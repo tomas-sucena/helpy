@@ -3,4 +3,4 @@ project(helpy)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(helpy main.cpp)
+add_executable(helpy main.cpp src/writer.cpp src/writer.h)
