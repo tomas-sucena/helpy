@@ -18,7 +18,7 @@ namespace Helpy {
 
     /* METHODS */
     private:
-        static void writeName();
+        void writeName();
 
     public:
         void write();
