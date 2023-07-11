@@ -4,7 +4,6 @@
 #include <fstream>
 
 #define LINE_BREAK std::endl << std::endl
-#define FS std::filesystem
 
 namespace Helpy {
     void Manager::writeHelpyfileTemplate(const std::string &path) {
@@ -49,10 +48,10 @@ namespace Helpy {
         path_ += dirname;
 
         // create directory
-        if (FS::exists(path_) && FS::is_directory(path_))
+        if (std::filesystem::is_directory(path_))
             throw std::exception();
 
-        FS::create_directory(path_);
+        std::filesystem::create_directory(path_);
 
         path_ += '/';
         writeHelpyfileTemplate(path_);
