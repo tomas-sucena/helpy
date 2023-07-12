@@ -7,10 +7,12 @@ namespace Helpy {
     class Manager {
     /* METHODS */
     private:
+        static void formatPath(std::string &path);
         static void writeHelpyfileTemplate(const std::string &path);
 
     public:
         static void init(std::string path, const std::string &dirname = "helpy");
+        static void run(std::string path, const std::string &filename = "Helpyfile");
     };
 }
 

@@ -3,9 +3,16 @@
 #include <filesystem>
 #include <fstream>
 
+#include "../lexer/lexer.h"
+
 #define LINE_BREAK std::endl << std::endl
 
 namespace Helpy {
+    void Manager::formatPath(std::string &path) {
+        if (!path.empty() && path.back() != '/')
+            path.push_back('/');
+    }
+
     void Manager::writeHelpyfileTemplate(const std::string &path) {
         std::ofstream file(path + "Helpyfile");
 
@@ -40,22 +47,25 @@ namespace Helpy {
     }
 
     void Manager::init(std::string path, const std::string &dirname) {
-        std::string path_(std::move(path));
-
-        if (!path_.empty() && path_.back() != '/')
-            path_.push_back('/');
-
-        path_ += dirname;
+        formatPath(path);
+        path += dirname;
 
         // create directory
-        if (std::filesystem::is_directory(path_))
+        if (std::filesystem::is_directory(path))
             throw std::exception();
 
-        std::filesystem::create_directory(path_);
+        std::filesystem::create_directory(path);
 
-        path_ += '/';
-        writeHelpyfileTemplate(path_);
+        path += '/';
+        writeHelpyfileTemplate(path);
+    }
+
+    void Manager::run(std::string path, const std::string &filename) {
+        formatPath(path);
+        path += filename;
+
+        // read Helpyfile
+        Lexer lexer(path);
+        lexer.execute();
     }
 }
-
-
