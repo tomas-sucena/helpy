@@ -3,4 +3,4 @@ project(helpy)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(helpy main.cpp src/manager.cpp src/manager.h)
+add_executable(helpy src/main.cpp src/manager/manager.cpp src/manager/manager.h src/lexer/lexer.cpp src/lexer/lexer.h src/lexer/token.hpp)

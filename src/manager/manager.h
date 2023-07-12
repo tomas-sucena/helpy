@@ -5,6 +5,8 @@
 
 namespace Helpy {
     class Manager {
+    /* METHODS */
+    private:
         static void writeHelpyfileTemplate(const std::string &path);
 
     public:
