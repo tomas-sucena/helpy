@@ -59,26 +59,52 @@ namespace Helpy {
 
     std::list<Token> Lexer::execute() {
         std::list<Token> tokens;
+        int getNext = true;
 
         while (!file.eof()) {
-            read();
+            if (getNext++) read();
 
             switch (curr) {
-                case '\n' :
-                    tokens.emplace_back(TokenType::LineEnd);
-                    break;
                 case 'a' ... 'z' :
                 case 'A' ... 'Z' : {
-                    std::string value = readWord();
-                    auto it = keywords.find(value);
-
-                    if (it == keywords.end())
-                        tokens.emplace_back(TokenType::Literal, value);
-                    else
-                        tokens.emplace_back(it->second);
+                    tokens.emplace_back(TokenType::Literal, readWord());
+                    getNext = false;
 
                     break;
                 }
+                case ':' : {
+                    Token last = tokens.back();
+                    tokens.pop_back();
+
+                    auto it = keywords.find(last.value);
+
+                    if (it == keywords.end())
+                        throw std::runtime_error("Error in line " + std::to_string(line) + ": '" + last.value
+                            + "' is NOT a valid keyword!");
+
+                    tokens.emplace_back(it->second);
+                    break;
+                }
+                case '/' :
+                    read();
+
+                    if (file.eof() || (curr != '/' && curr != '*'))
+                        throw std::runtime_error("Error in line " + std::to_string(line) + ": Badly formatted comment - "
+                            "unexpected character '" + curr + "' after '/'!");
+
+                    ignoreComment(curr == '*');
+                    break;
+                case '\n' :
+                    tokens.emplace_back(TokenType::LineEnd);
+                    break;
+                case '-' :
+                    tokens.emplace_back(TokenType::Hyphen);
+                    break;
+                case ' ' :
+                    break;
+                default :
+                    throw std::runtime_error("Error in line " + std::to_string(line) + ": Unexpected character '"
+                        + curr + "'!");
             }
         }
 
