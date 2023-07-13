@@ -14,16 +14,20 @@ namespace Helpy {
 
     std::string Lexer::readWord() {
         std::string value;
+        bool getNext = true;
 
-        while (!file.eof() && curr != ' ' && curr != '\n') {
+        while (!file.eof() && getNext) {
             switch (curr) {
                 case 'a' ... 'z' :
                 case 'A' ... 'Z' :
                 case '0' ... '9' :
                     value += curr;
-                case ':' :
-                case '\n' :
                     break;
+                case ':' :
+                case ' ' :
+                case '\n' :
+                    getNext = false;
+                    continue;
                 default :
                     throw std::runtime_error("Error in line " + std::to_string(line) + ": Unexpected character '"
                         + curr + "'!");
@@ -70,7 +74,8 @@ namespace Helpy {
 
             switch (curr) {
                 case 'a' ... 'z' :
-                case 'A' ... 'Z' : {
+                case 'A' ... 'Z' :
+                case '1' ... '9' : {
                     tokens.emplace_back(TokenType::Literal, readWord());
                     getNext = false;
 
@@ -98,13 +103,11 @@ namespace Helpy {
 
                     ignoreComment(curr == '*');
                     break;
-                case '\n' :
-                    tokens.emplace_back(TokenType::LineEnd);
-                    break;
                 case '-' :
                     tokens.emplace_back(TokenType::Hyphen);
                     break;
                 case ' ' :
+                case '\n' :
                     break;
                 default :
                     throw std::runtime_error("Error in line " + std::to_string(line) + ": Unexpected character '"

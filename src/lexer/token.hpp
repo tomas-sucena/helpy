@@ -7,7 +7,6 @@ namespace Helpy {
     enum class TokenType {
         Literal,
         Hyphen,
-        LineEnd,
 
         // keywords
         NameKeyword,
@@ -32,9 +31,6 @@ namespace Helpy {
                     break;
                 case TokenType::Hyphen:
                     os << "Hyphen";
-                    break;
-                case TokenType::LineEnd:
-                    os << "LineEnd";
                     break;
                 case TokenType::NameKeyword:
                     os << "NAME";
