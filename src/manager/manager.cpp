@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 
 #include "../lexer/lexer.h"
 
@@ -65,7 +66,13 @@ namespace Helpy {
         path += filename;
 
         // read Helpyfile
+        if (!std::filesystem::is_regular_file(path))
+            throw std::runtime_error("Error: Could not find file '" + path + "'!");
+
         Lexer lexer(path);
-        lexer.execute();
+        std::list<Token> tokens = lexer.execute();
+
+        for (const Token &token : tokens)
+            std::cout << token << std::endl;
     }
 }
