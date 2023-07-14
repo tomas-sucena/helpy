@@ -75,12 +75,11 @@ namespace Helpy {
             switch (curr) {
                 case 'a' ... 'z' :
                 case 'A' ... 'Z' :
-                case '1' ... '9' : {
+                case '1' ... '9' :
                     tokens.emplace_back(TokenType::Literal, readWord());
                     getNext = false;
 
                     break;
-                }
                 case ':' : {
                     Token last = tokens.back();
                     tokens.pop_back();
