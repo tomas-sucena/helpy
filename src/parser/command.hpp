@@ -10,7 +10,10 @@ namespace Helpy {
 
     /* METHODS */
     public:
-        void push(const std::string& argument) {
+        void push(std::string argument) {
+            for (char &c : argument)
+                c = (char) tolower(c);
+
             arguments.emplace_back(argument);
         }
 
@@ -19,9 +22,6 @@ namespace Helpy {
             bool firstWord = true;
 
             for (std::string argument : arguments) {
-                for (char &c : argument)
-                    c = (char) tolower(c);
-
                 if (!firstWord) argument[0] = (char) toupper(argument[0]);
                 firstWord = false;
 

@@ -54,8 +54,10 @@ namespace Helpy {
         // find the COMMANDS keyword
         auto it = tokens.begin();
         for (; it != tokens.end(); ++it) {
-            if (it->type == TokenType::CommandsKeyword)
-                break;
+            if (it->type != TokenType::CommandsKeyword) continue;
+
+            it = tokens.erase(it);
+            break;
         }
 
         if (it == tokens.end())
