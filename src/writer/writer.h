@@ -14,6 +14,17 @@ namespace Helpy {
     /* CONSTRUCTOR */
     public:
         Writer(const std::string &path, ParserInfo info);
+
+    /* METHODS */
+    private:
+        void writeIncludes();
+        void writeCommandMethods();
+
+        void writeHeader();
+        void writeSource();
+
+    public:
+        void execute();
     };
 }
 

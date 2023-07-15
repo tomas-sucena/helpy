@@ -85,5 +85,6 @@ namespace Helpy {
             std::cout << command.getMethodName() << '\n';
 
         Writer writer(path, info);
+        writer.execute();
     }
 }
