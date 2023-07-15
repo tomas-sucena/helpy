@@ -1,10 +1,10 @@
 #include "manager.h"
 
 #include <filesystem>
-#include <fstream>
 #include <iostream>
 
 #include "../lexer/lexer.h"
+#include "../parser/parser.h"
 
 #define LINE_BREAK std::endl << std::endl
 
@@ -72,7 +72,15 @@ namespace Helpy {
         Lexer lexer(path);
         std::list<Token> tokens = lexer.execute();
 
+        std::cout << "TOKENS:" << '\n';
         for (const Token &token : tokens)
-            std::cout << token << std::endl;
+            std::cout << token << '\n';
+
+        Parser parser(tokens);
+        std::list<Command> commands = parser.execute().commands;
+
+        std::cout << '\n' << "COMMANDS:" << '\n';
+        for (const Command &command : commands)
+            std::cout << command.getMethodName() << '\n';
     }
 }

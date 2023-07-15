@@ -4,12 +4,12 @@
 #include <list>
 #include <string>
 
-#include "../lexer/token.hpp"
+#include "../lexer/lexer.h"
 #include "command.hpp"
 
 namespace Helpy {
     struct ParserInfo {
-        char numArguments;
+        int numArguments;
         std::string name;
         std::list<Command> commands;
     };
@@ -23,7 +23,9 @@ namespace Helpy {
 
     /* METHODS */
     private:
-        char findArguments();
+        int findArguments();
+        std::string findName();
+        std::list<Command> findCommands(int numArguments);
 
     public:
         ParserInfo execute();
