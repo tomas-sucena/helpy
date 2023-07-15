@@ -43,7 +43,9 @@ namespace Helpy {
             else if (it->type != TokenType::Literal)
                 throw std::runtime_error("Error: Unexpected value assigned to NAME!");
 
+            name = it->value;
             tokens.erase(it);
+
             break;
         }
 
