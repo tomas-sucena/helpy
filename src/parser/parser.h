@@ -5,7 +5,7 @@
 #include <string>
 
 #include "../lexer/lexer.h"
-#include "command.hpp"
+#include "../utils/command.hpp"
 
 namespace Helpy {
     struct ParserInfo {

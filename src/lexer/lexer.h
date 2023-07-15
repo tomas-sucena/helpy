@@ -5,7 +5,7 @@
 #include <list>
 #include <unordered_map>
 
-#include "token.hpp"
+#include "../utils/token.hpp"
 
 #define uMap std::unordered_map
 

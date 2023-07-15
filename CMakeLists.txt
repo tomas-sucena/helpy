@@ -9,7 +9,7 @@ add_executable(helpy
         src/manager/manager.h
         src/lexer/lexer.cpp
         src/lexer/lexer.h
-        src/lexer/token.hpp
+        src/utils/token.hpp
         src/parser/parser.cpp
         src/parser/parser.h
-        src/parser/command.hpp)
+        src/utils/command.hpp src/writer/writer.cpp src/writer/writer.h)

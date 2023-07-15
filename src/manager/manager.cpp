@@ -5,6 +5,7 @@
 
 #include "../lexer/lexer.h"
 #include "../parser/parser.h"
+#include "../writer/writer.h"
 
 #define LINE_BREAK std::endl << std::endl
 
@@ -61,15 +62,15 @@ namespace Helpy {
         writeHelpyfileTemplate(path);
     }
 
-    void Manager::run(std::string path, const std::string &filename) {
+    void Manager::run(std::string path, std::string filename) {
         formatPath(path);
-        path += filename;
+        filename = path + filename;
 
         // read Helpyfile
-        if (!std::filesystem::is_regular_file(path))
-            throw std::runtime_error("Error: Could not find file '" + path + "'!");
+        if (!std::filesystem::is_regular_file(filename))
+            throw std::runtime_error("Error: Could not find file '" + filename + "'!");
 
-        Lexer lexer(path);
+        Lexer lexer(filename);
         std::list<Token> tokens = lexer.execute();
 
         std::cout << "TOKENS:" << '\n';
@@ -77,10 +78,12 @@ namespace Helpy {
             std::cout << token << '\n';
 
         Parser parser(tokens);
-        std::list<Command> commands = parser.execute().commands;
+        ParserInfo info = parser.execute();
 
         std::cout << '\n' << "COMMANDS:" << '\n';
-        for (const Command &command : commands)
+        for (const Command &command : info.commands)
             std::cout << command.getMethodName() << '\n';
+
+        Writer writer(path, info);
     }
 }
