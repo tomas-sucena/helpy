@@ -7,28 +7,26 @@
 namespace Helpy {
     class Command {
         std::vector<std::string> arguments;
+        std::string methodName;
 
     /* METHODS */
     public:
         void push(std::string argument) {
+            // update arguments
             for (char &c : argument)
                 c = (char) tolower(c);
 
             arguments.emplace_back(argument);
+
+            // update method name
+            if (!methodName.empty())
+                argument.front() = (char) toupper(argument.front());
+
+            methodName += argument;
         }
 
         [[nodiscard]] std::string getMethodName() const {
-            std::string name;
-            bool firstWord = true;
-
-            for (std::string argument : arguments) {
-                if (!firstWord) argument[0] = (char) toupper(argument[0]);
-                firstWord = false;
-
-                name += argument;
-            }
-
-            return name;
+            return methodName;
         }
     };
 }
