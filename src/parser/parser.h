@@ -10,7 +10,7 @@
 namespace Helpy {
     struct ParserInfo {
         int numArguments;
-        std::string name;
+        std::string classname, filename;
         std::list<Command> commands;
     };
 
@@ -23,6 +23,8 @@ namespace Helpy {
 
     /* METHODS */
     private:
+        static std::string toSnakeCase(const std::string &string);
+
         int findArguments();
         std::string findName();
         std::list<Command> findCommands(int numArguments);

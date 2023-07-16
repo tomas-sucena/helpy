@@ -5,6 +5,19 @@
 namespace Helpy {
     Parser::Parser(std::list<Token> &tokens) : tokens(tokens) {}
 
+    std::string Parser::toSnakeCase(const std::string &string) {
+        std::string string_;
+
+        for (char c : string) {
+            if (std::isupper(c) && !string_.empty())
+                string_ += '_';
+
+            string_ += (char) tolower(c);
+        }
+
+        return string_;
+    }
+
     int Parser::findArguments() {
         int numArguments = 3;
 
@@ -96,9 +109,13 @@ namespace Helpy {
     ParserInfo Parser::execute() {
         ParserInfo info;
 
+        // mandatory
         info.numArguments = findArguments();
-        info.name = findName();
         info.commands = findCommands(info.numArguments);
+
+        // optional
+        info.classname = findName();
+        info.filename = toSnakeCase(info.classname);
 
         return info;
     }
