@@ -1,3 +1,6 @@
 # CLion
 .idea/
 cmake-build-debug/
+
+# test files
+cli/
