@@ -25,7 +25,11 @@ namespace Helpy {
             methodName += argument;
         }
 
-        [[nodiscard]] std::string getMethodName() const {
+        const std::string& operator[](int index) const {
+            return arguments[index];
+        }
+
+        [[nodiscard]] const std::string& getMethodName() const {
             return methodName;
         }
     };

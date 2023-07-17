@@ -19,11 +19,13 @@ namespace Helpy {
     private:
         // header
         void writeHeaderIncludes();
+        void writeMethodsDeclaration();
+        void writeClass();
 
         // source
         void writeSourceIncludes();
         void writeKeywordMaps();
-        void writeCommandMethods();
+        void writeMethodsDefinition();
 
         void writeHeader();
         void writeSource();

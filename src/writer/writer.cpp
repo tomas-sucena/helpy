@@ -18,7 +18,48 @@ namespace Helpy {
                << "#define " << uppercaseFilename << "_H\n"
                << '\n'
                << "#include <string>\n"
-               << "#include <unordered_map>\n";
+               << "#include <unordered_map>\n"
+               << "#include <unordered_set>\n"
+               << '\n'
+               << "#define uMap std::unordered_map\n"
+               << "#define uSet std::unordered_set\n"
+               << '\n'
+               << "using std::string;\n";
+    }
+
+    void Writer::writeMethodsDeclaration() {
+        header << '\n'
+               << "\t/* METHODS */\n"
+               << "\tstatic string readInput(const string& instruction, uSet<string>& options);\n"
+               << "\tstatic double readNumber(const string& instruction);\n"
+               << "\tvoid advancedMode();\n"
+               << "\tvoid guidedMode();\n"
+               << "\tbool processCommand(";
+
+        for (int i = 1; i <= info.numArguments; ++i)
+            header << "const string& s" << i << ((i < info.numArguments) ? ", " : ");\n");
+
+        // user-defined methods
+        header << "\n\t// commands\n";
+
+        for (const Command &command : info.commands)
+            header << "\tvoid " << command.getMethodName() << "();\n";
+
+        header << '\n'
+               << "public:\n"
+               << "\tvoid run();\n";
+    }
+
+    void Writer::writeClass() {
+        header << '\n'
+               << "class " << info.classname << " {\n"
+               << "\tstatic uMap<string, int> ";
+
+        for (int i = 1; i <= info.numArguments; ++i)
+            header << "map" << i << ((i < info.numArguments) ? ", " : ";\n");
+
+        writeMethodsDeclaration();
+        header << "};\n";
     }
 
     void Writer::writeSourceIncludes() {
@@ -27,7 +68,7 @@ namespace Helpy {
                << "#include <iostream>\n";
     }
 
-    void Writer::writeCommandMethods() {
+    void Writer::writeMethodsDefinition() {
         for (const Command &command : info.commands) {
             source << '\n'
                    << "void " << info.classname << "::" << command.getMethodName() << "() {\n"
@@ -38,6 +79,7 @@ namespace Helpy {
 
     void Writer::writeHeader() {
         writeHeaderIncludes();
+        writeClass();
 
         // close the header guard
         header << '\n'
@@ -46,7 +88,7 @@ namespace Helpy {
 
     void Writer::writeSource() {
         writeSourceIncludes();
-        writeCommandMethods();
+        writeMethodsDefinition();
     }
 
     void Writer::execute() {
