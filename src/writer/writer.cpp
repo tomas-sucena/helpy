@@ -76,12 +76,13 @@ namespace Helpy {
             source << "uMap<string, int> " << info.classname << "::map" << i << " = {";
 
             int value = prime;
-            for (const Command &command : info.commands) {
-                source << "{\"" << command[i - 1] << "\", " << value << "}, ";
+            for (auto it = info.commands.begin(); it != info.commands.end(); ) {
+                source << "{\"" << (*it)[i - 1] << "\", " << value << '}'
+                       << ((++it == info.commands.end()) ? "};\n" : ", ");
+
                 value *= prime;
             }
 
-            source << "};\n";
             prime += 1;
         }
     }
