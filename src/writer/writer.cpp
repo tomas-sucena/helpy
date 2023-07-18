@@ -30,14 +30,14 @@ namespace Helpy {
     void Writer::writeMethodsDeclaration() {
         header << '\n'
                << "\t/* METHODS */\n"
-               << "\tstatic string readInput(const string& instruction, uSet<string>& options);\n"
-               << "\tstatic double readNumber(const string& instruction);\n"
+               << "\tstatic string readInput(const string &instruction, uSet<string> &options);\n"
+               << "\tstatic double readNumber(const string &instruction);\n"
                << "\tvoid advancedMode();\n"
                << "\tvoid guidedMode();\n"
                << "\tbool processCommand(";
 
         for (int i = 1; i <= info.numArguments; ++i)
-            header << "const string& s" << i << ((i < info.numArguments) ? ", " : ");\n");
+            header << "const string &s" << i << ((i < info.numArguments) ? ", " : ");\n");
 
         // user-defined methods
         header << "\n\t// commands\n";
@@ -68,11 +68,29 @@ namespace Helpy {
                << "#include <iostream>\n";
     }
 
+    void Writer::writeKeywordMaps() {
+        source << '\n';
+        int prime = 2;
+
+        for (int i = 1; i <= info.numArguments; ++i) {
+            source << "uMap<string, int> " << info.classname << "::map" << i << " = {";
+
+            int value = prime;
+            for (const Command &command : info.commands) {
+                source << "{\"" << command[i - 1] << "\", " << value << "}, ";
+                value *= prime;
+            }
+
+            source << "};\n";
+            prime += 1;
+        }
+    }
+
     void Writer::writeMethodsDefinition() {
         for (const Command &command : info.commands) {
             source << '\n'
                    << "void " << info.classname << "::" << command.getMethodName() << "() {\n"
-                   << "\tstd::cout << \"Under development!\";\n"
+                   << "\tstd::cout << \"Under development!\" << std::endl;\n"
                    << "}\n";
         }
     }
@@ -88,6 +106,7 @@ namespace Helpy {
 
     void Writer::writeSource() {
         writeSourceIncludes();
+        writeKeywordMaps();
         writeMethodsDefinition();
     }
 
