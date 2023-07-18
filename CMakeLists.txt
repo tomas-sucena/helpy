@@ -12,4 +12,6 @@ add_executable(helpy
         src/utils/token.hpp
         src/parser/parser.cpp
         src/parser/parser.h
-        src/utils/command.hpp src/writer/writer.cpp src/writer/writer.h)
+        src/utils/command.hpp
+        src/writer/writer.cpp
+        src/writer/writer.h)

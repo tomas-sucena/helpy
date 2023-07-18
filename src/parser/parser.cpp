@@ -3,7 +3,7 @@
 #include <stdexcept>
 
 namespace Helpy {
-    Parser::Parser(std::list<Token> &tokens) : tokens(tokens) {}
+    Parser::Parser(const std::list<Token> &tokens) : tokens(tokens) {}
 
     std::string Parser::toSnakeCase(const std::string &string) {
         std::string string_;

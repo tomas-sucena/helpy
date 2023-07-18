@@ -71,20 +71,9 @@ namespace Helpy {
             throw std::runtime_error("Error: Could not find file '" + filename + "'!");
 
         Lexer lexer(filename);
-        std::list<Token> tokens = lexer.execute();
+        Parser parser(lexer.execute());
 
-        std::cout << "TOKENS:" << '\n';
-        for (const Token &token : tokens)
-            std::cout << token << '\n';
-
-        Parser parser(tokens);
-        ParserInfo info = parser.execute();
-
-        std::cout << '\n' << "COMMANDS:" << '\n';
-        for (const Command &command : info.commands)
-            std::cout << command.getMethodName() << '\n';
-
-        Writer writer(path, info);
+        Writer writer(path, parser.execute());
         writer.execute();
     }
 }

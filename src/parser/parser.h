@@ -19,7 +19,7 @@ namespace Helpy {
 
     /* CONSTRUCTOR */
     public:
-        explicit Parser(std::list<Token> &tokens);
+        explicit Parser(const std::list<Token> &tokens);
 
     /* METHODS */
     private:
