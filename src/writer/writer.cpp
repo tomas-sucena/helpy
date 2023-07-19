@@ -2,6 +2,8 @@
 
 #include <thread>
 
+#include "../utils/utils.hpp"
+
 namespace Helpy {
     Writer::Writer(const std::string &path, ParserInfo info) : info(std::move(info)) {
         header = std::ofstream(path + this->info.filename + ".h");
@@ -83,7 +85,7 @@ namespace Helpy {
                 value *= prime;
             }
 
-            prime += 1;
+            Utils::nextPrime(prime);
         }
     }
 

@@ -19,12 +19,10 @@ namespace Helpy {
 
     /* CONSTRUCTOR */
     public:
-        explicit Parser(const std::list<Token> &tokens);
+        explicit Parser(std::list<Token> tokens);
 
     /* METHODS */
     private:
-        static std::string toSnakeCase(const std::string &string);
-
         int findArguments();
         std::string findName();
         std::list<Command> findCommands(int numArguments);

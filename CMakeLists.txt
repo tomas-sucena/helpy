@@ -14,4 +14,5 @@ add_executable(helpy
         src/parser/parser.h
         src/utils/command.hpp
         src/writer/writer.cpp
-        src/writer/writer.h)
+        src/writer/writer.h
+        src/utils/utils.hpp)

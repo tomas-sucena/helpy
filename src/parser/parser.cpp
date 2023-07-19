@@ -1,22 +1,12 @@
 #include "parser.h"
 
 #include <stdexcept>
+#include <utility>
+
+#include "../utils/utils.hpp"
 
 namespace Helpy {
-    Parser::Parser(const std::list<Token> &tokens) : tokens(tokens) {}
-
-    std::string Parser::toSnakeCase(const std::string &string) {
-        std::string string_;
-
-        for (char c : string) {
-            if (std::isupper(c) && !string_.empty())
-                string_ += '_';
-
-            string_ += (char) tolower(c);
-        }
-
-        return string_;
-    }
+    Parser::Parser(std::list<Token> tokens) : tokens(std::move(tokens)) {}
 
     int Parser::findArguments() {
         int numArguments = 3;
@@ -115,7 +105,7 @@ namespace Helpy {
 
         // optional
         info.classname = findName();
-        info.filename = toSnakeCase(info.classname);
+        info.filename = Utils::toSnakeCase(info.classname);
 
         return info;
     }
