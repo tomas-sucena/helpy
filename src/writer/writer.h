@@ -32,6 +32,7 @@ namespace Helpy {
         void writeSourceIncludes();
         void writeKeywordMaps();
         void writeMethodsDefinition();
+        void writeHelpyMethods();
 
         void writeHeader();
         void writeSource();

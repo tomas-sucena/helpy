@@ -69,7 +69,23 @@ namespace Helpy {
     void Writer::writeSourceIncludes() {
         source << "#include \"" << info.filename << ".h\"\n"
                << '\n'
-               << "#include <iostream>\n";
+               << "#include <iostream>\n"
+               << '\n'
+               << "using std::cout;\n"
+               << "using std::endl;\n"
+               << '\n'
+               << "// output colors\n"
+                  "#define RESET   \"\\033[0;m\"\n"
+                  "#define RED     \"\\033[1;31m\"\n"
+                  "#define GREEN   \"\\033[32m\"\n"
+                  "#define BLUE    \"\\033[34m\"\n"
+                  "#define YELLOW  \"\\033[33m\"\n"
+                  "#define BOLD    \"\\033[1m\"\n"
+               << '\n'
+               << "// text\n"
+                  "#define DASHED_LINE \"- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\"\n"
+                  "#define BREAK       endl << YELLOW << DASHED_LINE << RESET << endl << endl\n"
+                  "#define YES_NO      \" (\" << GREEN << \"Yes\" << RESET << '/' << RED << \"No\" << RESET << ')'\n";
     }
 
     void Writer::writeKeywordMaps() {
@@ -102,6 +118,41 @@ namespace Helpy {
         }
     }
 
+    void Writer::writeHelpyMethods() {
+        // processCommand()
+        source << '\n'
+               << "bool " << info.classname << "::processCommand(";
+
+        for (int i = 1; i <= info.numArguments; ++i)
+            source << "const string &s" << i << ((i < info.numArguments) ? ", " : ") {\n");
+
+        source << "\tswitch (";
+
+        for (int i = 1; i <= info.numArguments; ++i)
+            source << "map" << i << "[s" << i << ']'
+                   << ((i < info.numArguments) ? " + " : ") {\n");
+
+        for (const Command &command : info.commands) {
+            int sum = 0;
+            for (int i = 0; i < info.numArguments; ++i)
+                sum += maps[i][command[i]];
+
+            source << "\t\tcase (" << sum << ") :\n"
+                   << "\t\t\t" << command.getMethodName() << "();\n"
+                   << "\t\t\t" << "break;\n";
+        }
+
+        source << "\t\tdefault :\n"
+               << "\t\t\tcout << BREAK;\n"
+               << "\t\t\tcout << RED << \"Invalid command! Please, type another command.\" << RESET << endl;\n"
+               << '\n'
+               << "\t\t\treturn false;\n"
+               << "\t}\n"
+               << '\n'
+               << "\treturn true;\n"
+               << "}\n";
+    }
+
     void Writer::writeHeader() {
         writeHeaderIncludes();
         writeClass();
@@ -115,6 +166,7 @@ namespace Helpy {
         writeSourceIncludes();
         writeKeywordMaps();
         writeMethodsDefinition();
+        writeHelpyMethods();
     }
 
     void Writer::execute() {
