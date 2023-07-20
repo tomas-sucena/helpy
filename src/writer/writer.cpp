@@ -70,6 +70,7 @@ namespace Helpy {
         source << "#include \"" << info.filename << ".h\"\n"
                << '\n'
                << "#include <iostream>\n"
+               << "#include <sstream>\n"
                << '\n'
                << "using std::cout;\n"
                << "using std::endl;\n"
@@ -119,6 +120,44 @@ namespace Helpy {
     }
 
     void Writer::writeHelpyMethods() {
+        // readInput()
+        source << "\n"
+                  "/**\n"
+                  " * @brief reads a line of user input\n"
+                  " * @param instruction the instruction that will be displayed before prompting the user to type\n"
+                  " * @param options the options that will be displayed to the user\n"
+                  " * @return read input\n"
+                  " */\n"
+               << "string " << info.classname << "::readInput(const string &instruction, uSet<string> &options) {\n"
+                  "\tstring res;\n"
+                  "\tbool valid = false;\n"
+                  "\n"
+                  "\twhile (true) {\n"
+                  "\t\tcout << BREAK;\n"
+                  "\t\tcout << instruction << endl << endl;\n"
+                  "\n"
+                  "\t\tstring line; getline(std::cin >> std::ws, line);\n"
+                  "\t\tUtils::lowercase(line);\n"
+                  "\n"
+                  "\t\tstd::istringstream line_(line);\n"
+                  "\n"
+                  "\t\twhile (line_ >> res) {\n"
+                  "\t\t\tif (options.find(res) == options.end())\n"
+                  "\t\t\t\tcontinue;\n"
+                  "\n"
+                  "\t\t\tvalid = true;\n"
+                  "\t\t\tbreak;\n"
+                  "\t\t}\n"
+                  "\n"
+                  "\t\tif (valid) break;\n"
+                  "\n"
+                  "\t\tcout << BREAK;\n"
+                  "\t\tcout << RED << \"Invalid command! Please, try again.\" << RESET << endl;\n"
+                  "\t}\n"
+                  "\n"
+                  "\treturn res;\n"
+                  "}\n";
+
         // processCommand()
         source << '\n'
                << "bool " << info.classname << "::processCommand(";
