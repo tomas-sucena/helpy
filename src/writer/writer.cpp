@@ -8,6 +8,8 @@ namespace Helpy {
     Writer::Writer(const std::string &path, ParserInfo info) : info(std::move(info)) {
         header = std::ofstream(path + this->info.filename + ".h");
         source = std::ofstream(path + this->info.filename + ".cpp");
+
+        maps.resize(this->info.numArguments);
     }
 
     void Writer::writeHeaderIncludes() {
@@ -74,17 +76,19 @@ namespace Helpy {
         source << '\n';
         int prime = 2;
 
-        for (int i = 1; i <= info.numArguments; ++i) {
-            source << "uMap<string, int> " << info.classname << "::map" << i << " = {";
+        for (int i = 0; i < info.numArguments; ++i) {
+            source << "uMap<string, int> " << info.classname << "::map" << i + 1 << " = {";
 
             int value = prime;
-            for (auto it = info.commands.begin(); it != info.commands.end(); ) {
-                source << "{\"" << (*it)[i - 1] << "\", " << value << '}'
-                       << ((++it == info.commands.end()) ? "};\n" : ", ");
+            for (auto &command : info.commands) {
+                if (!maps[i].insert({command[i], value}).second)
+                    continue;
 
+                source << "{\"" << command[i] << "\", " << value << "},";
                 value *= prime;
             }
 
+            source << "};\n";
             Utils::nextPrime(prime);
         }
     }

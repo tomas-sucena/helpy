@@ -2,14 +2,20 @@
 #define HELPY_WRITER_H
 
 #include <fstream>
+#include <string>
+#include <vector>
+#include <unordered_map>
 
 #include "../parser/parser.h"
 #include "../utils/command.hpp"
 
+#define uMap std::unordered_map
+
 namespace Helpy {
     class Writer {
-        std::ofstream header, source;
         ParserInfo info;
+        std::ofstream header, source;
+        std::vector<uMap<std::string, int>> maps;
 
     /* CONSTRUCTOR */
     public:
