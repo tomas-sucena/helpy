@@ -14,7 +14,7 @@
 namespace Helpy {
     class Writer {
         ParserInfo info;
-        std::ofstream header, source, utils;
+        std::ofstream header, source;
         std::vector<uMap<std::string, int>> maps;
 
     /* CONSTRUCTOR */
@@ -36,7 +36,6 @@ namespace Helpy {
 
         void writeHeader();
         void writeSource();
-        void writeUtils();
 
     public:
         void execute();
