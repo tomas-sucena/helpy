@@ -8,6 +8,7 @@ namespace Helpy {
     Writer::Writer(const std::string &path, ParserInfo info) : info(std::move(info)) {
         header = std::ofstream(path + this->info.filename + ".h");
         source = std::ofstream(path + this->info.filename + ".cpp");
+        utils = std::ofstream(path + "utils.hpp");
 
         maps.resize(this->info.numArguments);
     }
@@ -21,12 +22,7 @@ namespace Helpy {
         header << "#ifndef " << uppercaseFilename << "_H\n"
                << "#define " << uppercaseFilename << "_H\n"
                << '\n'
-               << "#include <string>\n"
-               << "#include <unordered_map>\n"
-               << "#include <unordered_set>\n"
-               << '\n'
-               << "#define uMap std::unordered_map\n"
-               << "#define uSet std::unordered_set\n"
+               << "#include \"utils.hpp\"\n"
                << '\n'
                << "using std::string;\n";
     }
@@ -69,12 +65,6 @@ namespace Helpy {
     void Writer::writeSourceIncludes() {
         source << "#include \"" << info.filename << ".h\"\n"
                << '\n'
-               << "#include <iostream>\n"
-               << "#include <sstream>\n"
-               << '\n'
-               << "using std::cout;\n"
-               << "using std::endl;\n"
-               << '\n'
                << "// output colors\n"
                   "#define RESET   \"\\033[0;m\"\n"
                   "#define RED     \"\\033[1;31m\"\n"
@@ -85,7 +75,7 @@ namespace Helpy {
                << '\n'
                << "// text\n"
                   "#define DASHED_LINE \"- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\"\n"
-                  "#define BREAK       endl << YELLOW << DASHED_LINE << RESET << endl << endl\n"
+                  "#define BREAK       std::endl << YELLOW << DASHED_LINE << RESET << std::endl << std::endl\n"
                   "#define YES_NO      \" (\" << GREEN << \"Yes\" << RESET << '/' << RED << \"No\" << RESET << ')'\n";
     }
 
@@ -134,7 +124,7 @@ namespace Helpy {
                   "\n"
                   "\twhile (true) {\n"
                   "\t\tstd::cout << BREAK;\n"
-                  "\t\tstd::cout << instruction << endl << endl;\n"
+                  "\t\tstd::cout << instruction << std::endl << std::endl;\n"
                   "\n"
                   "\t\tstring line; getline(std::cin >> std::ws, line);\n"
                   "\t\tUtils::lowercase(line);\n"
@@ -152,7 +142,7 @@ namespace Helpy {
                   "\t\tif (valid) break;\n"
                   "\n"
                   "\t\tstd::cout << BREAK;\n"
-                  "\t\tstd::cout << RED << \"Invalid command! Please, try again.\" << RESET << endl;\n"
+                  "\t\tstd::cout << RED << \"Invalid command! Please, try again.\" << RESET << std::endl;\n"
                   "\t}\n"
                   "\n"
                   "\treturn res;\n"
@@ -171,7 +161,7 @@ namespace Helpy {
                   "\n"
                   "\twhile (true){\n"
                   "\t\tstd::cout << BREAK;\n"
-                  "\t\tstd::cout << instruction << std::endl << std::endl;\n"
+                  "\t\tstd::cout << instruction << std::std::endl << std::std::endl;\n"
                   "\n"
                   "\t\tstring line; getline(std::cin >> std::ws, line);\n"
                   "\t\tUtils::lowercase(line);\n"
@@ -194,7 +184,7 @@ namespace Helpy {
                   "\t\tif (valid) break;\n"
                   "\n"
                   "\t\tstd::cout << BREAK;\n"
-                  "\t\tstd::cout << RED << \"Invalid input! Please, try again.\" << RESET << std::endl;\n"
+                  "\t\tstd::cout << RED << \"Invalid input! Please, try again.\" << RESET << std::std::endl;\n"
                   "\t}\n"
                   "\n"
                   "\treturn res;\n"
@@ -224,8 +214,8 @@ namespace Helpy {
         }
 
         source << "\t\tdefault :\n"
-               << "\t\t\tcout << BREAK;\n"
-               << "\t\t\tcout << RED << \"Invalid command! Please, type another command.\" << RESET << endl;\n"
+               << "\t\t\tstd::cout << BREAK;\n"
+               << "\t\t\tstd::cout << RED << \"Invalid command! Please, type another command.\" << RESET << std::endl;\n"
                << '\n'
                << "\t\t\treturn false;\n"
                << "\t}\n"
@@ -250,9 +240,40 @@ namespace Helpy {
         writeHelpyMethods();
     }
 
+    void Writer::writeUtils() {
+        utils << "#ifndef UTILS_HPP\n"
+                 "#define UTILS_HPP\n"
+                 "\n"
+                 "#include <iostream>\n"
+                 "#include <sstream>\n"
+                 "#include <string>\n"
+                 "#include <unordered_map>\n"
+                 "#include <unordered_set>\n"
+                 "\n"
+                 "#define uMap std::unordered_map\n"
+                 "#define uSet std::unordered_set\n"
+                 "\n"
+                 "class Utils {\n"
+                 "public:\n"
+                 "\t/**\n"
+                 "\t* @brief turns all the characters of a string into lowercase or uppercase\n"
+                 "\t* @complexity O(n)\n"
+                 "\t* @param s string to be modified\n"
+                 "\t* @param uppercase bool that indicates if the string should be converted to uppercase\n"
+                 "\t*/\n"
+                 "\tstatic void lowercase(std::string &s, bool uppercase = false) {\n"
+                 "\t\tfor (char &c : s)\n"
+                 "\t\t\tc = (uppercase) ? (char) toupper(c) : (char) tolower(c);\n"
+                 "\t}\n"
+                 "};\n"
+                 "\n"
+                 "#endif //UTILS_HPP\n";
+    }
+
     void Writer::execute() {
         std::thread t1(&Writer::writeSource, this);
         writeHeader();
+        writeUtils();
 
         t1.join();
     }
