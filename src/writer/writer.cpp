@@ -39,12 +39,14 @@ namespace Helpy {
                << "\tstatic void toLowercase(string &s, bool uppercase = false);\n"
                << "\tstatic string readInput(const string &instruction, uSet<string> &options);\n"
                << "\tstatic double readNumber(const string &instruction);\n"
-               << "\tvoid advancedMode();\n"
-               << "\tvoid guidedMode();\n"
+               << '\n'
                << "\tbool processCommand(";
 
         for (int i = 1; i <= info.numArguments; ++i)
             header << "const string &s" << i << ((i < info.numArguments) ? ", " : ");\n");
+
+        header << "\tvoid advancedMode();\n"
+               << "\tvoid guidedMode();\n";
 
         // user-defined methods
         header << "\n\t// commands\n";
@@ -242,6 +244,64 @@ namespace Helpy {
                << '\n'
                << "\treturn true;\n"
                << "}\n";
+
+        // advancedMode()
+        source << '\n'
+               << "/**\n"
+                  " * @brief executes the advanced mode of the UI\n"
+                  " */\n"
+               << "void " << info.classname << "::advancedMode() {\n"
+                  "\tbool done = false;\n"
+                  "\n"
+                  "\twhile (!done) {\n"
+                  "\t\tstd::cout << BREAK;\n"
+                  "\t\tstd::cout << \"How can I be of assistance?\" << std::endl << std::endl;\n"
+                  "\n"
+                  "\t\tstring ";
+
+        for (int i = 1; i <= info.numArguments; ++i)
+            source << 's' << i << ((i < info.numArguments) ? ", " : ";\n");
+
+        source << "\t\tstd::istringstream s_;\n"
+                  "\n"
+                  "\t\tstd::cin >> s1; toLowercase(s1);\n"
+                  "\n"
+                  "\t\tif (s1 == \"quit\" || s1 == \"no\" || s1 == \"die\")\n"
+                  "\t\t\tbreak;\n"
+                  "\n";
+
+        for (int i = 2; i <= info.numArguments; ++i)
+            source << "\t\tstd::cin >> s" << i << "; toLowercase(s" << i << ");\n";
+
+        source << "\n"
+                  "\t\tif (!processCommand(";
+
+        for (int i = 1; i <= info.numArguments; ++i)
+            source << 's' << i << ((i < info.numArguments) ? ", " : "))\n");
+
+        source << "\t\t\tcontinue;\n"
+                  "\n"
+                  "\t\tstd::cout << BREAK;\n"
+                  "\t\tstd::cout << \"Anything else?\" << YES_NO << std::endl << std::endl;\n"
+                  "\n"
+                  "\t\ts1.clear(); getline(std::cin >> std::ws, s1);\n"
+                  "\t\ttoLowercase(s1);\n"
+                  "\n"
+                  "\t\ts_.clear(); s_.str(s1);\n"
+                  "\t\tdone = true;\n"
+                  "\n"
+                  "\t\twhile (s_ >> s1) {\n"
+                  "\t\t\tif (s1 != \"yes\" && s1 != \"y\")\n"
+                  "\t\t\t\tcontinue;\n"
+                  "\n"
+                  "\t\t\tdone = false;\n"
+                  "\t\t\tbreak;\n"
+                  "\t\t}\n"
+                  "\t}\n"
+                  "\n"
+                  "\tstd::cout << BREAK;\n"
+                  "\tstd::cout << \"See you next time!\" << std::endl << std::endl;\n"
+                  "}\n";
     }
 
     void Writer::writeHeader() {
