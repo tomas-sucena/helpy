@@ -97,11 +97,15 @@ namespace Helpy {
 
             int value = prime;
             for (auto &command : info.commands) {
-                if (!maps[i].insert({command[i], value}).second)
-                    continue;
+                const std::string &argument = command[i];
 
-                source << "{\"" << command[i] << "\", " << value << "},";
-                value *= prime;
+                // new argument
+                if (maps[i].insert({argument, value}).second) {
+                    source << "{\"" << command[i] << "\", " << value << "},";
+                    value *= prime;
+                }
+
+                command += maps[i][argument];
             }
 
             source << "};\n";
@@ -225,15 +229,10 @@ namespace Helpy {
             source << "map" << i << "[s" << i << ']'
                    << ((i < info.numArguments) ? " + " : ") {\n");
 
-        for (const Command &command : info.commands) {
-            int sum = 0;
-            for (int i = 0; i < info.numArguments; ++i)
-                sum += maps[i][command[i]];
-
-            source << "\t\tcase (" << sum << ") :\n"
+        for (const Command &command : info.commands)
+            source << "\t\tcase (" << command.getValue() << ") :\n"
                    << "\t\t\t" << command.getMethodName() << "();\n"
                    << "\t\t\t" << "break;\n";
-        }
 
         source << "\t\tdefault :\n"
                << "\t\t\tstd::cout << BREAK;\n"

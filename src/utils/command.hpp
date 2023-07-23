@@ -8,6 +8,11 @@ namespace Helpy {
     class Command {
         std::vector<std::string> arguments;
         std::string methodName;
+        unsigned value;
+
+    /* CONSTRUCTOR */
+    public:
+        Command() : value(0) {}
 
     /* METHODS */
     public:
@@ -29,8 +34,16 @@ namespace Helpy {
             return arguments[index];
         }
 
+        void operator+=(unsigned val) {
+            value += val;
+        }
+
         [[nodiscard]] const std::string& getMethodName() const {
             return methodName;
+        }
+
+        [[nodiscard]] unsigned getValue() const {
+            return value;
         }
     };
 }
