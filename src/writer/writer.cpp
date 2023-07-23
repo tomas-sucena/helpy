@@ -301,6 +301,17 @@ namespace Helpy {
                   "\tstd::cout << BREAK;\n"
                   "\tstd::cout << \"See you next time!\" << std::endl << std::endl;\n"
                   "}\n";
+
+        // run()
+        source << '\n'
+               << "void " << info.classname << "::run() {\n"
+               << "\tstring instruction = \"Which mode would you prefer?\\n\\n\"\n"
+                  "                         \"* Guided\\n\"\n"
+                  "                         \"* Advanced\";\n"
+                  "\tuSet<string> options = {\"guided\", \"advanced\", \"adv\"};\n"
+                  "\n"
+                  "\t(readInput(instruction, options) == \"guided\") ? guidedMode() : advancedMode();\n"
+                  "}\t";
     }
 
     void Writer::writeHeader() {
