@@ -1,0 +1,68 @@
+\hypertarget{namespace_helpy}{}\doxysection{Helpy Namespace Reference}
+\label{namespace_helpy}\index{Helpy@{Helpy}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_helpy_1_1_command}{Command}}
+\item 
+class \mbox{\hyperlink{class_helpy_1_1_lexer}{Lexer}}
+\item 
+class \mbox{\hyperlink{class_helpy_1_1_manager}{Manager}}
+\item 
+class \mbox{\hyperlink{class_helpy_1_1_parser}{Parser}}
+\item 
+struct \mbox{\hyperlink{struct_helpy_1_1_parser_info}{Parser\+Info}}
+\item 
+struct \mbox{\hyperlink{struct_helpy_1_1_token}{Token}}
+\begin{DoxyCompactList}\small\item\em A class that represents a Helpyfile token. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_helpy_1_1_utils}{Utils}}
+\begin{DoxyCompactList}\small\item\em A class that encompasses helpful functions. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_helpy_1_1_writer}{Writer}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{namespace_helpy_a3894588c7a7a5e648048819f88cd2531}{Token\+Type}} \{ \newline
+\mbox{\hyperlink{namespace_helpy_a3894588c7a7a5e648048819f88cd2531ad7da1b76e5799f53a399b7a96ba67437}{Literal}}
+, \mbox{\hyperlink{namespace_helpy_a3894588c7a7a5e648048819f88cd2531a726add2b4d11304a74bc0360f8338984}{Hyphen}}
+, \mbox{\hyperlink{namespace_helpy_a3894588c7a7a5e648048819f88cd2531a1e57d498a45cfb4011f56166650a026f}{Name\+Keyword}}
+, \mbox{\hyperlink{namespace_helpy_a3894588c7a7a5e648048819f88cd2531a69256c54faac4d3c9d0e82471ea5178b}{Arguments\+Keyword}}
+, \newline
+\mbox{\hyperlink{namespace_helpy_a3894588c7a7a5e648048819f88cd2531ae3e47c844d7f29e89ebf19b526662c8f}{Commands\+Keyword}}
+ \}
+\begin{DoxyCompactList}\small\item\em An enum that details all the types of tokens. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{namespace_helpy_a3894588c7a7a5e648048819f88cd2531}\label{namespace_helpy_a3894588c7a7a5e648048819f88cd2531}} 
+\index{Helpy@{Helpy}!TokenType@{TokenType}}
+\index{TokenType@{TokenType}!Helpy@{Helpy}}
+\doxysubsubsection{\texorpdfstring{TokenType}{TokenType}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{namespace_helpy_a3894588c7a7a5e648048819f88cd2531}{Helpy\+::\+Token\+Type}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+An enum that details all the types of tokens. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Literal@{Literal}!Helpy@{Helpy}}\index{Helpy@{Helpy}!Literal@{Literal}}}\mbox{\Hypertarget{namespace_helpy_a3894588c7a7a5e648048819f88cd2531ad7da1b76e5799f53a399b7a96ba67437}\label{namespace_helpy_a3894588c7a7a5e648048819f88cd2531ad7da1b76e5799f53a399b7a96ba67437}} 
+Literal&a literal, such as a number or a string (except keywords) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Hyphen@{Hyphen}!Helpy@{Helpy}}\index{Helpy@{Helpy}!Hyphen@{Hyphen}}}\mbox{\Hypertarget{namespace_helpy_a3894588c7a7a5e648048819f88cd2531a726add2b4d11304a74bc0360f8338984}\label{namespace_helpy_a3894588c7a7a5e648048819f88cd2531a726add2b4d11304a74bc0360f8338984}} 
+Hyphen&a hyphen \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NameKeyword@{NameKeyword}!Helpy@{Helpy}}\index{Helpy@{Helpy}!NameKeyword@{NameKeyword}}}\mbox{\Hypertarget{namespace_helpy_a3894588c7a7a5e648048819f88cd2531a1e57d498a45cfb4011f56166650a026f}\label{namespace_helpy_a3894588c7a7a5e648048819f88cd2531a1e57d498a45cfb4011f56166650a026f}} 
+Name\+Keyword&the string \textquotesingle{}NAME\textquotesingle{} \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ArgumentsKeyword@{ArgumentsKeyword}!Helpy@{Helpy}}\index{Helpy@{Helpy}!ArgumentsKeyword@{ArgumentsKeyword}}}\mbox{\Hypertarget{namespace_helpy_a3894588c7a7a5e648048819f88cd2531a69256c54faac4d3c9d0e82471ea5178b}\label{namespace_helpy_a3894588c7a7a5e648048819f88cd2531a69256c54faac4d3c9d0e82471ea5178b}} 
+Arguments\+Keyword&the string \textquotesingle{}ARGUMENTS\textquotesingle{} \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CommandsKeyword@{CommandsKeyword}!Helpy@{Helpy}}\index{Helpy@{Helpy}!CommandsKeyword@{CommandsKeyword}}}\mbox{\Hypertarget{namespace_helpy_a3894588c7a7a5e648048819f88cd2531ae3e47c844d7f29e89ebf19b526662c8f}\label{namespace_helpy_a3894588c7a7a5e648048819f88cd2531ae3e47c844d7f29e89ebf19b526662c8f}} 
+Commands\+Keyword&the string \textquotesingle{}COMMANDS\textquotesingle{} \\
+\hline
+
+\end{DoxyEnumFields}

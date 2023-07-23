@@ -1,3 +1,5 @@
+/** @file */
+
 #ifndef HELPY_TOKEN_HPP
 #define HELPY_TOKEN_HPP
 
@@ -8,7 +10,7 @@ namespace Helpy {
      * @brief An enum that details all the types of tokens.
      */
     enum class TokenType {
-        Literal, /**< a literal value, such as a number or a string (except keywords) */
+        Literal, /**< a literal, such as a number or a string (except keywords) */
         Hyphen, /**< a hyphen */
 
         // keywords
@@ -27,6 +29,8 @@ namespace Helpy {
         /* CONSTRUCTOR */
         /**
          * @brief Creates a token.
+         *
+         * Creates a token given its type and, in the case of a literal, its value
          * @param type the type of the token
          * @param value the value (if any) of the token
          */
@@ -35,6 +39,8 @@ namespace Helpy {
         /* METHODS */
         /**
          * @brief Outputs a token to a stream.
+         *
+         * Used exclusively for testing.
          * @param os output stream
          * @param token token to be output
          * @return output stream, after outputting the token

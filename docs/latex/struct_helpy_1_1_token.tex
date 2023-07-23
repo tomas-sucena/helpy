@@ -12,13 +12,13 @@ A class that represents a Helpyfile token.
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{struct_helpy_1_1_token_adaea7342a7b915a6d52616e198918abf}{Token}} (Token\+Type type, std\+::string value=\char`\"{}\char`\"{})
+\mbox{\hyperlink{struct_helpy_1_1_token_adaea7342a7b915a6d52616e198918abf}{Token}} (\mbox{\hyperlink{token_8hpp_a3894588c7a7a5e648048819f88cd2531}{Token\+Type}} type, std\+::string value=\char`\"{}\char`\"{})
 \begin{DoxyCompactList}\small\item\em Creates a token. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\Hypertarget{struct_helpy_1_1_token_ac478b11a484ba05a7228ebda1cc08aa5}\label{struct_helpy_1_1_token_ac478b11a484ba05a7228ebda1cc08aa5}} 
-Token\+Type {\bfseries type}
+\mbox{\hyperlink{token_8hpp_a3894588c7a7a5e648048819f88cd2531}{Token\+Type}} {\bfseries type}
 \item 
 \mbox{\Hypertarget{struct_helpy_1_1_token_a95a459c9f423a41c6e7ed67166332abf}\label{struct_helpy_1_1_token_a95a459c9f423a41c6e7ed67166332abf}} 
 std\+::string {\bfseries value}
@@ -38,13 +38,13 @@ A class that represents a Helpyfile token.
 \index{Helpy::Token@{Helpy::Token}!Token@{Token}}
 \index{Token@{Token}!Helpy::Token@{Helpy::Token}}
 \doxysubsubsection{\texorpdfstring{Token()}{Token()}}
-{\footnotesize\ttfamily Helpy\+::\+Token\+::\+Token (\begin{DoxyParamCaption}\item[{Token\+Type}]{type,  }\item[{std\+::string}]{value = {\ttfamily \char`\"{}\char`\"{}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+{\footnotesize\ttfamily Helpy\+::\+Token\+::\+Token (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{token_8hpp_a3894588c7a7a5e648048819f88cd2531}{Token\+Type}}}]{type,  }\item[{std\+::string}]{value = {\ttfamily \char`\"{}\char`\"{}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
 
 
 
 Creates a token. 
 
-
+Creates a token given its type and, in the case of a literal, its value 
 \begin{DoxyParams}{Parameters}
 {\em type} & the type of the token \\
 \hline
@@ -64,7 +64,7 @@ Creates a token.
 
 Outputs a token to a stream. 
 
-
+Used exclusively for testing. 
 \begin{DoxyParams}{Parameters}
 {\em os} & output stream \\
 \hline
@@ -78,4 +78,4 @@ output stream, after outputting the token
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-token.\+hpp\end{DoxyCompactItemize}
+\mbox{\hyperlink{token_8hpp}{token.\+hpp}}\end{DoxyCompactItemize}

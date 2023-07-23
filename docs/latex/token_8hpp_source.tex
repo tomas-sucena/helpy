@@ -1,59 +1,60 @@
 \hypertarget{token_8hpp_source}{}\doxysection{token.\+hpp}
 \label{token_8hpp_source}\index{token.hpp@{token.hpp}}
-
+\mbox{\hyperlink{token_8hpp}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ HELPY\_TOKEN\_HPP}}
-\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ HELPY\_TOKEN\_HPP}}
-\DoxyCodeLine{00003\ }
-\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#ifndef\ HELPY\_TOKEN\_HPP}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#define\ HELPY\_TOKEN\_HPP}}
 \DoxyCodeLine{00005\ }
-\DoxyCodeLine{00006\ \textcolor{keyword}{namespace\ }Helpy\ \{}
-\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{enum}\ TokenType\ \{}
-\DoxyCodeLine{00011\ \ \ \ \ \ \ \ \ Literal,\ }
-\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ Hyphen,\ }
-\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ keywords}}
-\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ NameKeyword,\ }
-\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ ArgumentsKeyword,\ }
-\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ CommandsKeyword,\ }
-\DoxyCodeLine{00018\ \ \ \ \ \};}
-\DoxyCodeLine{00019\ }
-\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_helpy_1_1_token}{Token}}\ \{}
-\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ TokenType\ type;}
-\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ std::string\ value;}
-\DoxyCodeLine{00026\ }
-\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ CONSTRUCTOR\ */}}
-\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{struct_helpy_1_1_token_adaea7342a7b915a6d52616e198918abf}{Token}}(TokenType\ type,\ std::string\ value\ =\ \textcolor{stringliteral}{"{}"{}})\ :\ type(type),\ value(std::move(value))\ \{\}}
-\DoxyCodeLine{00034\ }
-\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ METHODS\ */}}
-\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ std::ostream\&\ \mbox{\hyperlink{struct_helpy_1_1_token_abe142e9574481fef3f1f07e5f4cb6338}{operator<<}}(std::ostream\ \&os,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_helpy_1_1_token}{Token}}\ \&token)\ \{}
-\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ os\ <<\ \textcolor{stringliteral}{"{}\{\ type:\ "{}};}
-\DoxyCodeLine{00044\ }
-\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (token.type)\ \{}
-\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::Literal:}
-\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ os\ <<\ \textcolor{stringliteral}{"{}Literal"{}};}
-\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::Hyphen:}
-\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ os\ <<\ \textcolor{stringliteral}{"{}Hyphen"{}};}
-\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::NameKeyword:}
-\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ os\ <<\ \textcolor{stringliteral}{"{}NAME"{}};}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace\ }Helpy\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{token_8hpp_a3894588c7a7a5e648048819f88cd2531}{TokenType}}\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token_8hpp_a3894588c7a7a5e648048819f88cd2531ad7da1b76e5799f53a399b7a96ba67437}{Literal}},\ }
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token_8hpp_a3894588c7a7a5e648048819f88cd2531a726add2b4d11304a74bc0360f8338984}{Hyphen}},\ }
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ keywords}}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token_8hpp_a3894588c7a7a5e648048819f88cd2531a1e57d498a45cfb4011f56166650a026f}{NameKeyword}},\ }
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token_8hpp_a3894588c7a7a5e648048819f88cd2531a69256c54faac4d3c9d0e82471ea5178b}{ArgumentsKeyword}},\ }
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token_8hpp_a3894588c7a7a5e648048819f88cd2531ae3e47c844d7f29e89ebf19b526662c8f}{CommandsKeyword}},\ }
+\DoxyCodeLine{00020\ \ \ \ \ \};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_helpy_1_1_token}{Token}}\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token_8hpp_a3894588c7a7a5e648048819f88cd2531}{TokenType}}\ type;}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ std::string\ value;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ CONSTRUCTOR\ */}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{struct_helpy_1_1_token_adaea7342a7b915a6d52616e198918abf}{Token}}(\mbox{\hyperlink{token_8hpp_a3894588c7a7a5e648048819f88cd2531}{TokenType}}\ type,\ std::string\ value\ =\ \textcolor{stringliteral}{"{}"{}})\ :\ type(type),\ value(std::move(value))\ \{\}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ METHODS\ */}}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ std::ostream\&\ \mbox{\hyperlink{struct_helpy_1_1_token_abe142e9574481fef3f1f07e5f4cb6338}{operator<<}}(std::ostream\ \&os,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_helpy_1_1_token}{Token}}\ \&token)\ \{}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ os\ <<\ \textcolor{stringliteral}{"{}\{\ type:\ "{}};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (token.type)\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::Literal:}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ os\ <<\ \textcolor{stringliteral}{"{}Literal"{}};}
 \DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::ArgumentsKeyword:}
-\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ os\ <<\ \textcolor{stringliteral}{"{}ARGUMENTS"{}};}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::Hyphen:}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ os\ <<\ \textcolor{stringliteral}{"{}Hyphen"{}};}
 \DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::CommandsKeyword:}
-\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ os\ <<\ \textcolor{stringliteral}{"{}COMMANDS"{}};}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::NameKeyword:}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ os\ <<\ \textcolor{stringliteral}{"{}NAME"{}};}
 \DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00062\ }
-\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!token.value.empty())\ os\ <<\ \textcolor{stringliteral}{"{},\ value:\ "{}}\ <<\ token.value;}
-\DoxyCodeLine{00064\ }
-\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ os\ <<\ \textcolor{stringliteral}{"{}\ \}"{}};}
-\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ os;}
-\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00068\ \ \ \ \ \};}
-\DoxyCodeLine{00069\ \}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::ArgumentsKeyword:}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ os\ <<\ \textcolor{stringliteral}{"{}ARGUMENTS"{}};}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::CommandsKeyword:}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ os\ <<\ \textcolor{stringliteral}{"{}COMMANDS"{}};}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!token.value.empty())\ os\ <<\ \textcolor{stringliteral}{"{},\ value:\ "{}}\ <<\ token.value;}
 \DoxyCodeLine{00070\ }
-\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//HELPY\_TOKEN\_HPP}}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ os\ <<\ \textcolor{stringliteral}{"{}\ \}"{}};}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ os;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00074\ \ \ \ \ \};}
+\DoxyCodeLine{00075\ \}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//HELPY\_TOKEN\_HPP}}
 
 \end{DoxyCode}
