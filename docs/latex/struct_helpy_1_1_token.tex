@@ -1,0 +1,81 @@
+\hypertarget{struct_helpy_1_1_token}{}\doxysection{Helpy\+::Token Struct Reference}
+\label{struct_helpy_1_1_token}\index{Helpy::Token@{Helpy::Token}}
+
+
+A class that represents a Helpyfile token.  
+
+
+
+
+{\ttfamily \#include $<$token.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_helpy_1_1_token_adaea7342a7b915a6d52616e198918abf}{Token}} (Token\+Type type, std\+::string value=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Creates a token. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_helpy_1_1_token_ac478b11a484ba05a7228ebda1cc08aa5}\label{struct_helpy_1_1_token_ac478b11a484ba05a7228ebda1cc08aa5}} 
+Token\+Type {\bfseries type}
+\item 
+\mbox{\Hypertarget{struct_helpy_1_1_token_a95a459c9f423a41c6e7ed67166332abf}\label{struct_helpy_1_1_token_a95a459c9f423a41c6e7ed67166332abf}} 
+std\+::string {\bfseries value}
+\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+std\+::ostream \& \mbox{\hyperlink{struct_helpy_1_1_token_abe142e9574481fef3f1f07e5f4cb6338}{operator$<$$<$}} (std\+::ostream \&os, const \mbox{\hyperlink{struct_helpy_1_1_token}{Token}} \&token)
+\begin{DoxyCompactList}\small\item\em Outputs a token to a stream. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A class that represents a Helpyfile token. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{struct_helpy_1_1_token_adaea7342a7b915a6d52616e198918abf}\label{struct_helpy_1_1_token_adaea7342a7b915a6d52616e198918abf}} 
+\index{Helpy::Token@{Helpy::Token}!Token@{Token}}
+\index{Token@{Token}!Helpy::Token@{Helpy::Token}}
+\doxysubsubsection{\texorpdfstring{Token()}{Token()}}
+{\footnotesize\ttfamily Helpy\+::\+Token\+::\+Token (\begin{DoxyParamCaption}\item[{Token\+Type}]{type,  }\item[{std\+::string}]{value = {\ttfamily \char`\"{}\char`\"{}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+Creates a token. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & the type of the token \\
+\hline
+{\em value} & the value (if any) of the token \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{struct_helpy_1_1_token_abe142e9574481fef3f1f07e5f4cb6338}\label{struct_helpy_1_1_token_abe142e9574481fef3f1f07e5f4cb6338}} 
+\index{Helpy::Token@{Helpy::Token}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!Helpy::Token@{Helpy::Token}}
+\doxysubsubsection{\texorpdfstring{operator$<$$<$}{operator<<}}
+{\footnotesize\ttfamily std\+::ostream \& operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{os,  }\item[{const \mbox{\hyperlink{struct_helpy_1_1_token}{Token}} \&}]{token }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Outputs a token to a stream. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em os} & output stream \\
+\hline
+{\em token} & token to be output \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+output stream, after outputting the token 
+\end{DoxyReturn}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+token.\+hpp\end{DoxyCompactItemize}

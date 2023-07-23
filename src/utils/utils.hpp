@@ -5,14 +5,16 @@
 
 namespace Helpy {
     /**
-     * A class that encompasses helpful functions.
+     * @brief A class that encompasses helpful functions.
      */
     class Utils {
     /* METHODS */
     public:
         /**
-         * @brief converts a string to snake_case, which is a writing style where each word is in lowercase and spaces
-         * are replaced with underscores
+         * @brief Converts a string to snake_case.
+         *
+         * Converts a string to snake_case, which is a writing style where each word is in lowercase and spaces
+         * are replaced with underscores.
          * @param string string to be converted to snake_case
          * @return converted string
          */
@@ -30,7 +32,7 @@ namespace Helpy {
         }
 
         /**
-         * @brief computes the first prime number that comes after the argument number
+         * @brief Computes the first prime number that comes after the argument number.
          * @param n variable which will store the first prime that comes after its initial value
          */
         static void nextPrime(int &n) {
