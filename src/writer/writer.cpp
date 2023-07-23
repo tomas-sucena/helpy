@@ -223,7 +223,9 @@ namespace Helpy {
         for (int i = 1; i <= info.numArguments; ++i)
             source << "const string &s" << i << ((i < info.numArguments) ? ", " : ") {\n");
 
-        source << "\tswitch (";
+        source << "\tvoid (" << info.classname << "::*func)();\n"
+               << '\n'
+               << "\tswitch (";
 
         for (int i = 1; i <= info.numArguments; ++i)
             source << "map" << i << "[s" << i << ']'
@@ -231,7 +233,7 @@ namespace Helpy {
 
         for (const Command &command : info.commands)
             source << "\t\tcase (" << command.getValue() << ") :\n"
-                   << "\t\t\t" << command.getMethodName() << "();\n"
+                   << "\t\t\tfunc = &" << info.classname << "::" << command.getMethodName() << ";\n"
                    << "\t\t\t" << "break;\n";
 
         source << "\t\tdefault :\n"
@@ -240,6 +242,9 @@ namespace Helpy {
                << '\n'
                << "\t\t\treturn false;\n"
                << "\t}\n"
+               << '\n'
+               << "\tstd::cout << BREAK;\n"
+               << "\t(this->*func)();\n"
                << '\n'
                << "\treturn true;\n"
                << "}\n";
@@ -302,6 +307,12 @@ namespace Helpy {
                   "\tstd::cout << \"See you next time!\" << std::endl << std::endl;\n"
                   "}\n";
 
+        // guidedMode()
+        source << '\n'
+               << "void " << info.classname << "::guidedMode() {\n"
+               << "\tstd::cout << \"Temporarily unavailable!\" << std::endl;\n"
+               << "}\n";
+
         // run()
         source << '\n'
                << "void " << info.classname << "::run() {\n"
@@ -311,7 +322,7 @@ namespace Helpy {
                   "\tuSet<string> options = {\"guided\", \"advanced\", \"adv\"};\n"
                   "\n"
                   "\t(readInput(instruction, options) == \"guided\") ? guidedMode() : advancedMode();\n"
-                  "}\t";
+                  "}\n";
     }
 
     void Writer::writeHeader() {
