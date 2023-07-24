@@ -74,17 +74,24 @@ namespace Helpy {
     void Writer::writeSourceIncludes() {
         source << "#include \"" << info.filename << ".h\"\n"
                << '\n'
+               << "// formatting\n"
+                  "#define RESET      \"\\033[0m\"\n"
+                  "#define BOLD       \"\\033[1m\"\n"
+                  "#define ITALICS    \"\\033[3m\"\n"
+                  "#define UNDERLINE  \"\\033[4m\"\n"
+               << '\n'
                << "// output colors\n"
-                  "#define RESET   \"\\033[0;m\"\n"
-                  "#define RED     \"\\033[1;31m\"\n"
-                  "#define GREEN   \"\\033[32m\"\n"
-                  "#define BLUE    \"\\033[34m\"\n"
-                  "#define YELLOW  \"\\033[33m\"\n"
-                  "#define BOLD    \"\\033[1m\"\n"
+                  "#define RED        \"\\033[31m\"\n"
+                  "#define GREEN      \"\\033[32m\"\n"
+                  "#define YELLOW     \"\\033[33m\"\n"
+                  "#define BLUE       \"\\033[34m\"\n"
+                  "#define PURPLE     \"\\033[35m\"\n"
+                  "#define CYAN       \"\\033[36m\"\n"
+                  "#define WHITE      \"\\033[37m\"\n"
                << '\n'
                << "// text\n"
                   "#define DASHED_LINE \"- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\"\n"
-                  "#define BREAK       std::endl << YELLOW << DASHED_LINE << RESET << std::endl << std::endl\n"
+                  "#define BREAK       std::endl << " << info.color << " << DASHED_LINE << RESET << std::endl << std::endl\n"
                   "#define YES_NO      \" (\" << GREEN << \"Yes\" << RESET << '/' << RED << \"No\" << RESET << ')'\n";
     }
 
