@@ -1,9 +1,12 @@
 #include "parser.h"
 
 #include <stdexcept>
+#include <unordered_set>
 #include <utility>
 
 #include "../utils/utils.hpp"
+
+#define uSet std::unordered_set
 
 namespace Helpy {
     Parser::Parser(std::list<Token> tokens) : tokens(std::move(tokens)) {}
@@ -53,6 +56,33 @@ namespace Helpy {
         }
 
         return name;
+    }
+
+    std::string Parser::findColor() {
+        std::string color = "YELLOW";
+        uSet<std::string> colors = {"RED", "GREEN", "YELLOW", "BLUE", "PURPLE", "CYAN", "WHITE"};
+
+        for (auto it = tokens.begin(); it != tokens.end(); ++it) {
+            if (it->type != TokenType::ColorKeyword) continue;
+            it = tokens.erase(it);
+
+            if (it == tokens.end())
+                throw std::runtime_error("Error: No value was assigned to COLOR!");
+            else if (it->type != TokenType::Literal)
+                throw std::runtime_error("Error: Unexpected value assigned to COLOR!");
+
+            color = it->value;
+
+            // convert the color to uppercase
+            for (char &c : color)
+                c = (char) toupper(c);
+
+            // verify if the color exists
+            if (colors.find(color) == colors.end())
+                throw std::runtime_error("Error: Unexpected value assigned to COLOR!");
+        }
+
+        return color;
     }
 
     std::list<Command> Parser::findCommands(int numArguments) {
@@ -105,8 +135,9 @@ namespace Helpy {
 
         // optional
         info.classname = findName();
-        info.filename = Utils::toSnakeCase(info.classname);
+        info.color = findColor();
 
+        info.filename = Utils::toSnakeCase(info.classname);
         return info;
     }
 }
