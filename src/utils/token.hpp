@@ -14,9 +14,10 @@ namespace Helpy {
         Hyphen, /**< a hyphen */
 
         // keywords
-        NameKeyword, /**< the string 'NAME'*/
-        ArgumentsKeyword, /**< the string 'ARGUMENTS'*/
-        CommandsKeyword, /**< the string 'COMMANDS'*/
+        NameKeyword, /**< the string 'NAME' */
+        ArgumentsKeyword, /**< the string 'ARGUMENTS' */
+        CommandsKeyword, /**< the string 'COMMANDS' */
+        ColorKeyword, /**< the string 'COLOR' */
     };
 
     /**
@@ -30,7 +31,7 @@ namespace Helpy {
         /**
          * @brief Creates a token.
          *
-         * Creates a token given its type and, in the case of a literal, its value
+         * Creates a token given its type and, if it exists, its value
          * @param type the type of the token
          * @param value the value (if any) of the token
          */
@@ -64,6 +65,8 @@ namespace Helpy {
                 case TokenType::CommandsKeyword:
                     os << "COMMANDS";
                     break;
+                case TokenType::ColorKeyword:
+                    os << "COLOR";
             }
 
             if (!token.value.empty()) os << ", value: " << token.value;

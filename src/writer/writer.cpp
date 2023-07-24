@@ -133,7 +133,7 @@ namespace Helpy {
                   "*/\n"
                << "void " << info.classname << "::toLowercase(string &s, bool uppercase) {\n"
                << "\tfor (char& c : s)\n"
-                  "\t\tc = (uppercase) ? (char) toupper(c) : (char) tolower(c);\n"
+                  "\t\tc = (char) ((uppercase) ? toupper(c) : tolower(c));\n"
                   "}\n";
 
         // readInput()
