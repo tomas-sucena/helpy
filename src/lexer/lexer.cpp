@@ -3,7 +3,9 @@
 namespace Helpy {
     uMap<std::string, TokenType> Lexer::keywords = {{"NAME", TokenType::NameKeyword},
                                                     {"ARGUMENTS", TokenType::ArgumentsKeyword},
-                                                    {"COMMANDS", TokenType::CommandsKeyword}};
+                                                    {"COMMANDS", TokenType::CommandsKeyword},
+                                                    {"COLOR", TokenType::ColorKeyword},
+                                                    {"COLOUR", TokenType::ColorKeyword}};
 
     Lexer::Lexer(const std::string &path) : file(path), curr(0), line(0) {}
 

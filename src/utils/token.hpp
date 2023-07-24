@@ -31,7 +31,7 @@ namespace Helpy {
         /**
          * @brief Creates a token.
          *
-         * Creates a token given its type and, if it exists, its value
+         * Creates a token given its type and, in the case of a literal, its value
          * @param type the type of the token
          * @param value the value (if any) of the token
          */
