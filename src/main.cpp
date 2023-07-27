@@ -8,7 +8,7 @@ int main(int argc, char *argv[]) {
 
     if (!strcmp(argv[1], "init"))
         Helpy::Manager::init((argc < 3) ? "" : argv[2], (argc < 4) ? "helpy" : argv[3]);
-    else if (!strcmp(argv[1], "init"))
+    else if (!strcmp(argv[1], "run"))
         Helpy::Manager::run((argc < 3) ? "" : argv[2], (argc < 4) ? "Helpyfile" : argv[3]);
     else {
         std::string command(argv[1]);
