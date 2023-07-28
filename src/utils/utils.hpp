@@ -1,7 +1,18 @@
 #ifndef HELPY_UTILS_HPP
 #define HELPY_UTILS_HPP
 
+#include <iostream>
 #include <string>
+
+// output formatting
+#define RESET      "\033[0m"
+#define BOLD       "\033[1m"
+#define R_BOLD     "\033[22m"
+#define ITALICS    "\033[3m"
+#define UNDERLINE  "\033[4m"
+
+// output colors
+#define RED        "\033[31m"
 
 namespace Helpy {
     /**
@@ -10,6 +21,14 @@ namespace Helpy {
     class Utils {
     /* METHODS */
     public:
+        static void printError(const std::basic_string<char> &errorMsg, unsigned line = 0) {
+            std::cout << RED << BOLD << "Error";
+            if (line) std::cout << " in line " << line;
+
+            std::cout << ": " << R_BOLD << errorMsg;
+            exit(1);
+        }
+
         /**
          * @brief Converts a string to snake_case.
          *
