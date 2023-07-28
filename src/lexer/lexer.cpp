@@ -7,7 +7,7 @@ namespace Helpy {
                                                     {"COLOR", TokenType::ColorKeyword},
                                                     {"COLOUR", TokenType::ColorKeyword}};
 
-    Lexer::Lexer(const std::string &path) : file(path), curr(0), line(0) {}
+    Lexer::Lexer(const std::string &path) : file(path), curr(0), line(1) {}
 
     void Lexer::read() {
         file.get(curr);
