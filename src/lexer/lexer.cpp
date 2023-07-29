@@ -74,8 +74,11 @@ namespace Helpy {
         std::list<Token> tokens;
         int getNext = true;
 
-        while (!file.eof()) {
+        while (true) {
             if (getNext++) read();
+
+            // check if there is more to read
+            if (file.eof()) break;
 
             switch (curr) {
                 case 'a' ... 'z' :
@@ -92,7 +95,7 @@ namespace Helpy {
                     auto it = keywords.find(last.value);
 
                     if (it == keywords.end()) {
-                        Utils::printError(last.value + " is NOT a valid keyword!", line, false);
+                        Utils::printError('\'' + last.value + "' is NOT a valid keyword!", line, false);
                         error = true;
                     }
                     else tokens.emplace_back(it->second);
@@ -104,7 +107,7 @@ namespace Helpy {
 
                     if (file.eof() || (curr != '/' && curr != '*')) {
                         Utils::printError(std::string("Badly formatted comment - unexpected character '")
-                            + curr + "' after '/'!", line, false);
+                            + BOLD + curr + R_BOLD + "' after '" + BOLD + '/' + R_BOLD + "'!", line, false);
                         error = true;
                     }
 
