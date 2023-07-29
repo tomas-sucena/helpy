@@ -16,18 +16,20 @@ namespace Helpy {
 
         for (auto it = tokens.begin(); it != tokens.end(); ++it) {
             if (it->type != TokenType::ArgumentsKeyword) continue;
+
+            unsigned line = it->line;
             it = tokens.erase(it);
 
             if (it == tokens.end())
-                Utils::printError("Could not find ARGUMENTS!");
+                Utils::printError("No value was assigned to ARGUMENTS!", line);
             else if (it->type != TokenType::Literal)
-                Utils::printError("No value was assigned to ARGUMENTS!");
+                Utils::printError("Unexpected value assigned to ARGUMENTS!", line);
 
             try {
                 numArguments = std::stoi(it->value);
             }
             catch (std::invalid_argument const &ex) {
-                Utils::printError("The value assigned to ARGUMENTS is NOT a number!");
+                Utils::printError("The value assigned to ARGUMENTS is NOT a number!", it->line);
             }
 
             tokens.erase(it);
@@ -42,12 +44,14 @@ namespace Helpy {
 
         for (auto it = tokens.begin(); it != tokens.end(); ++it) {
             if (it->type != TokenType::NameKeyword) continue;
+
+            unsigned line = it->line;
             it = tokens.erase(it);
 
             if (it == tokens.end())
-                Utils::printError("No value was assigned to NAME!");
+                Utils::printError("No value was assigned to NAME!", line);
             else if (it->type != TokenType::Literal)
-                Utils::printError("Unexpected value assigned to NAME!");
+                Utils::printError("Unexpected value assigned to NAME!", line);
 
             name = it->value;
             tokens.erase(it);
@@ -64,12 +68,14 @@ namespace Helpy {
 
         for (auto it = tokens.begin(); it != tokens.end(); ++it) {
             if (it->type != TokenType::ColorKeyword) continue;
+
+            unsigned line = it->line;
             it = tokens.erase(it);
 
             if (it == tokens.end())
-                Utils::printError("No value was assigned to COLOR!");
+                Utils::printError("No value was assigned to COLOR!", line);
             else if (it->type != TokenType::Literal)
-                Utils::printError("Unexpected value assigned to COLOR!");
+                Utils::printError("Unexpected value assigned to COLOR!", it->line);
 
             color = it->value;
 
@@ -79,7 +85,7 @@ namespace Helpy {
 
             // verify if the color exists
             if (colors.find(color) == colors.end())
-                Utils::printError("Unexpected value assigned to COLOR!");
+                Utils::printError("Unexpected value assigned to COLOR!", it->line);
         }
 
         return color;
@@ -103,7 +109,7 @@ namespace Helpy {
 
         while (it != tokens.end() && it->type == TokenType::Hyphen) {
             if ((++it) == tokens.end() || it->type != TokenType::Literal)
-                Utils::printError("Unexpected command!");
+                Utils::printError("Unexpected command!", it->line);
 
             Command command;
             int acc = 0;
@@ -115,10 +121,10 @@ namespace Helpy {
 
             if (acc > numArguments)
                 Utils::printError("Command with too many arguments - "
-                    "the maximum number should be " + std::to_string(numArguments) + '!');
+                    "the maximum number should be " + std::to_string(numArguments) + '!', it->line);
             else if (acc < numArguments)
                 Utils::printError("Command with too few arguments - "
-                    "the minimum number should be " + std::to_string(numArguments) + '!');
+                    "the minimum number should be " + std::to_string(numArguments) + '!', it->line);
 
             commands.push_back(command);
         }

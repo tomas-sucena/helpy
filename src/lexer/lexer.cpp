@@ -83,11 +83,14 @@ namespace Helpy {
             switch (curr) {
                 case 'a' ... 'z' :
                 case 'A' ... 'Z' :
-                case '1' ... '9' :
-                    tokens.emplace_back(TokenType::Literal, readWord());
+                case '1' ... '9' : {
+                    int initialLine = line;
+
+                    tokens.emplace_back(TokenType::Literal, initialLine, readWord());
                     getNext = false;
 
                     break;
+                }
                 case ':' : {
                     Token last = tokens.back();
                     tokens.pop_back();
@@ -98,7 +101,7 @@ namespace Helpy {
                         Utils::printError('\'' + last.value + "' is NOT a valid keyword!", line, false);
                         error = true;
                     }
-                    else tokens.emplace_back(it->second);
+                    else tokens.emplace_back(it->second, last.line);
 
                     break;
                 }
@@ -114,7 +117,7 @@ namespace Helpy {
                     ignoreComment(curr == '*');
                     break;
                 case '-' :
-                    tokens.emplace_back(TokenType::Hyphen);
+                    tokens.emplace_back(TokenType::Hyphen, line);
                     break;
                 case ' ' :
                 case '\n' :

@@ -25,6 +25,7 @@ namespace Helpy {
      */
     struct Token {
         TokenType type;
+        unsigned line;
         std::string value;
 
         /* CONSTRUCTOR */
@@ -33,9 +34,11 @@ namespace Helpy {
          *
          * Creates a token given its type and, in the case of a literal, its value
          * @param type the type of the token
+         * @param line the line where the token was found
          * @param value the value (if any) of the token
          */
-        explicit Token(TokenType type, std::string value = "") : type(type), value(std::move(value)) {}
+        explicit Token(TokenType type, unsigned line, std::string value = "")
+            : type(type), line(line), value(std::move(value)) {}
 
         /* METHODS */
         /**
