@@ -19,15 +19,15 @@ namespace Helpy {
             it = tokens.erase(it);
 
             if (it == tokens.end())
-                throw std::runtime_error("Error: Could not find ARGUMENTS!");
+                Utils::printError("Could not find ARGUMENTS!");
             else if (it->type != TokenType::Literal)
-                throw std::runtime_error("Error: No value was assigned to ARGUMENTS!");
+                Utils::printError("No value was assigned to ARGUMENTS!");
 
             try {
                 numArguments = std::stoi(it->value);
             }
             catch (std::invalid_argument const &ex) {
-                throw std::runtime_error("Error: The value assigned to ARGUMENTS is NOT a number!");
+                Utils::printError("The value assigned to ARGUMENTS is NOT a number!");
             }
 
             tokens.erase(it);
@@ -45,9 +45,9 @@ namespace Helpy {
             it = tokens.erase(it);
 
             if (it == tokens.end())
-                throw std::runtime_error("Error: No value was assigned to NAME!");
+                Utils::printError("No value was assigned to NAME!");
             else if (it->type != TokenType::Literal)
-                throw std::runtime_error("Error: Unexpected value assigned to NAME!");
+                Utils::printError("Unexpected value assigned to NAME!");
 
             name = it->value;
             tokens.erase(it);
@@ -67,9 +67,9 @@ namespace Helpy {
             it = tokens.erase(it);
 
             if (it == tokens.end())
-                throw std::runtime_error("Error: No value was assigned to COLOR!");
+                Utils::printError("No value was assigned to COLOR!");
             else if (it->type != TokenType::Literal)
-                throw std::runtime_error("Error: Unexpected value assigned to COLOR!");
+                Utils::printError("Unexpected value assigned to COLOR!");
 
             color = it->value;
 
@@ -79,7 +79,7 @@ namespace Helpy {
 
             // verify if the color exists
             if (colors.find(color) == colors.end())
-                throw std::runtime_error("Error: Unexpected value assigned to COLOR!");
+                Utils::printError("Unexpected value assigned to COLOR!");
         }
 
         return color;
@@ -96,14 +96,14 @@ namespace Helpy {
         }
 
         if (it == tokens.end())
-            throw std::runtime_error("Error: Could not find COMMANDS!");
+            Utils::printError("Could not find COMMANDS!");
 
         // get the commands
         std::list<Command> commands;
 
         while (it != tokens.end() && it->type == TokenType::Hyphen) {
             if ((++it) == tokens.end() || it->type != TokenType::Literal)
-                throw std::runtime_error("Error: Unexpected command!");
+                Utils::printError("Unexpected command!");
 
             Command command;
             int acc = 0;
@@ -114,10 +114,10 @@ namespace Helpy {
             }
 
             if (acc > numArguments)
-                throw std::runtime_error("Error: Command with too many arguments - "
+                Utils::printError("Command with too many arguments - "
                     "the maximum number should be " + std::to_string(numArguments) + '!');
             else if (acc < numArguments)
-                throw std::runtime_error("Error: Command with too few arguments - "
+                Utils::printError("Command with too few arguments - "
                     "the minimum number should be " + std::to_string(numArguments) + '!');
 
             commands.push_back(command);
