@@ -21,12 +21,18 @@ namespace Helpy {
     class Utils {
     /* METHODS */
     public:
-        static void printError(const std::basic_string<char> &errorMsg, unsigned line = 0) {
-            std::cout << RED << BOLD << "Error";
-            if (line) std::cout << " in line " << line;
+        /**
+         * @brief Prints an error message in the console.
+         * @param errorMsg string containing the error message
+         * @param line number of the line in which the error occurred
+         * @param quit bool indicating if the program should terminate
+         */
+        static void printError(const std::string &errorMsg, unsigned line = 0, bool quit = true) {
+            std::cout << RED << "Error";
+            if (line) std::cout << " in " << BOLD << "line " << line << R_BOLD;
 
-            std::cout << ": " << R_BOLD << errorMsg;
-            exit(1);
+            std::cout << ": " << errorMsg << std::endl;
+            if (quit) exit(1);
         }
 
         /**

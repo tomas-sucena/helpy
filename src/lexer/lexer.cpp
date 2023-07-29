@@ -1,3 +1,4 @@
+#include "../utils/utils.hpp"
 #include "lexer.h"
 
 namespace Helpy {
@@ -7,7 +8,7 @@ namespace Helpy {
                                                     {"COLOR", TokenType::ColorKeyword},
                                                     {"COLOUR", TokenType::ColorKeyword}};
 
-    Lexer::Lexer(const std::string &path) : file(path), curr(0), line(1) {}
+    Lexer::Lexer(const std::string &path) : file(path), curr(0), line(1), error(false) {}
 
     void Lexer::read() {
         file.get(curr);
@@ -31,8 +32,8 @@ namespace Helpy {
                     getNext = false;
                     continue;
                 default :
-                    throw std::runtime_error("Error in line " + std::to_string(line) + ": Unexpected character '"
-                        + curr + "'!");
+                    Utils::printError(std::string("Unexpected character '") + curr + "'!", line, false);
+                    error = true;
             }
 
             read();
@@ -49,7 +50,7 @@ namespace Helpy {
             return;
         }
 
-        std::string initialLine = std::to_string(line);
+        int initialLine = line;
 
         while (!file.eof()) {
             read();
@@ -62,9 +63,11 @@ namespace Helpy {
             break;
         }
 
-        if (file.eof())
-            throw std::runtime_error("Error in line " + initialLine + ": Badly formatted comment - expected closing"
-                " '*/' to match opening '/*'!");
+        if (file.eof()) {
+            Utils::printError(std::string("Badly formatted comment - expected closing '") + BOLD + "*/" 
+                + R_BOLD + "' to match opening '" + BOLD + "/*" + R_BOLD + "'!", initialLine, false);
+            error = true;
+        }
     }
 
     std::list<Token> Lexer::execute() {
@@ -88,19 +91,22 @@ namespace Helpy {
 
                     auto it = keywords.find(last.value);
 
-                    if (it == keywords.end())
-                        throw std::runtime_error("Error in line " + std::to_string(line) + ": '" + last.value
-                            + "' is NOT a valid keyword!");
+                    if (it == keywords.end()) {
+                        Utils::printError(last.value + " is NOT a valid keyword!", line, false);
+                        error = true;
+                    }
+                    else tokens.emplace_back(it->second);
 
-                    tokens.emplace_back(it->second);
                     break;
                 }
                 case '/' :
                     read();
 
-                    if (file.eof() || (curr != '/' && curr != '*'))
-                        throw std::runtime_error("Error in line " + std::to_string(line) + ": Badly formatted comment - "
-                            "unexpected character '" + curr + "' after '/'!");
+                    if (file.eof() || (curr != '/' && curr != '*')) {
+                        Utils::printError(std::string("Badly formatted comment - unexpected character '")
+                            + curr + "' after '/'!", line, false);
+                        error = true;
+                    }
 
                     ignoreComment(curr == '*');
                     break;
@@ -111,11 +117,13 @@ namespace Helpy {
                 case '\n' :
                     break;
                 default :
-                    throw std::runtime_error("Error in line " + std::to_string(line) + ": Unexpected character '"
-                        + curr + "'!");
+                    Utils::printError(std::string("Unexpected character '") + BOLD + curr + R_BOLD
+                        + "'!", line, false);
+                    error = true;
             }
         }
 
+        if (error) exit(1);
         return tokens;
     }
 }

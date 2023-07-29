@@ -14,6 +14,8 @@ namespace Helpy {
         std::ifstream file;
         char curr;
         int line;
+        bool error;
+
         static uMap<std::string, TokenType> keywords;
 
     /* CONSTRUCTOR */
