@@ -12,23 +12,6 @@
 namespace Helpy {
     Parser::Parser(std::list<Token> tokens) : tokens(std::move(tokens)) {}
 
-    std::string Parser::parseName() {
-        auto it = tokens.begin();
-        unsigned line = it->line;
-
-        it = tokens.erase(it); // erase the NAME token
-
-        if (it == tokens.end())
-            Utils::printError("No value was assigned to NAME!", line);
-        else if (it->type != TokenType::Literal)
-            Utils::printError("Unexpected value assigned to NAME!", line);
-
-        std::string name = it->value;
-        tokens.erase(it);
-
-        return name;
-    }
-
     std::string Parser::parseColor() {
         auto it = tokens.begin();
         unsigned line = it->line;
@@ -64,10 +47,11 @@ namespace Helpy {
         numArguments = 0;
 
         while (it != tokens.end() && it->type == TokenType::Hyphen) {
+            unsigned line = it->line;
             it = tokens.erase(it); // erase the HYPHEN token
 
             if (it == tokens.end() || it->type != TokenType::Literal)
-                Utils::printError("Unexpected command!", it->line);
+                Utils::printError("Unexpected command!", line);
 
             Command command;
             int acc = 0;
@@ -94,6 +78,51 @@ namespace Helpy {
         return commands;
     }
 
+    void Parser::parseDescriptions(std::list<Command> &commands) {
+        auto it = tokens.begin();
+        unsigned line = it->line;
+
+        if (commands.empty())
+            Utils::printError("DESCRIPTIONS cannot appear before COMMANDS!", line);
+
+        auto commandIt = commands.begin();
+        it = tokens.erase(it); // erase the DESCRIPTIONS token
+
+        while (it != tokens.end() && it->type == TokenType::Hyphen) {
+            line = it->line;
+            it = tokens.erase(it); // erase the HYPHEN token
+
+            if (it == tokens.end() || it->type != TokenType::Literal)
+                Utils::printError("Unexpected description!", line);
+
+            std::string description;
+
+            while (it != tokens.end() && it->type == TokenType::Literal) {
+                description += it->value;
+                it = tokens.erase(it);
+            }
+
+            (commandIt++)->setDescription(description);
+        }
+    }
+
+    std::string Parser::parseName() {
+        auto it = tokens.begin();
+        unsigned line = it->line;
+
+        it = tokens.erase(it); // erase the NAME token
+
+        if (it == tokens.end())
+            Utils::printError("No value was assigned to NAME!", line);
+        else if (it->type != TokenType::Literal)
+            Utils::printError("Unexpected value assigned to NAME!", line);
+
+        std::string name = it->value;
+        tokens.erase(it);
+
+        return name;
+    }
+
     ParserInfo Parser::execute() {
         ParserInfo info = {.color = "YELLOW", .classname = "Helpy"};
 
@@ -109,6 +138,9 @@ namespace Helpy {
                 // optional
                 case TokenType::ColorKeyword:
                     info.color = parseColor();
+                    break;
+                case TokenType::DescriptionsKeyword:
+                    parseDescriptions(info.commands);
                     break;
                 case TokenType::NameKeyword:
                     info.classname = parseName();

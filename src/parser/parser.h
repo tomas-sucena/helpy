@@ -25,9 +25,10 @@ namespace Helpy {
 
     /* METHODS */
     private:
-        std::string parseName();
         std::string parseColor();
         std::list<Command> parseCommands(unsigned &numArguments);
+        void parseDescriptions(std::list<Command> &commands);
+        std::string parseName();
 
     public:
         ParserInfo execute();
