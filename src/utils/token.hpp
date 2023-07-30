@@ -15,7 +15,6 @@ namespace Helpy {
 
         // keywords
         NameKeyword, /**< the string 'NAME' */
-        ArgumentsKeyword, /**< the string 'ARGUMENTS' */
         CommandsKeyword, /**< the string 'COMMANDS' */
         ColorKeyword, /**< the string 'COLOR' */
     };
@@ -61,9 +60,6 @@ namespace Helpy {
                     break;
                 case TokenType::NameKeyword:
                     os << "NAME";
-                    break;
-                case TokenType::ArgumentsKeyword:
-                    os << "ARGUMENTS";
                     break;
                 case TokenType::CommandsKeyword:
                     os << "COMMANDS";
