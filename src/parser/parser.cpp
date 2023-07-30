@@ -115,7 +115,7 @@ namespace Helpy {
                     break;
 
                 default:
-                    break;
+                    Utils::printError('\'' + curr.value + "' is NOT a valid keyword!", curr.line);
             }
         }
 
