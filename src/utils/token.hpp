@@ -14,9 +14,10 @@ namespace Helpy {
         Hyphen, /**< a hyphen */
 
         // keywords
-        NameKeyword, /**< the string 'NAME' */
-        CommandsKeyword, /**< the string 'COMMANDS' */
         ColorKeyword, /**< the string 'COLOR' */
+        CommandsKeyword, /**< the string 'COMMANDS' */
+        DescriptionsKeyword, /**< the string 'DESCRIPTIONS' */
+        NameKeyword, /**< the string 'NAME' */
     };
 
     /**
@@ -58,14 +59,18 @@ namespace Helpy {
                 case TokenType::Hyphen:
                     os << "Hyphen";
                     break;
-                case TokenType::NameKeyword:
-                    os << "NAME";
+                case TokenType::ColorKeyword:
+                    os << "COLOR";
                     break;
                 case TokenType::CommandsKeyword:
                     os << "COMMANDS";
                     break;
-                case TokenType::ColorKeyword:
-                    os << "COLOR";
+                case TokenType::DescriptionsKeyword:
+                    os << "DESCRIPTIONS";
+                    break;
+                case TokenType::NameKeyword:
+                    os << "NAME";
+                    break;
             }
 
             if (!token.value.empty()) os << ", value: " << token.value;
