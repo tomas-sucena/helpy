@@ -124,7 +124,15 @@ namespace Helpy {
         for (const Command &command : info.commands) {
             source << '\n'
                    << "/**\n"
-                   << " * @brief " << command.getDescription() << '\n'
+                   << " * @brief ";
+
+            // write the method description
+            for (const char& c : command.getDescription()) {
+                source << c;
+                if (c == '\n') source << " * ";
+            }
+
+            source << '\n'
                    << " */\n"
                    << "void " << info.classname << "::" << command.getMethodName() << "() {\n"
                    << "\tstd::cout << BREAK;\n"
