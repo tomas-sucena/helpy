@@ -2,10 +2,11 @@
 #include "lexer.h"
 
 namespace Helpy {
-    uMap<std::string, TokenType> Lexer::keywords = {{"NAME", TokenType::NameKeyword},
+    uMap<std::string, TokenType> Lexer::keywords = {{"COLOR", TokenType::ColorKeyword},
+                                                    {"COLOUR", TokenType::ColorKeyword},
                                                     {"COMMANDS", TokenType::CommandsKeyword},
-                                                    {"COLOR", TokenType::ColorKeyword},
-                                                    {"COLOUR", TokenType::ColorKeyword}};
+                                                    {"DESCRIPTIONS", TokenType::DescriptionsKeyword},
+                                                    {"NAME", TokenType::NameKeyword},};
 
     Lexer::Lexer(const std::string &path) : file(path), curr(0), line(1), error(false) {}
 
