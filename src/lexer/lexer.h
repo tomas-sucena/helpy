@@ -26,6 +26,7 @@ namespace Helpy {
     private:
         void read();
         std::string readWord();
+        std::string readString(char delimiter);
         void ignoreComment(bool multiline);
 
     public:

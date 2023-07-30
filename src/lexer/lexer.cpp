@@ -16,7 +16,7 @@ namespace Helpy {
     }
 
     std::string Lexer::readWord() {
-        std::string value;
+        std::string word;
         bool getNext = true;
 
         while (!file.eof() && getNext) {
@@ -24,7 +24,7 @@ namespace Helpy {
                 case 'a' ... 'z' :
                 case 'A' ... 'Z' :
                 case '0' ... '9' :
-                    value += curr;
+                    word += curr;
                     break;
                 case ':' :
                 case '-' :
@@ -40,7 +40,47 @@ namespace Helpy {
             read();
         }
 
-        return value;
+        return word;
+    }
+
+    std::string Lexer::readString(char delimiter) {
+        std::string string;
+        unsigned initialLine = line;
+
+        bool getNext = true;
+        bool escape;
+
+        while (getNext) {
+            read();
+
+            if (file.eof())
+                Utils::printError(std::string("Badly formatted string literal - expected closing '")
+                    + BOLD + delimiter + R_BOLD + "'!", initialLine);
+
+            switch (curr) {
+                case '\\' :
+                    escape = true;
+                    continue;
+                case '\n' :
+                    break;
+                case 'n' :
+                    string += escape ? '\n' : 'n';
+                    break;
+                case '\'' :
+                case '"' :
+                    if (curr == delimiter && !escape) {
+                        getNext = false;
+                        break;
+                    }
+                default :
+                    string += curr;
+                    break;
+            }
+
+            escape = false;
+        }
+
+        return string;
     }
 
     void Lexer::ignoreComment(bool multiline) {
@@ -84,14 +124,15 @@ namespace Helpy {
             switch (curr) {
                 case 'a' ... 'z' :
                 case 'A' ... 'Z' :
-                case '1' ... '9' : {
-                    int initialLine = line;
-
-                    tokens.emplace_back(TokenType::Literal, initialLine, readWord());
+                case '1' ... '9' :
+                    tokens.emplace_back(TokenType::Word, line, readWord());
                     getNext = false;
 
                     break;
-                }
+                case '\'' :
+                case '"' :
+                    tokens.emplace_back(TokenType::String, line, readString(curr));
+                    break;
                 case ':' : {
                     Token last = tokens.back();
                     tokens.pop_back();
