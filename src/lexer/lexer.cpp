@@ -27,6 +27,7 @@ namespace Helpy {
                     value += curr;
                     break;
                 case ':' :
+                case '-' :
                 case ' ' :
                 case '\n' :
                     getNext = false;
