@@ -123,6 +123,9 @@ namespace Helpy {
     void Writer::writeMethodsDefinition() {
         for (const Command &command : info.commands) {
             source << '\n'
+                   << "/**\n"
+                   << " * @brief " << command.getDescription() << '\n'
+                   << " */\n"
                    << "void " << info.classname << "::" << command.getMethodName() << "() {\n"
                    << "\tstd::cout << BREAK;\n"
                    << "\tstd::cout << \"Under development!\" << std::endl;\n"
@@ -134,11 +137,11 @@ namespace Helpy {
         // toLowercase()
         source << '\n'
                << "/**\n"
-                  "* @brief turns all the characters of a string into lowercase or uppercase\n"
-                  "* @complexity O(n)\n"
-                  "* @param s string to be modified\n"
-                  "* @param uppercase bool that indicates if the string should be converted to uppercase\n"
-                  "*/\n"
+                  " * @brief turns all the characters of a string into lowercase or uppercase\n"
+                  " * @complexity O(n)\n"
+                  " * @param s string to be modified\n"
+                  " * @param uppercase bool that indicates if the string should be converted to uppercase\n"
+                  " */\n"
                << "void " << info.classname << "::toLowercase(string &s, bool uppercase) {\n"
                << "\tfor (char& c : s)\n"
                   "\t\tc = (char) ((uppercase) ? toupper(c) : tolower(c));\n"
