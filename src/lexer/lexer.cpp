@@ -3,7 +3,6 @@
 
 namespace Helpy {
     uMap<std::string, TokenType> Lexer::keywords = {{"NAME", TokenType::NameKeyword},
-                                                    {"ARGUMENTS", TokenType::ArgumentsKeyword},
                                                     {"COMMANDS", TokenType::CommandsKeyword},
                                                     {"COLOR", TokenType::ColorKeyword},
                                                     {"COLOUR", TokenType::ColorKeyword}};
