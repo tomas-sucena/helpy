@@ -10,8 +10,9 @@ namespace Helpy {
      * @brief An enum that details all the types of tokens.
      */
     enum class TokenType {
-        Literal, /**< a literal, such as a number or a string (except keywords) */
         Hyphen, /**< a hyphen */
+        Word, /**< a single word */
+        String, /**< a string, which can be comprised of many words */
 
         // keywords
         ColorKeyword, /**< the string 'COLOR' */
@@ -53,11 +54,14 @@ namespace Helpy {
             os << "{ type: ";
 
             switch (token.type) {
-                case TokenType::Literal:
-                    os << "Literal";
-                    break;
                 case TokenType::Hyphen:
                     os << "Hyphen";
+                    break;
+                case TokenType::Word:
+                    os << "Literal";
+                    break;
+                case TokenType::String:
+                    os << "String";
                     break;
                 case TokenType::ColorKeyword:
                     os << "COLOR";

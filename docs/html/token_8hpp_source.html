@@ -84,7 +84,7 @@ $(function() {
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span>Helpy {</div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="token_8hpp.html#a3894588c7a7a5e648048819f88cd2531">   12</a></span>    <span class="keyword">enum class</span> <a class="code hl_enumeration" href="token_8hpp.html#a3894588c7a7a5e648048819f88cd2531">TokenType</a> {</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>        <a class="code hl_enumvalue" href="token_8hpp.html#a3894588c7a7a5e648048819f88cd2531ad7da1b76e5799f53a399b7a96ba67437">Literal</a>, </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>        <a class="code hl_enumvalue" href="token_8hpp.html#a3894588c7a7a5e648048819f88cd2531ad7da1b76e5799f53a399b7a96ba67437">Word</a>, </div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        <a class="code hl_enumvalue" href="token_8hpp.html#a3894588c7a7a5e648048819f88cd2531a726add2b4d11304a74bc0360f8338984">Hyphen</a>, </div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        <span class="comment">// keywords</span></div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        <a class="code hl_enumvalue" href="token_8hpp.html#a3894588c7a7a5e648048819f88cd2531a1e57d498a45cfb4011f56166650a026f">NameKeyword</a>, </div>
@@ -104,8 +104,8 @@ $(function() {
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>            os &lt;&lt; <span class="stringliteral">&quot;{ type: &quot;</span>;</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>            <span class="keywordflow">switch</span> (token.type) {</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>                <span class="keywordflow">case</span> TokenType::Literal:</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>                    os &lt;&lt; <span class="stringliteral">&quot;Literal&quot;</span>;</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>                <span class="keywordflow">case</span> TokenType::Word:</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>                    os &lt;&lt; <span class="stringliteral">&quot;Word&quot;</span>;</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>                    <span class="keywordflow">break</span>;</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>                <span class="keywordflow">case</span> TokenType::Hyphen:</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>                    os &lt;&lt; <span class="stringliteral">&quot;Hyphen&quot;</span>;</div>
@@ -137,7 +137,7 @@ $(function() {
 <div class="ttc" id="atoken_8hpp_html_a3894588c7a7a5e648048819f88cd2531a1e57d498a45cfb4011f56166650a026f"><div class="ttname"><a href="token_8hpp.html#a3894588c7a7a5e648048819f88cd2531a1e57d498a45cfb4011f56166650a026f">Helpy::TokenType::NameKeyword</a></div><div class="ttdeci">@ NameKeyword</div></div>
 <div class="ttc" id="atoken_8hpp_html_a3894588c7a7a5e648048819f88cd2531a69256c54faac4d3c9d0e82471ea5178b"><div class="ttname"><a href="token_8hpp.html#a3894588c7a7a5e648048819f88cd2531a69256c54faac4d3c9d0e82471ea5178b">Helpy::TokenType::ArgumentsKeyword</a></div><div class="ttdeci">@ ArgumentsKeyword</div></div>
 <div class="ttc" id="atoken_8hpp_html_a3894588c7a7a5e648048819f88cd2531a726add2b4d11304a74bc0360f8338984"><div class="ttname"><a href="token_8hpp.html#a3894588c7a7a5e648048819f88cd2531a726add2b4d11304a74bc0360f8338984">Helpy::TokenType::Hyphen</a></div><div class="ttdeci">@ Hyphen</div></div>
-<div class="ttc" id="atoken_8hpp_html_a3894588c7a7a5e648048819f88cd2531ad7da1b76e5799f53a399b7a96ba67437"><div class="ttname"><a href="token_8hpp.html#a3894588c7a7a5e648048819f88cd2531ad7da1b76e5799f53a399b7a96ba67437">Helpy::TokenType::Literal</a></div><div class="ttdeci">@ Literal</div></div>
+<div class="ttc" id="atoken_8hpp_html_a3894588c7a7a5e648048819f88cd2531ad7da1b76e5799f53a399b7a96ba67437"><div class="ttname"><a href="token_8hpp.html#a3894588c7a7a5e648048819f88cd2531ad7da1b76e5799f53a399b7a96ba67437">Helpy::TokenType::Word</a></div><div class="ttdeci">@ Word</div></div>
 <div class="ttc" id="atoken_8hpp_html_a3894588c7a7a5e648048819f88cd2531ae3e47c844d7f29e89ebf19b526662c8f"><div class="ttname"><a href="token_8hpp.html#a3894588c7a7a5e648048819f88cd2531ae3e47c844d7f29e89ebf19b526662c8f">Helpy::TokenType::CommandsKeyword</a></div><div class="ttdeci">@ CommandsKeyword</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
