@@ -7,124 +7,86 @@
 #include "../utils/utils.hpp"
 
 #define uSet std::unordered_set
+#define MAX_ARGUMENTS 8
 
 namespace Helpy {
     Parser::Parser(std::list<Token> tokens) : tokens(std::move(tokens)) {}
 
-    int Parser::findArguments() {
-        int numArguments = 3;
+    std::string Parser::parseName() {
+        auto it = tokens.begin();
+        unsigned line = it->line;
 
-        for (auto it = tokens.begin(); it != tokens.end(); ++it) {
-            if (it->type != TokenType::ArgumentsKeyword) continue;
+        it = tokens.erase(it); // erase the NAME token
 
-            unsigned line = it->line;
-            it = tokens.erase(it);
+        if (it == tokens.end())
+            Utils::printError("No value was assigned to NAME!", line);
+        else if (it->type != TokenType::Literal)
+            Utils::printError("Unexpected value assigned to NAME!", line);
 
-            if (it == tokens.end())
-                Utils::printError("No value was assigned to ARGUMENTS!", line);
-            else if (it->type != TokenType::Literal)
-                Utils::printError("Unexpected value assigned to ARGUMENTS!", line);
-
-            try {
-                numArguments = std::stoi(it->value);
-            }
-            catch (std::invalid_argument const &ex) {
-                Utils::printError("The value assigned to ARGUMENTS is NOT a number!", it->line);
-            }
-
-            tokens.erase(it);
-            break;
-        }
-
-        return numArguments;
-    }
-
-    std::string Parser::findName() {
-        std::string name = "Helpy";
-
-        for (auto it = tokens.begin(); it != tokens.end(); ++it) {
-            if (it->type != TokenType::NameKeyword) continue;
-
-            unsigned line = it->line;
-            it = tokens.erase(it);
-
-            if (it == tokens.end())
-                Utils::printError("No value was assigned to NAME!", line);
-            else if (it->type != TokenType::Literal)
-                Utils::printError("Unexpected value assigned to NAME!", line);
-
-            name = it->value;
-            tokens.erase(it);
-
-            break;
-        }
+        std::string name = it->value;
+        tokens.erase(it);
 
         return name;
     }
 
-    std::string Parser::findColor() {
-        std::string color = "YELLOW";
+    std::string Parser::parseColor() {
+        auto it = tokens.begin();
+        unsigned line = it->line;
+
+        it = tokens.erase(it); // erase the COLOR token
+
+        if (it == tokens.end())
+            Utils::printError("No value was assigned to COLOR!", line);
+        else if (it->type != TokenType::Literal)
+            Utils::printError("Unexpected value assigned to COLOR!", line);
+
+        std::string color = it->value;
+        tokens.erase(it);
+
+        // convert the color to uppercase
+        for (char &c : color)
+            c = (char) toupper(c);
+
+        // verify if the color exists
         uSet<std::string> colors = {"RED", "GREEN", "YELLOW", "BLUE", "PURPLE", "CYAN", "WHITE"};
 
-        for (auto it = tokens.begin(); it != tokens.end(); ++it) {
-            if (it->type != TokenType::ColorKeyword) continue;
-
-            unsigned line = it->line;
-            it = tokens.erase(it);
-
-            if (it == tokens.end())
-                Utils::printError("No value was assigned to COLOR!", line);
-            else if (it->type != TokenType::Literal)
-                Utils::printError("Unexpected value assigned to COLOR!", it->line);
-
-            color = it->value;
-
-            // convert the color to uppercase
-            for (char &c : color)
-                c = (char) toupper(c);
-
-            // verify if the color exists
-            if (colors.find(color) == colors.end())
-                Utils::printError("Unexpected value assigned to COLOR!", it->line);
-        }
+        if (colors.find(color) == colors.end())
+            Utils::printError("Unexpected value assigned to COLOR!", it->line);
 
         return color;
     }
 
-    std::list<Command> Parser::findCommands(int numArguments) {
-        // find the COMMANDS keyword
+    std::list<Command> Parser::parseCommands(unsigned &numArguments) {
         auto it = tokens.begin();
-        for (; it != tokens.end(); ++it) {
-            if (it->type != TokenType::CommandsKeyword) continue;
+        it = tokens.erase(it); // erase the COMMANDS token
 
-            it = tokens.erase(it);
-            break;
-        }
-
-        if (it == tokens.end())
-            Utils::printError("Could not find COMMANDS!");
-
-        // get the commands
         std::list<Command> commands;
+        numArguments = 0;
 
         while (it != tokens.end() && it->type == TokenType::Hyphen) {
-            if ((++it) == tokens.end() || it->type != TokenType::Literal)
+            it = tokens.erase(it); // erase the HYPHEN token
+
+            if (it == tokens.end() || it->type != TokenType::Literal)
                 Utils::printError("Unexpected command!", it->line);
 
             Command command;
             int acc = 0;
 
             while (it != tokens.end() && it->type == TokenType::Literal) {
-                command.push((it++)->value);
+                command.push(it->value);
                 ++acc;
+
+                it = tokens.erase(it);
             }
 
-            if (acc > numArguments)
-                Utils::printError("Command with too many arguments - "
-                    "the maximum number should be " + std::to_string(numArguments) + '!', it->line);
-            else if (acc < numArguments)
-                Utils::printError("Command with too few arguments - "
-                    "the minimum number should be " + std::to_string(numArguments) + '!', it->line);
+            if (!numArguments) numArguments = acc;
+
+            if (acc > MAX_ARGUMENTS)
+                Utils::printError(std::string("Command with too many arguments - ")
+                    + "the maximum number should be " + BOLD + '8' + R_BOLD + '!', it->line);
+            else if (acc != numArguments)
+                Utils::printError("Not all commands have the same number of arguments - "
+                    "they should all have " + std::to_string(numArguments) + '!', it->line);
 
             commands.push_back(command);
         }
@@ -133,15 +95,33 @@ namespace Helpy {
     }
 
     ParserInfo Parser::execute() {
-        ParserInfo info;
+        ParserInfo info = {.color = "YELLOW", .classname = "Helpy"};
 
-        // mandatory
-        info.numArguments = findArguments();
-        info.commands = findCommands(info.numArguments);
+        while (!tokens.empty()) {
+            Token curr = tokens.front();
 
-        // optional
-        info.classname = findName();
-        info.color = findColor();
+            switch (curr.type) {
+                // mandatory
+                case TokenType::CommandsKeyword:
+                    info.commands = parseCommands(info.numArguments);
+                    break;
+
+                // optional
+                case TokenType::ColorKeyword:
+                    info.color = parseColor();
+                    break;
+                case TokenType::NameKeyword:
+                    info.classname = parseName();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        // verify if there are any commands
+        if (info.commands.empty())
+            Utils::printError("Could not find COMMANDS!");
 
         info.filename = Utils::toSnakeCase(info.classname);
         return info;

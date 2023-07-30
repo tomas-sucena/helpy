@@ -9,7 +9,7 @@
 
 namespace Helpy {
     struct ParserInfo {
-        int numArguments;
+        unsigned numArguments;
         std::string color;
         std::string classname;
         std::string filename;
@@ -25,10 +25,9 @@ namespace Helpy {
 
     /* METHODS */
     private:
-        int findArguments();
-        std::string findName();
-        std::string findColor();
-        std::list<Command> findCommands(int numArguments);
+        std::string parseName();
+        std::string parseColor();
+        std::list<Command> parseCommands(unsigned &numArguments);
 
     public:
         ParserInfo execute();
