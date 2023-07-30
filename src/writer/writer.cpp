@@ -40,7 +40,7 @@ namespace Helpy {
                << "\tstatic string readInput(const string &instruction, uSet<string> &options);\n"
                << "\tstatic double readNumber(const string &instruction);\n"
                << '\n'
-               << "\tbool processCommand(";
+               << "\tbool executeCommand(";
 
         for (int i = 1; i <= info.numArguments; ++i)
             header << "const string &s" << i << ((i < info.numArguments) ? ", " : ");\n");
@@ -224,9 +224,19 @@ namespace Helpy {
                   "\treturn res;\n"
                   "}\n";
 
-        // processCommand()
+        // executeCommand()
         source << '\n'
-               << "bool " << info.classname << "::processCommand(";
+               << "/**\n"
+               << " * @brief parses the arguments that were inputted and executes the corresponding command\n";
+
+        std::string numerals[8] = {"first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth"};
+
+        for (int i = 1; i <= info.numArguments; ++i)
+            source << " * @param s" << i << ' ' << numerals[i - 1] << " argument of the command\n";
+
+        source << " * @return 'true' if the command exists, 'false' otherwise\n"
+               << " */\n"
+               << "bool " << info.classname << "::executeCommand(";
 
         for (int i = 1; i <= info.numArguments; ++i)
             source << "const string &s" << i << ((i < info.numArguments) ? ", " : ") {\n");
@@ -281,7 +291,7 @@ namespace Helpy {
             source << "\t\tstd::cin >> s" << i << "; toLowercase(s" << i << ");\n";
 
         source << "\n"
-                  "\t\tif (!processCommand(";
+                  "\t\tif (!executeCommand(";
 
         for (int i = 1; i <= info.numArguments; ++i)
             source << 's' << i << ((i < info.numArguments) ? ", " : "))\n");
