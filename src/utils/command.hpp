@@ -8,6 +8,7 @@ namespace Helpy {
     class Command {
         std::vector<std::string> arguments;
         std::string methodName;
+        std::string description;
         unsigned value;
 
     /* CONSTRUCTOR */
@@ -30,6 +31,10 @@ namespace Helpy {
             methodName += argument;
         }
 
+        void setDescription(const std::string &newDescription) {
+            description = newDescription;
+        }
+
         const std::string& operator[](int index) const {
             return arguments[index];
         }
@@ -40,6 +45,10 @@ namespace Helpy {
 
         [[nodiscard]] const std::string& getMethodName() const {
             return methodName;
+        }
+
+        [[nodiscard]] const std::string& getDescription() const {
+            return description;
         }
 
         [[nodiscard]] unsigned getValue() const {
