@@ -20,7 +20,7 @@ namespace Helpy {
 
         if (it == tokens.end())
             Utils::printError("No value was assigned to COLOR!", line);
-        else if (it->type != TokenType::Literal)
+        else if (it->type != TokenType::Word)
             Utils::printError("Unexpected value assigned to COLOR!", line);
 
         std::string color = it->value;
@@ -50,13 +50,13 @@ namespace Helpy {
             unsigned line = it->line;
             it = tokens.erase(it); // erase the HYPHEN token
 
-            if (it == tokens.end() || it->type != TokenType::Literal)
+            if (it == tokens.end() || it->type != TokenType::Word)
                 Utils::printError("Unexpected command!", line);
 
             Command command;
             int acc = 0;
 
-            while (it != tokens.end() && it->type == TokenType::Literal) {
+            while (it != tokens.end() && it->type == TokenType::Word) {
                 command.push(it->value);
                 ++acc;
 
@@ -92,15 +92,18 @@ namespace Helpy {
             line = it->line;
             it = tokens.erase(it); // erase the HYPHEN token
 
-            if (it == tokens.end() || it->type != TokenType::Literal)
-                Utils::printError("Unexpected description!", line);
-
             std::string description;
 
-            while (it != tokens.end() && it->type == TokenType::Literal) {
+            while (it != tokens.end() && (it->type == TokenType::Word || it->type == TokenType::String)) {
+                if (!description.empty()) description += ' ';
                 description += it->value;
+
                 it = tokens.erase(it);
             }
+
+            // verify if there is a description
+            if (description.empty())
+                Utils::printError("Unexpected description!", line);
 
             (commandIt++)->setDescription(description);
         }
@@ -114,7 +117,7 @@ namespace Helpy {
 
         if (it == tokens.end())
             Utils::printError("No value was assigned to NAME!", line);
-        else if (it->type != TokenType::Literal)
+        else if (it->type != TokenType::Word)
             Utils::printError("Unexpected value assigned to NAME!", line);
 
         std::string name = it->value;
