@@ -127,7 +127,7 @@ namespace Helpy {
                    << " * @brief ";
 
             // write the method description
-            for (const char& c : command.getDescription()) {
+            for (const char &c : command.getDescription()) {
                 source << c;
                 if (c == '\n') source << " * ";
             }

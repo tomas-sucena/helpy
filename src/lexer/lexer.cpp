@@ -59,7 +59,7 @@ namespace Helpy {
 
             switch (curr) {
                 case '\\' :
-                    escape = true;
+                    escape ^= true;
                     continue;
                 case '\n' :
                     break;
@@ -68,6 +68,7 @@ namespace Helpy {
                     break;
                 case '\'' :
                 case '"' :
+                case ')' :
                     if (curr == delimiter && !escape) {
                         getNext = false;
                         break;
@@ -132,6 +133,9 @@ namespace Helpy {
                 case '\'' :
                 case '"' :
                     tokens.emplace_back(TokenType::String, line, readString(curr));
+                    break;
+                case '(' :
+                    tokens.emplace_back(TokenType::String, line, readString(')'));
                     break;
                 case ':' : {
                     Token last = tokens.back();

@@ -72,6 +72,12 @@ namespace Helpy {
                 Utils::printError("Not all commands have the same number of arguments - "
                     "they should all have " + std::to_string(numArguments) + '!', it->line);
 
+            // check if there is a description
+            if (it->type == TokenType::String) {
+                command.setDescription(it->value);
+                it = tokens.erase(it);
+            }
+
             commands.push_back(command);
         }
 
