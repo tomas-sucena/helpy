@@ -29,6 +29,7 @@ namespace Helpy {
     void Writer::writeIncludes() {
         utils << '\n'
               << "#include <iostream>\n"
+              << "#include <list>\n"
               << "#include <sstream>\n"
               << "#include <string>\n"
               << "#include <unordered_map>\n"
@@ -354,14 +355,50 @@ namespace Helpy {
 
         // toLowercase()
         utils << "\t/**\n"
-              << "\t * @brief turns all the characters of a string into lowercase or uppercase\n"
+              << "\t * @brief turns all the characters of a string into lowercase\n"
               << "\t * @complexity O(n)\n"
               << "\t * @param s string to be modified\n"
-              << "\t * @param uppercase bool that indicates if the string should be converted to uppercase\n"
               << "\t */\n"
-              << "\tvoid toLowercase(string &s, bool uppercase = false) {\n"
-              << "\t\tfor (char& c : s)\n"
-              << "\t\t\tc = (char) ((uppercase) ? toupper(c) : tolower(c));\n"
+              << "\tvoid toLowercase(string &s) {\n"
+              << "\t\tfor (char &c : s)\n"
+              << "\t\t\tc = (char) tolower(c);\n"
+              << "\t}\n";
+
+        // toUppercase()
+        utils << '\n'
+              << "\t/**\n"
+              << "\t * @brief turns all the characters of a string into uppercase\n"
+              << "\t * @complexity O(n)\n"
+              << "\t * @param s string to be modified\n"
+              << "\t */\n"
+              << "\tvoid toUppercase(string &s) {\n"
+              << "\t\tfor (char &c : s)\n"
+              << "\t\t\tc = (char) toupper(c);\n"
+              << "\t}\n";
+
+        // createTable()
+        utils << '\n'
+              << "\t/**\n"
+              << "\t* @brief creates a fort::utf8_table that will be used to display information in the terminal\n"
+              << "\t* @param columnNames list containing the name of each column of the table\n"
+              << "\t* @return fort::char_table object\n"
+              << "\t*/\n"
+              << "\tfort::char_table createTable(const std::list<string> &columnNames) {\n"
+              << "\t\tfort::char_table table;\n"
+              << "\n"
+              << "\t\ttable.set_border_style(FT_NICE_STYLE);\n"
+              << "\t\ttable.row(0).set_cell_content_text_style(fort::text_style::bold);\n"
+              << "\t\ttable.row(0).set_cell_content_fg_color(fort::color::yellow);\n"
+              << "\t\ttable << fort::header;\n"
+              << '\n'
+              << "\t\tauto it = columnNames.begin();\n"
+              << "\t\tfor (int i = 0; it != columnNames.end(); ++i){\n"
+              << "\t\t\ttable << *it++;\n"
+              << "\t\t\ttable.column(i).set_cell_text_align(fort::text_align::center);\n"
+              << "\t\t}\n"
+              << '\n'
+              << "\t\ttable << fort::endr;\n"
+              << "\t\treturn table;\n"
               << "\t}\n";
 
         utils << "}\n"
