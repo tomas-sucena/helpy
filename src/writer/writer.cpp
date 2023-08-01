@@ -8,35 +8,48 @@ namespace Helpy {
     Writer::Writer(const std::string &path, ParserInfo info) : info(std::move(info)) {
         header = std::ofstream(path + this->info.filename + ".h");
         source = std::ofstream(path + this->info.filename + ".cpp");
+        utils = std::ofstream(path + "utils.hpp");
 
         maps.resize(this->info.numArguments);
     }
 
-    void Writer::writeHeaderIncludes() {
+    void Writer::writeHeaderGuards() {
         std::string uppercaseFilename;
 
         for (char c : info.filename)
             uppercaseFilename += (char) toupper(c);
 
         header << "#ifndef " << uppercaseFilename << "_H\n"
-               << "#define " << uppercaseFilename << "_H\n"
-               << '\n'
-               << "#include <iostream>\n"
-               << "#include <sstream>\n"
-               << "#include <string>\n"
-               << "#include <unordered_map>\n"
-               << "#include <unordered_set>\n"
-               << '\n'
-               << "#define uMap std::unordered_map\n"
-               << "#define uSet std::unordered_set\n"
-               << '\n'
-               << "using std::string;\n";
+               << "#define " << uppercaseFilename << "_H\n";
+
+        utils << "#ifndef " << uppercaseFilename << "_UTILS_H\n"
+              << "#define " << uppercaseFilename << "_UTILS_H\n";
+    }
+
+    void Writer::writeIncludes() {
+        utils << '\n'
+              << "#include <iostream>\n"
+              << "#include <sstream>\n"
+              << "#include <string>\n"
+              << "#include <unordered_map>\n"
+              << "#include <unordered_set>\n"
+              << '\n'
+              << "#include \"../external/libfort/fort.hpp\"\n"
+              << '\n'
+              << "#define uMap std::unordered_map\n"
+              << "#define uSet std::unordered_set\n"
+              << '\n'
+              << "using std::string;\n";
+
+        header << '\n'
+               << "#include \"utils.hpp\"\n";
+
+        source << "#include \"" << info.filename << ".h\"\n";
     }
 
     void Writer::writeMethodsDeclaration() {
         header << '\n'
                << "\t/* METHODS */\n"
-               << "\tstatic void toLowercase(string &s, bool uppercase = false);\n"
                << "\tstatic string readInput(const string &instruction, uSet<string> &options);\n"
                << "\tstatic double readNumber(const string &instruction);\n"
                << '\n'
@@ -71,9 +84,8 @@ namespace Helpy {
         header << "};\n";
     }
 
-    void Writer::writeSourceIncludes() {
-        source << "#include \"" << info.filename << ".h\"\n"
-               << '\n'
+    void Writer::writeMacros() {
+        source << '\n'
                << "// formatting\n"
                   "#define RESET      \"\\033[0m\"\n"
                   "#define BOLD       \"\\033[1m\"\n"
@@ -91,7 +103,7 @@ namespace Helpy {
                << '\n'
                << "// text\n"
                   "#define DASHED_LINE \"- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\"\n"
-                  "#define BREAK       std::endl << " << info.color << " << DASHED_LINE << RESET << std::endl << std::endl\n"
+                  "#define BREAK       '\\n' << " << info.color << " << DASHED_LINE << RESET << '\\n' << std::endl\n"
                   "#define YES_NO      \" (\" << GREEN << \"Yes\" << RESET << '/' << RED << \"No\" << RESET << ')'\n";
     }
 
@@ -142,19 +154,6 @@ namespace Helpy {
     }
 
     void Writer::writeHelpyMethods() {
-        // toLowercase()
-        source << '\n'
-               << "/**\n"
-                  " * @brief turns all the characters of a string into lowercase or uppercase\n"
-                  " * @complexity O(n)\n"
-                  " * @param s string to be modified\n"
-                  " * @param uppercase bool that indicates if the string should be converted to uppercase\n"
-                  " */\n"
-               << "void " << info.classname << "::toLowercase(string &s, bool uppercase) {\n"
-               << "\tfor (char& c : s)\n"
-                  "\t\tc = (char) ((uppercase) ? toupper(c) : tolower(c));\n"
-                  "}\n";
-
         // readInput()
         source << "\n"
                   "/**\n"
@@ -172,7 +171,7 @@ namespace Helpy {
                   "\t\tstd::cout << instruction << std::endl << std::endl;\n"
                   "\n"
                   "\t\tstring line; getline(std::cin >> std::ws, line);\n"
-                  "\t\ttoLowercase(line);\n"
+                  "\t\tUtils::toLowercase(line);\n"
                   "\n"
                   "\t\tstd::istringstream line_(line);\n"
                   "\n"
@@ -209,7 +208,7 @@ namespace Helpy {
                   "\t\tstd::cout << instruction << std::endl << std::endl;\n"
                   "\n"
                   "\t\tstring line; getline(std::cin >> std::ws, line);\n"
-                  "\t\ttoLowercase(line);\n"
+                  "\t\tUtils::toLowercase(line);\n"
                   "\n"
                   "\t\tstd::istringstream line_(line);\n"
                   "\n"
@@ -292,14 +291,14 @@ namespace Helpy {
 
         source << "\t\tstd::istringstream s_;\n"
                   "\n"
-                  "\t\tstd::cin >> s1; toLowercase(s1);\n"
+                  "\t\tstd::cin >> s1; Utils::toLowercase(s1);\n"
                   "\n"
                   "\t\tif (s1 == \"quit\" || s1 == \"no\" || s1 == \"die\")\n"
                   "\t\t\tbreak;\n"
                   "\n";
 
         for (int i = 2; i <= info.numArguments; ++i)
-            source << "\t\tstd::cin >> s" << i << "; toLowercase(s" << i << ");\n";
+            source << "\t\tstd::cin >> s" << i << "; Utils::toLowercase(s" << i << ");\n";
 
         source << "\n"
                   "\t\tif (!executeCommand(";
@@ -313,7 +312,7 @@ namespace Helpy {
                   "\t\tstd::cout << \"Anything else?\" << YES_NO << std::endl << std::endl;\n"
                   "\n"
                   "\t\ts1.clear(); getline(std::cin >> std::ws, s1);\n"
-                  "\t\ttoLowercase(s1);\n"
+                  "\t\tUtils::toLowercase(s1);\n"
                   "\n"
                   "\t\ts_.clear(); s_.str(s1);\n"
                   "\t\tdone = true;\n"
@@ -349,8 +348,28 @@ namespace Helpy {
                   "}\n";
     }
 
+    void Writer::writeUtils() {
+        utils << '\n'
+              << "namespace Utils {\n";
+
+        // toLowercase()
+        utils << "\t/**\n"
+              << "\t * @brief turns all the characters of a string into lowercase or uppercase\n"
+              << "\t * @complexity O(n)\n"
+              << "\t * @param s string to be modified\n"
+              << "\t * @param uppercase bool that indicates if the string should be converted to uppercase\n"
+              << "\t */\n"
+              << "\tvoid toLowercase(string &s, bool uppercase = false) {\n"
+              << "\t\tfor (char& c : s)\n"
+              << "\t\t\tc = (char) ((uppercase) ? toupper(c) : tolower(c));\n"
+              << "\t}\n";
+
+        utils << "}\n"
+              << '\n'
+              << "#endif\n";
+    }
+
     void Writer::writeHeader() {
-        writeHeaderIncludes();
         writeClass();
 
         // close the header guard
@@ -359,16 +378,22 @@ namespace Helpy {
     }
 
     void Writer::writeSource() {
-        writeSourceIncludes();
+        writeMacros();
         writeKeywordMaps();
         writeMethodsDefinition();
         writeHelpyMethods();
     }
 
     void Writer::execute() {
+        writeHeaderGuards();
+        writeIncludes();
+
+        // write the code
         std::thread t1(&Writer::writeSource, this);
+        std::thread t2(&Writer::writeUtils, this);
         writeHeader();
 
         t1.join();
+        t2.join();
     }
 }
