@@ -359,7 +359,7 @@ namespace Helpy {
               << "\t * @complexity O(n)\n"
               << "\t * @param s string to be modified\n"
               << "\t */\n"
-              << "\tvoid toLowercase(string &s) {\n"
+              << "\tstatic void toLowercase(string &s) {\n"
               << "\t\tfor (char &c : s)\n"
               << "\t\t\tc = (char) tolower(c);\n"
               << "\t}\n";
@@ -371,7 +371,7 @@ namespace Helpy {
               << "\t * @complexity O(n)\n"
               << "\t * @param s string to be modified\n"
               << "\t */\n"
-              << "\tvoid toUppercase(string &s) {\n"
+              << "\tstatic void toUppercase(string &s) {\n"
               << "\t\tfor (char &c : s)\n"
               << "\t\t\tc = (char) toupper(c);\n"
               << "\t}\n";
@@ -383,7 +383,7 @@ namespace Helpy {
               << "\t* @param columnNames list containing the name of each column of the table\n"
               << "\t* @return fort::char_table object\n"
               << "\t*/\n"
-              << "\tfort::char_table createTable(const std::list<string> &columnNames) {\n"
+              << "\tstatic fort::char_table createTable(const std::list<string> &columnNames) {\n"
               << "\t\tfort::char_table table;\n"
               << "\n"
               << "\t\ttable.set_border_style(FT_NICE_STYLE);\n"

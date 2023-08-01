@@ -27,3 +27,12 @@ add_executable(helpy
         ${PROJECT_DEPENDENCIES}
         ${PROJECT_HEADERS}
         ${PROJECT_SOURCES})
+
+# for testing purposes
+add_executable(test
+        cli/main.cpp
+        cli/my_helpy.cpp
+        cli/my_helpy.h
+        cli/utils.hpp
+        external/libfort/fort.c
+        external/libfort/fort.hpp)
