@@ -14,75 +14,68 @@
 // output colors
 #define RED        "\033[31m"
 
-namespace Helpy {
+namespace Helpy::Utils {
     /**
-     * @brief A class that encompasses helpful functions.
+     * @brief Prints an error message in the console.
+     * @param errorMsg string containing the error message
+     * @param line number of the line in which the error occurred
+     * @param quit bool indicating if the program should terminate
      */
-    class Utils {
-    /* METHODS */
-    public:
-        /**
-         * @brief Prints an error message in the console.
-         * @param errorMsg string containing the error message
-         * @param line number of the line in which the error occurred
-         * @param quit bool indicating if the program should terminate
-         */
-        static void printError(const std::string &errorMsg, unsigned line = 0, bool quit = true) {
-            std::cout << RED << "Error";
-            if (line) std::cout << " in " << BOLD << "line " << line << R_BOLD;
+    static void printError(const std::string &errorMsg, unsigned line = 0, bool quit = true) {
+        std::cout << RED << "Error";
+        if (line) std::cout << " in " << BOLD << "line " << line << R_BOLD;
 
-            std::cout << ": " << errorMsg << std::endl;
-            if (quit) exit(1);
+        std::cout << ": " << errorMsg << std::endl;
+        if (quit) exit(1);
+    }
+
+    /**
+     * @brief Converts a string to snake_case.
+     *
+     * Converts a string to snake_case, which is a writing style where each word is in lowercase and spaces
+     * are replaced with underscores.
+     * @param string string to be converted to snake_case
+     * @return converted string
+     */
+    static std::string toSnakeCase(const std::string &string) {
+        std::string string_;
+
+        for (char c : string) {
+            if (std::isupper(c) && !string_.empty())
+                string_ += '_';
+
+            string_ += (char) tolower(c);
         }
 
-        /**
-         * @brief Converts a string to snake_case.
-         *
-         * Converts a string to snake_case, which is a writing style where each word is in lowercase and spaces
-         * are replaced with underscores.
-         * @param string string to be converted to snake_case
-         * @return converted string
-         */
-        static std::string toSnakeCase(const std::string &string) {
-            std::string string_;
+        return string_;
+    }
 
-            for (char c : string) {
-                if (std::isupper(c) && !string_.empty())
-                    string_ += '_';
-
-                string_ += (char) tolower(c);
-            }
-
-            return string_;
+    /**
+     * @brief Computes the first prime number that comes after the argument number.
+     * @param n variable which will store the first prime that comes after its initial value
+     */
+    static void nextPrime(int &n) {
+        if (n < 2) {
+            n = 2;
+            return;
         }
 
-        /**
-         * @brief Computes the first prime number that comes after the argument number.
-         * @param n variable which will store the first prime that comes after its initial value
-         */
-        static void nextPrime(int &n) {
-            if (n < 2) {
-                n = 2;
-                return;
+        n += (n % 2) ? 2 : 1;
+
+        while (true) {
+            bool isPrime = true;
+
+            for (int i = 3; i < n; ++i) {
+                if (n % i) continue;
+
+                isPrime = false;
+                break;
             }
 
-            n += (n % 2) ? 2 : 1;
-
-            while (true) {
-                bool isPrime = true;
-
-                for (int i = 3; i < n; ++i) {
-                    if (n % i) continue;
-
-                    isPrime = false;
-                    break;
-                }
-
-                if (isPrime) break;
-                n += 2;
-            }
+            if (isPrime) break;
+            n += 2;
         }
-    };
+    }
 }
 
 #endif //HELPY_UTILS_HPP
