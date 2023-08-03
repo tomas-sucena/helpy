@@ -43,7 +43,7 @@ namespace Helpy {
               << "using std::string;\n";
 
         header << '\n'
-               << "#include \"utils.hpp\"\n";
+               << "#include \"" << info.filename << "_utils.hpp\"\n";
 
         source << "#include \"" << info.filename << ".h\"\n";
     }
