@@ -8,7 +8,7 @@ namespace Helpy {
     Writer::Writer(const std::string &path, ParserInfo info) : info(std::move(info)) {
         header = std::ofstream(path + this->info.filename + ".h");
         source = std::ofstream(path + this->info.filename + ".cpp");
-        utils = std::ofstream(path + "utils.hpp");
+        utils = std::ofstream(path + this->info.filename + "_utils.hpp");
 
         maps.resize(this->info.numArguments);
     }
