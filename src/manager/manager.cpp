@@ -7,6 +7,8 @@
 #include "../parser/parser.h"
 #include "../writer/writer.h"
 
+namespace fs = std::filesystem;
+
 namespace Helpy {
     void Manager::formatPath(std::string &path) {
         if (!path.empty() && path.back() != '/')
@@ -52,11 +54,21 @@ namespace Helpy {
         formatPath(path);
         path += dirname;
 
-        // create directory
-        if (std::filesystem::is_directory(path))
-            throw std::exception();
+        // check if the directory is usable
+        if (!fs::is_empty(path)) {
+            std::cout << "WARNING: The selected directory is already in use. Would you like to overwrite it? (Y/n)\n";
 
-        std::filesystem::create_directory(path);
+            char answer;
+            std::cin >> answer;
+
+            if (answer != 'Y' && answer != 'y') return;
+
+            // delete the content of the directory
+            fs::remove_all(path);
+        }
+
+        // create the directory
+        fs::create_directory(path);
 
         path += '/';
         writeHelpyfileTemplate(path);
