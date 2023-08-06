@@ -39,11 +39,11 @@ namespace Helpy {
         return color;
     }
 
-    std::list<Command> Parser::parseCommands(unsigned &numArguments) {
+    std::vector<Command> Parser::parseCommands(unsigned &numArguments) {
         auto it = tokens.begin();
         it = tokens.erase(it); // erase the COMMANDS token
 
-        std::list<Command> commands;
+        std::vector<Command> commands;
         numArguments = 0;
 
         while (it != tokens.end() && it->type == TokenType::Hyphen) {
@@ -84,7 +84,7 @@ namespace Helpy {
         return commands;
     }
 
-    void Parser::parseDescriptions(std::list<Command> &commands) {
+    void Parser::parseDescriptions(std::vector<Command> &commands) {
         auto it = tokens.begin();
         unsigned line = it->line;
 

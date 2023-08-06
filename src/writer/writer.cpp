@@ -54,12 +54,8 @@ namespace Helpy {
                << "\tstatic string readInput(const string &instruction, uSet<string> &options);\n"
                << "\tstatic double readNumber(const string &instruction);\n"
                << '\n'
-               << "\tbool executeCommand(";
-
-        for (int i = 1; i <= info.numArguments; ++i)
-            header << "const string &s" << i << ((i < info.numArguments) ? ", " : ");\n");
-
-        header << "\tvoid advancedMode();\n"
+               << "\tbool executeCommand(int value);\n"
+               << "\tvoid advancedMode();\n"
                << "\tvoid guidedMode();\n";
 
         // user-defined methods
@@ -116,7 +112,7 @@ namespace Helpy {
             source << "uMap<string, int> " << info.classname << "::map" << i + 1 << " = {";
 
             int value = prime;
-            for (auto &command : info.commands) {
+            for (Command &command : info.commands) {
                 const std::string &argument = command[i];
 
                 // new argument
@@ -238,29 +234,17 @@ namespace Helpy {
         // executeCommand()
         source << '\n'
                << "/**\n"
-               << " * @brief parses the arguments that were inputted and executes the corresponding command\n";
-
-        std::string numerals[8] = {"first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth"};
-
-        for (int i = 1; i <= info.numArguments; ++i)
-            source << " * @param s" << i << ' ' << numerals[i - 1] << " argument of the command\n";
-
-        source << " * @return 'true' if the command exists, 'false' otherwise\n"
+               << " * @brief parses the arguments that were inputted and executes the corresponding command\n"
+               << " * @param value the value that will be used in the switch case to choose which command to execute\n"
+               << " * @return 'true' if the command exists, 'false' otherwise\n"
                << " */\n"
-               << "bool " << info.classname << "::executeCommand(";
+               << "bool " << info.classname << "::executeCommand(int value) {\n"
+               << "\tswitch (value) {\n";
 
-        for (int i = 1; i <= info.numArguments; ++i)
-            source << "const string &s" << i << ((i < info.numArguments) ? ", " : ") {\n");
-
-        source << "\tswitch (";
-
-        for (int i = 1; i <= info.numArguments; ++i)
-            source << "map" << i << "[s" << i << ']'
-                   << ((i < info.numArguments) ? " + " : ") {\n");
-
-        for (const Command &command : info.commands)
-            source << "\t\tcase (" << command.getValue() << ") :\n"
-                   << "\t\t\t" << command.getMethodName() << "();\n"
+        for (int i = 0; i < (int) info.commands.size(); ++i)
+            source << "\t\tcase (-" << i + 1 << ") :\n"
+                   << "\t\tcase (" << info.commands[i].getValue() << ") :\n"
+                   << "\t\t\t" << info.commands[i].getMethodName() << "();\n"
                    << "\t\t\t" << "break;\n";
 
         source << "\t\tdefault :\n"
@@ -305,7 +289,7 @@ namespace Helpy {
                   "\t\tif (!executeCommand(";
 
         for (int i = 1; i <= info.numArguments; ++i)
-            source << 's' << i << ((i < info.numArguments) ? ", " : "))\n");
+            source << "map" << i << "[s" << i << ']' << ((i < info.numArguments) ? " + " : "))\n");
 
         source << "\t\t\tcontinue;\n"
                   "\n"
@@ -328,11 +312,14 @@ namespace Helpy {
                   "\t}\n"
                   "\n"
                   "\tstd::cout << BREAK;\n"
-                  "\tstd::cout << \"See you next time!\" << std::endl << std::endl;\n"
+                  "\tstd::cout << \"See you next time!\\n\" << std::endl;\n"
                   "}\n";
 
         // guidedMode()
         source << '\n'
+               << "/**\n"
+                  " * @brief executes the guided mode of the UI\n"
+                  " */\n"
                << "void " << info.classname << "::guidedMode() {\n"
                << "\tstd::cout << \"Temporarily unavailable!\" << std::endl;\n"
                << "}\n";
