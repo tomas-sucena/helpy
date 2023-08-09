@@ -321,7 +321,31 @@ namespace Helpy {
                   " * @brief executes the guided mode of the UI\n"
                   " */\n"
                << "void " << info.classname << "::guidedMode() {\n"
-               << "\tstd::cout << \"Temporarily unavailable!\" << std::endl;\n"
+                  "\tbool done = false;\n"
+                  "\n"
+                  "\twhile (!done) {\n"
+                  "\t\tstd::ostringstream instruction;\n"
+                  "\t\tinstruction << \"How can I be of assistance?\\n\" << std::endl;\n"
+                  "\n";
+
+        for (int i = 1; i <= (int) info.commands.size(); ++i) {
+            const Command &command = info.commands[i - 1];
+            source << "\t\tinstruction << BOLD << " << info.color << " << \"" << i << " - \" << WHITE << \"";
+
+            for (int j = 1; j <= info.numArguments; ++j)
+                source << command[j - 1] << ((j < info.numArguments) ? " " : "\\n\";\n");
+
+            source << "\t\tinstruction << RESET << \"" << command.getDescription()
+                   << ((i < info.commands.size()) ? "\\n\" << std::endl" : "\"") << ";\n"
+                   << '\n';
+        }
+
+        source << "\t\tint num = (int) -readNumber(instruction.str());\n"
+               << "\t\tif (!executeCommand(num))\n"
+               << "\t\t\tcontinue;\n"
+               << '\n'
+               << "\t\tdone = true;\n"
+               << "\t}\n"
                << "}\n";
 
         // run()
