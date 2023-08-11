@@ -310,9 +310,6 @@ namespace Helpy {
                   "\t\t\tbreak;\n"
                   "\t\t}\n"
                   "\t}\n"
-                  "\n"
-                  "\tstd::cout << BREAK;\n"
-                  "\tstd::cout << \"See you next time!\\n\" << std::endl;\n"
                   "}\n";
 
         // guidedMode()
@@ -363,13 +360,13 @@ namespace Helpy {
                   "\t\t\tbreak;\n"
                   "\t\t}\n"
                   "\t}\n"
-                  "\n"
-                  "\tstd::cout << BREAK;\n"
-                  "\tstd::cout << \"See you next time!\\n\" << std::endl;\n"
                   "}\n";
 
         // run()
         source << '\n'
+                << "/**\n"
+                   " * @brief runs the command-line menu\n"
+                   " */\n"
                << "void " << info.classname << "::run() {\n"
                << "\tstring instruction = \"Which mode would you prefer?\\n\\n\"\n"
                   "                         \"* Guided\\n\"\n"
@@ -377,6 +374,9 @@ namespace Helpy {
                   "\tuSet<string> options = {\"guided\", \"advanced\", \"adv\"};\n"
                   "\n"
                   "\t(readInput(instruction, options) == \"guided\") ? guidedMode() : advancedMode();\n"
+                  "\n"
+                  "\tstd::cout << BREAK;\n"
+                  "\tstd::cout << \"See you next time!\\n\" << std::endl;\n"
                   "}\n";
     }
 
