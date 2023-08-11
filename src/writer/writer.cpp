@@ -321,32 +321,52 @@ namespace Helpy {
                   " * @brief executes the guided mode of the UI\n"
                   " */\n"
                << "void " << info.classname << "::guidedMode() {\n"
-                  "\tbool done = false;\n"
-                  "\n"
-                  "\twhile (!done) {\n"
-                  "\t\tstd::ostringstream instruction;\n"
-                  "\t\tinstruction << \"How can I be of assistance?\\n\" << std::endl;\n"
+                  "\tstring instruction = \"How can I be of assistance?\\n\\n\";\n"
                   "\n";
 
         for (int i = 1; i <= (int) info.commands.size(); ++i) {
             const Command &command = info.commands[i - 1];
-            source << "\t\tinstruction << BOLD << " << info.color << " << \"" << i << " - \" << WHITE << \"";
+
+            source << "\t// " << command.getMethodName() << "()\n"
+                   << "\tinstruction += (string) BOLD + " << info.color << " + \"" << i << " - \" + WHITE + \"";
 
             for (int j = 1; j <= info.numArguments; ++j)
-                source << command[j - 1] << ((j < info.numArguments) ? " " : "\\n\";\n");
+                source << command[j - 1] << ((j < info.numArguments) ? " " : "\\n\"\n");
 
-            source << "\t\tinstruction << RESET << \"" << command.getDescription()
-                   << ((i < info.commands.size()) ? "\\n\" << std::endl" : "\"") << ";\n"
+            source << "\t            + RESET + \"" << command.getDescription()
+                   << ((i < info.commands.size()) ? "\\n\"\n"
+                                                    "\t            + '\\n'" : "\"") << ";\n"
                    << '\n';
         }
 
-        source << "\t\tint num = (int) -readNumber(instruction.str());\n"
-               << "\t\tif (!executeCommand(num))\n"
-               << "\t\t\tcontinue;\n"
-               << '\n'
-               << "\t\tdone = true;\n"
-               << "\t}\n"
-               << "}\n";
+        source << "\tbool done = false;\n"
+                  "\n"
+                  "\twhile (!done) {\n"
+                  "\t\tint num = (int) -readNumber(instruction);\n"
+                  "\t\tif (!executeCommand(num))\n"
+                  "\t\t\tcontinue;\n"
+                  "\n"
+                  "\t\tstd::cout << BREAK;\n"
+                  "\t\tstd::cout << \"Anything else?\" << YES_NO << std::endl << std::endl;\n"
+                  "\n"
+                  "\t\tstring input; getline(std::cin >> std::ws, input);\n"
+                  "\t\tUtils::toLowercase(input);\n"
+                  "\n"
+                  "\t\tstd::istringstream input_(input);\n"
+                  "\t\tdone = true;\n"
+                  "\n"
+                  "\t\twhile (input_ >> input) {\n"
+                  "\t\t\tif (input != \"yes\" && input != \"y\")\n"
+                  "\t\t\t\tcontinue;\n"
+                  "\n"
+                  "\t\t\tdone = false;\n"
+                  "\t\t\tbreak;\n"
+                  "\t\t}\n"
+                  "\t}\n"
+                  "\n"
+                  "\tstd::cout << BREAK;\n"
+                  "\tstd::cout << \"See you next time!\\n\" << std::endl;\n"
+                  "}\n";
 
         // run()
         source << '\n'
