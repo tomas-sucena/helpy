@@ -7,6 +7,26 @@
 #include "../parser/parser.h"
 #include "../writer/writer.h"
 
+// formatting
+#define RESET      "\033[0m"
+#define BOLD       "\033[1m"
+#define ITALICS    "\033[3m"
+#define UNDERLINE  "\033[4m"
+
+// output colors
+#define RED        "\033[31m"
+#define GREEN      "\033[32m"
+#define YELLOW     "\033[33m"
+#define BLUE       "\033[34m"
+#define PURPLE     "\033[35m"
+#define CYAN       "\033[36m"
+#define WHITE      "\033[37m"
+
+// text
+#define DASHED_LINE "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+#define BREAK       std::endl << YELLOW << DASHED_LINE << RESET << std::endl << std::endl
+#define YES_NO      " (" << GREEN << "Yes" << RESET << '/' << RED << "No" << RESET << ')'
+
 namespace fs = std::filesystem;
 
 namespace Helpy {
@@ -55,8 +75,9 @@ namespace Helpy {
         path += dirname;
 
         // check if the directory is usable
-        if (!fs::is_empty(path)) {
-            std::cout << "WARNING: The selected directory is already in use. Would you like to overwrite it? (Y/n)\n";
+        if (fs::exists(path) && !fs::is_empty(path)) {
+            std::cout << BOLD << YELLOW << "WARNING: " << RESET
+                      << "The selected directory is already in use. Would you like to overwrite it?" << YES_NO << '\n';
 
             char answer;
             std::cin >> answer;
