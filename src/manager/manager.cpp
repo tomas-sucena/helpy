@@ -70,9 +70,12 @@ namespace Helpy {
              << "- // write your command here\n";
     }
 
-    void Manager::init(std::string path, const std::string &dirname) {
+    /**
+     * @brief writes a template for a Helpyfile, which is the file that contains the Helpy specification
+     * @param path path to the directory where the Helpyfile will be placed
+     */
+    void Manager::init(std::string path) {
         formatPath(path);
-        path += dirname;
 
         // check if the directory is usable
         if (fs::exists(path) && !fs::is_empty(path)) {
@@ -90,8 +93,7 @@ namespace Helpy {
 
         // create the directory
         fs::create_directory(path);
-
-        path += '/';
+        
         writeHelpyfileTemplate(path);
     }
 
@@ -100,8 +102,12 @@ namespace Helpy {
         filename = path + filename;
 
         // read Helpyfile
-        if (!std::filesystem::is_regular_file(filename))
-            throw std::runtime_error("Error: Could not find file '" + filename + "'!");
+        if (!std::filesystem::is_regular_file(filename)) {
+            std::cout << BOLD << RED << "ERROR: " << RESET << "Could not find the file '"
+                      << UNDERLINE << filename << RESET << "'! Please verify if the specified path is correct.\n";
+
+            return;
+        }
 
         Lexer lexer(filename);
         Parser parser(lexer.execute());

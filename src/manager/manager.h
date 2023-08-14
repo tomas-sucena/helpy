@@ -11,7 +11,7 @@ namespace Helpy {
         static void writeHelpyfileTemplate(const std::string &path);
 
     public:
-        static void init(std::string path, const std::string &dirname);
+        static void init(std::string path);
         static void run(std::string path, std::string filename);
     };
 }
