@@ -330,9 +330,16 @@ namespace Helpy {
             for (int j = 1; j <= info.numArguments; ++j)
                 source << command[j - 1] << ((j < info.numArguments) ? " " : "\\n\"\n");
 
-            source << "\t            + RESET + \"" << command.getDescription()
-                   << ((i < info.commands.size()) ? "\\n\"\n"
-                                                    "\t            + '\\n'" : "\"") << ";\n"
+            source << "\t            + RESET";
+
+            if (!command.getDescription().empty())
+                source << " + \"" << command.getDescription()
+                       << ((i < info.numArguments) ? "\\n\"\n"
+                                                     "\t            + '\\n'" : "\"");
+            else if (i < info.numArguments)
+                source << " + '\\n'";
+
+            source << ";\n"
                    << '\n';
         }
 
