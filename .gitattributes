@@ -1,0 +1,2 @@
+# exclude external libraries
+external/* linguist-vendored
