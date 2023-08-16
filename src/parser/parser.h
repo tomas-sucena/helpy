@@ -1,9 +1,6 @@
 #ifndef HELPY_PARSER_H
 #define HELPY_PARSER_H
 
-#include <list>
-#include <string>
-
 #include "../lexer/lexer.h"
 #include "../utils/command.hpp"
 
@@ -13,7 +10,7 @@ namespace Helpy {
         std::string color;
         std::string classname;
         std::string filename;
-        std::list<Command> commands;
+        std::vector<Command> commands;
     };
 
     class Parser {
@@ -26,8 +23,8 @@ namespace Helpy {
     /* METHODS */
     private:
         std::string parseColor();
-        std::list<Command> parseCommands(unsigned &numArguments);
-        void parseDescriptions(std::list<Command> &commands);
+        std::vector<Command> parseCommands(unsigned &numArguments);
+        void parseDescriptions(std::vector<Command> &commands);
         std::string parseName();
 
     public:
