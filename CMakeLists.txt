@@ -33,6 +33,6 @@ add_executable(test
         cli/main.cpp
         cli/my_helpy.cpp
         cli/my_helpy.h
-        cli/utils.hpp
+        cli/my_helpy_utils.hpp
         external/libfort/fort.c
         external/libfort/fort.hpp)
