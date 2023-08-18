@@ -22,10 +22,10 @@ namespace Helpy::Utils {
      * @param quit bool indicating if the program should terminate
      */
     static void printError(const std::string &errorMsg, unsigned line = 0, bool quit = true) {
-        std::cout << RED << "Error";
+        std::cout << BOLD << RED << "Error";
         if (line) std::cout << " in " << BOLD << "line " << line << R_BOLD;
 
-        std::cout << ": " << errorMsg << std::endl;
+        std::cout << ": " << R_BOLD << errorMsg << std::endl;
         if (quit) exit(1);
     }
 

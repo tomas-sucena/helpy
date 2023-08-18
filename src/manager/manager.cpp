@@ -6,6 +6,7 @@
 #include "../lexer/lexer.h"
 #include "../parser/parser.h"
 #include "../writer/writer.h"
+#include "../utils/utils.hpp"
 
 // formatting
 #define RESET      "\033[0m"
@@ -103,10 +104,10 @@ namespace Helpy {
 
         // read Helpyfile
         if (!std::filesystem::is_regular_file(filename)) {
-            std::cout << BOLD << RED << "ERROR: " << RESET << "Could not find the file '"
-                      << UNDERLINE << filename << RESET << "'! Please verify if the specified path is correct.\n";
+            Utils::printError((std::string) "Could not find the file '" + UNDERLINE + filename + RESET + RED
+                + "'! Please verify if the specified path is correct.");
 
-            return;
+            exit(1);
         }
 
         Lexer lexer(filename);

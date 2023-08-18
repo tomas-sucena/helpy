@@ -1,7 +1,7 @@
 #include <cstring>
-#include <stdexcept>
 
 #include "manager/manager.h"
+#include "utils/utils.hpp"
 
 int main(int argc, char *argv[]) {
     if (argc < 2) return 0;
@@ -11,8 +11,8 @@ int main(int argc, char *argv[]) {
     else if (!strcmp(argv[1], "run"))
         Helpy::Manager::run((argc < 3) ? "" : argv[2], (argc < 4) ? "Helpyfile" : argv[3]);
     else {
-        std::string command(argv[1]);
-        throw std::runtime_error("Error: Undefined command '" + command + "'!");
+        Helpy::Utils::printError((std::string) "Undefined command '" + argv[1] + "'!");
+        exit(1);
     }
 
     return 0;
