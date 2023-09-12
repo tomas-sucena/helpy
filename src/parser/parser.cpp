@@ -119,15 +119,17 @@ namespace Helpy {
         auto it = tokens.begin();
         unsigned line = it->line;
 
+        std::string name = "Helpy";
         it = tokens.erase(it); // erase the NAME token
 
         if (it == tokens.end())
-            Utils::printError("No value was assigned to NAME!", line);
+            Utils::printError("No value was assigned to NAME!", line, false);
         else if (it->type != TokenType::Word)
-            Utils::printError("Unexpected value assigned to NAME!", line);
-
-        std::string name = it->value;
-        tokens.erase(it);
+            Utils::printError("Unexpected value assigned to NAME!", line, false);
+        else {
+            name = it->value;
+            tokens.erase(it);
+        }
 
         return name;
     }
@@ -156,7 +158,8 @@ namespace Helpy {
                     break;
 
                 default:
-                    Utils::printError('\'' + curr.value + "' is NOT a valid keyword!", curr.line);
+                    Utils::printError('\'' + curr.value + "' is NOT a valid keyword!", curr.line, false);
+                    tokens.pop_front();
             }
         }
 
