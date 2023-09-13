@@ -14,11 +14,12 @@ namespace Helpy {
     };
 
     class Parser {
-        std::list<Token> tokens;
+        std::vector<Token> tokens;
+        std::vector<Token>::iterator it;
 
     /* CONSTRUCTOR */
     public:
-        explicit Parser(std::list<Token> tokens);
+        explicit Parser(std::vector<Token> tokens);
 
     /* METHODS */
     private:

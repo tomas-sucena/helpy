@@ -10,21 +10,17 @@
 #define MAX_ARGUMENTS 8
 
 namespace Helpy {
-    Parser::Parser(std::list<Token> tokens) : tokens(std::move(tokens)) {}
+    Parser::Parser(std::vector<Token> tokens) : tokens(std::move(tokens)), it(this->tokens.begin()) {}
 
     std::string Parser::parseColor() {
-        auto it = tokens.begin();
-        unsigned line = it->line;
-
-        it = tokens.erase(it); // erase the COLOR token
+        unsigned line = (it++)->line;
 
         if (it == tokens.end())
             Utils::printError("No value was assigned to COLOR!", line);
         else if (it->type != TokenType::Word)
             Utils::printError("Unexpected value assigned to COLOR!", line);
 
-        std::string color = it->value;
-        tokens.erase(it);
+        std::string color = (it++)->value;
 
         // convert the color to uppercase
         for (char &c : color)
@@ -40,15 +36,13 @@ namespace Helpy {
     }
 
     std::vector<Command> Parser::parseCommands(unsigned &numArguments) {
-        auto it = tokens.begin();
-        it = tokens.erase(it); // erase the COMMANDS token
+        ++it; // skip the COMMANDS token
 
         std::vector<Command> commands;
         numArguments = 0;
 
         while (it != tokens.end() && it->type == TokenType::Hyphen) {
-            unsigned line = it->line;
-            it = tokens.erase(it); // erase the HYPHEN token
+            unsigned line = (it++)->line;
 
             if (it == tokens.end() || it->type != TokenType::Word)
                 Utils::printError("Unexpected command!", line);
@@ -57,10 +51,8 @@ namespace Helpy {
             int acc = 0;
 
             while (it != tokens.end() && it->type == TokenType::Word) {
-                command.push(it->value);
+                command.push((it++)->value);
                 ++acc;
-
-                it = tokens.erase(it);
             }
 
             if (!numArguments) numArguments = acc;
@@ -73,10 +65,8 @@ namespace Helpy {
                     "they should all have " + std::to_string(numArguments) + '!', it->line);
 
             // check if there is a description
-            if (it->type == TokenType::String) {
-                command.setDescription(it->value);
-                it = tokens.erase(it);
-            }
+            if (it->type == TokenType::String)
+                command.setDescription((it++)->value);
 
             commands.push_back(command);
         }
@@ -85,26 +75,21 @@ namespace Helpy {
     }
 
     void Parser::parseDescriptions(std::vector<Command> &commands) {
-        auto it = tokens.begin();
-        unsigned line = it->line;
+        unsigned line = (it++)->line;
 
         if (commands.empty())
             Utils::printError("DESCRIPTIONS cannot appear before COMMANDS!", line);
 
         auto commandIt = commands.begin();
-        it = tokens.erase(it); // erase the DESCRIPTIONS token
 
         while (it != tokens.end() && it->type == TokenType::Hyphen) {
-            line = it->line;
-            it = tokens.erase(it); // erase the HYPHEN token
+            line = (it++)->line;
 
             std::string description;
 
             while (it != tokens.end() && (it->type == TokenType::Word || it->type == TokenType::String)) {
                 if (!description.empty()) description += ' ';
-                description += it->value;
-
-                it = tokens.erase(it);
+                description += (it++)->value;
             }
 
             // verify if there is a description
@@ -116,31 +101,25 @@ namespace Helpy {
     }
 
     std::string Parser::parseName() {
-        auto it = tokens.begin();
-        unsigned line = it->line;
-
         std::string name = "Helpy";
-        it = tokens.erase(it); // erase the NAME token
+        unsigned line = (it++)->line;
 
         if (it == tokens.end())
             Utils::printError("No value was assigned to NAME!", line, false);
         else if (it->type != TokenType::Word)
             Utils::printError("Unexpected value assigned to NAME!", line, false);
-        else {
+        else
             name = it->value;
-            tokens.erase(it);
-        }
 
+        ++it;
         return name;
     }
 
     ParserInfo Parser::execute() {
         ParserInfo info = {.color = "YELLOW", .classname = "Helpy"};
 
-        while (!tokens.empty()) {
-            Token curr = tokens.front();
-
-            switch (curr.type) {
+        while (it != tokens.end()) {
+            switch (it->type) {
                 // mandatory
                 case TokenType::CommandsKeyword:
                     info.commands = parseCommands(info.numArguments);
@@ -150,16 +129,18 @@ namespace Helpy {
                 case TokenType::ColorKeyword:
                     info.color = parseColor();
                     break;
+
                 case TokenType::DescriptionsKeyword:
                     parseDescriptions(info.commands);
                     break;
+
                 case TokenType::NameKeyword:
                     info.classname = parseName();
                     break;
 
                 default:
-                    Utils::printError('\'' + curr.value + "' is NOT a valid keyword!", curr.line, false);
-                    tokens.pop_front();
+                    Utils::printError('\'' + it->value + "' is NOT a valid keyword!", it->line, false);
+                    ++it;
             }
         }
 
