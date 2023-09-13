@@ -2,8 +2,8 @@
 #define HELPY_LEXER_H
 
 #include <fstream>
-#include <list>
 #include <unordered_map>
+#include <vector>
 
 #include "../utils/token.hpp"
 
@@ -30,7 +30,7 @@ namespace Helpy {
         void ignoreComment(bool multiline);
 
     public:
-        std::list<Token> execute();
+        std::vector<Token> execute();
     };
 }
 

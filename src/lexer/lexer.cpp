@@ -112,8 +112,8 @@ namespace Helpy {
         }
     }
 
-    std::list<Token> Lexer::execute() {
-        std::list<Token> tokens;
+    std::vector<Token> Lexer::execute() {
+        std::vector<Token> tokens;
         int getNext = true;
 
         while (true) {
