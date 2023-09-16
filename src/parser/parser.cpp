@@ -105,9 +105,9 @@ namespace Helpy {
         unsigned line = (it++)->line;
 
         if (it == tokens.end())
-            Utils::printError("No value was assigned to NAME!", line, false);
+            Utils::printWarning("No value was assigned to NAME!", line);
         else if (it->type != TokenType::Word)
-            Utils::printError("Unexpected value assigned to NAME!", line, false);
+            Utils::printWarning("Unexpected value assigned to NAME!", line);
         else
             name = it->value;
 
@@ -139,7 +139,7 @@ namespace Helpy {
                     break;
 
                 default:
-                    Utils::printError('\'' + it->value + "' is NOT a valid keyword!", it->line, false);
+                    Utils::printWarning('\'' + it->value + "' is NOT a valid keyword!", it->line);
                     ++it;
             }
         }
