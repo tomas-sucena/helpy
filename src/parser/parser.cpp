@@ -109,9 +109,8 @@ namespace Helpy {
         else if (it->type != TokenType::Word)
             Utils::printWarning("Unexpected value assigned to NAME!", line);
         else
-            name = it->value;
+            name = (it++)->value;
 
-        ++it;
         return name;
     }
 

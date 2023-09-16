@@ -10,10 +10,8 @@ int main(int argc, char *argv[]) {
         Helpy::Manager::init((argc < 3) ? "helpy" : argv[2]);
     else if (!strcmp(argv[1], "run"))
         Helpy::Manager::run((argc < 3) ? "" : argv[2], (argc < 4) ? "Helpyfile" : argv[3]);
-    else {
+    else
         Helpy::Utils::printError((std::string) "Undefined command '" + argv[1] + "'!");
-        exit(1);
-    }
 
     return 0;
 }
