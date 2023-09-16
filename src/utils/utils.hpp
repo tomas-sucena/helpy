@@ -1,6 +1,7 @@
 #ifndef HELPY_UTILS_HPP
 #define HELPY_UTILS_HPP
 
+#include <cmath>
 #include <iostream>
 #include <string>
 
@@ -78,7 +79,7 @@ namespace Helpy::Utils {
         while (true) {
             bool isPrime = true;
 
-            for (int i = 3; i < n; ++i) {
+            for (int i = 3; i < sqrt(n); ++i) {
                 if (n % i) continue;
 
                 isPrime = false;
