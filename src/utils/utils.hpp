@@ -13,20 +13,32 @@
 
 // output colors
 #define RED        "\033[31m"
+#define YELLOW     "\033[33m"
 
 namespace Helpy::Utils {
     /**
      * @brief Prints an error message in the console.
      * @param errorMsg string containing the error message
      * @param line number of the line in which the error occurred
-     * @param quit bool indicating if the program should terminate
      */
-    static void printError(const std::string &errorMsg, unsigned line = 0, bool quit = true) {
+    static void printError(const std::string &errorMsg, unsigned line = 0) {
         std::cout << BOLD << RED << "Error";
-        if (line) std::cout << " in " << BOLD << "line " << line << R_BOLD;
+        if (line) std::cout << " in " << BOLD << "line " << line;
 
         std::cout << ": " << R_BOLD << errorMsg << std::endl;
-        if (quit) exit(1);
+        exit(1);
+    }
+
+    /**
+     * @brief Prints a warning message in the console.
+     * @param warningMsg string containing the warning message
+     * @param line number of the line in which the error occurred
+     */
+    static void printWarning(const std::string &warningMsg, unsigned line = 0) {
+        std::cout << BOLD << YELLOW << "Error";
+        if (line) std::cout << " in " << BOLD << "line " << line;
+
+        std::cout << ": " << R_BOLD << warningMsg << std::endl;
     }
 
     /**
