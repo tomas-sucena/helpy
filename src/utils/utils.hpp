@@ -20,25 +20,26 @@ namespace Helpy::Utils {
      * @brief Prints an error message in the console.
      * @param errorMsg string containing the error message
      * @param line number of the line in which the error occurred
+     * @param quit bool indicating if the program should terminate
      */
-    static void printError(const std::string &errorMsg, unsigned line = 0) {
+    static void printError(const std::string &errorMsg, unsigned line = 0, bool quit = true) {
         std::cout << BOLD << RED << "Error";
-        if (line) std::cout << " in " << BOLD << "line " << line;
+        if (line) std::cout << R_BOLD << " (line " << line << ')' << BOLD;
 
-        std::cout << ": " << R_BOLD << errorMsg << std::endl;
-        exit(1);
+        std::cout << ": " << RESET << BOLD << errorMsg << std::endl;
+        if (quit) exit(1);
     }
 
     /**
      * @brief Prints a warning message in the console.
      * @param warningMsg string containing the warning message
-     * @param line number of the line in which the error occurred
+     * @param line number of the line which triggered the warning
      */
     static void printWarning(const std::string &warningMsg, unsigned line = 0) {
-        std::cout << BOLD << YELLOW << "Error";
-        if (line) std::cout << " in " << BOLD << "line " << line;
+        std::cout << BOLD << YELLOW << "WARNING";
+        if (line) std::cout << R_BOLD << " (line " << line << ')' << BOLD;
 
-        std::cout << ": " << R_BOLD << warningMsg << std::endl;
+        std::cout << ": " << RESET << BOLD << warningMsg << std::endl;
     }
 
     /**
