@@ -8,7 +8,7 @@ namespace Helpy {
                                                     {"DESCRIPTIONS", TokenType::DescriptionsKeyword},
                                                     {"NAME", TokenType::NameKeyword},};
 
-    Lexer::Lexer(const std::string &path) : file(path), curr(0), line(1), error(false) {}
+    Lexer::Lexer(const std::string &path) : file(path), curr(0), line(1), error(false), warnings(0) {}
 
     void Lexer::read() {
         file.get(curr);
@@ -105,11 +105,9 @@ namespace Helpy {
             break;
         }
 
-        if (file.eof()) {
+        if (file.eof())
             Utils::printError(std::string("Badly formatted comment - expected closing '") + BOLD + "*/" 
-                + R_BOLD + "' to match opening '" + BOLD + "/*" + R_BOLD + "'!", initialLine, false);
-            error = true;
-        }
+                + R_BOLD + "' to match opening '" + BOLD + "/*" + R_BOLD + "'!", initialLine);
     }
 
     std::vector<Token> Lexer::execute() {
@@ -130,13 +128,16 @@ namespace Helpy {
                     getNext = false;
 
                     break;
+
                 case '\'' :
                 case '"' :
                     tokens.emplace_back(TokenType::String, line, readString(curr));
                     break;
+
                 case '(' :
                     tokens.emplace_back(TokenType::String, line, readString(')'));
                     break;
+
                 case ':' : {
                     Token last = tokens.back();
                     tokens.pop_back();
@@ -151,30 +152,38 @@ namespace Helpy {
 
                     break;
                 }
-                case '/' :
-                    read();
 
-                    if (file.eof() || (curr != '/' && curr != '*')) {
-                        Utils::printError(std::string("Badly formatted comment - unexpected character '")
-                            + BOLD + curr + R_BOLD + "' after '" + BOLD + '/' + R_BOLD + "'!", line, false);
-                        error = true;
-                    }
-
-                    ignoreComment(curr == '*');
-                    break;
                 case '-' :
                     tokens.emplace_back(TokenType::Hyphen, line);
                     break;
+
+                case '/' :
+                    read();
+
+                    if (curr != '/' && curr != '*') {
+                        Utils::printWarning(std::string("Unexpected character '") + BOLD + '/' + R_BOLD
+                                            + "'!", line);
+
+                        getNext = false;
+                        ++warnings;
+                    }
+                    else
+                        ignoreComment(curr == '*');
+
+                    break;
+
                 case ' ' :
                 case '\n' :
                     break;
+
                 default :
-                    Utils::printError(std::string("Unexpected character '") + BOLD + curr + R_BOLD
-                        + "'!", line, false);
-                    error = true;
+                    Utils::printWarning(std::string("Unexpected character '") + BOLD + curr + R_BOLD
+                        + "'!", line);
+                    ++warnings;
             }
         }
 
+        // check if there were any errors
         if (error) exit(1);
         return tokens;
     }

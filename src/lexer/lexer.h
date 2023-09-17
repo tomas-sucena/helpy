@@ -15,6 +15,7 @@ namespace Helpy {
         char curr;
         uint16_t line;
         bool error;
+        uint16_t warnings;
 
         static uMap<std::string, TokenType> keywords;
 
