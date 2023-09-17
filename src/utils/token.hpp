@@ -3,6 +3,7 @@
 #ifndef HELPY_TOKEN_HPP
 #define HELPY_TOKEN_HPP
 
+#include <cstdint>
 #include <string>
 
 namespace Helpy {
@@ -26,7 +27,7 @@ namespace Helpy {
      */
     struct Token {
         TokenType type;
-        unsigned line;
+        uint16_t line;
         std::string value;
 
         /* CONSTRUCTOR */
