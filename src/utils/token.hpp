@@ -27,7 +27,7 @@ namespace Helpy {
      */
     struct Token {
         TokenType type;
-        uint16_t line;
+        uint16_t line, start, end;
         std::string value;
 
         /* CONSTRUCTOR */
@@ -37,10 +37,12 @@ namespace Helpy {
          * Creates a token given its type and, in the case of a literal, its value.
          * @param type the type of the token
          * @param line the line where the token was found
+         * @param start the position where the token starts
+         * @param end the position where the token ends
          * @param value the value (if any) of the token
          */
-        explicit Token(TokenType type, unsigned line, std::string value = "")
-            : type(type), line(line), value(std::move(value)) {}
+        Token(TokenType type, uint16_t line, uint16_t start, uint16_t end, std::string value = "")
+            : type(type), line(line), start(start), end(end), value(std::move(value)) {}
 
         /* METHODS */
         /**
@@ -78,7 +80,8 @@ namespace Helpy {
                     break;
             }
 
-            if (!token.value.empty()) os << ", value: " << token.value;
+            os << " , line: " << token.line << " , pos: " << token.start;
+            if (!token.value.empty()) os << " , value: " << token.value;
 
             os << " }";
             return os;
