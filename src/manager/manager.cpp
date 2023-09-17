@@ -6,6 +6,7 @@
 #include "../lexer/lexer.h"
 #include "../parser/parser.h"
 #include "../writer/writer.h"
+#include "../utils/program.hpp"
 #include "../utils/utils.hpp"
 
 // formatting
@@ -110,10 +111,52 @@ namespace Helpy {
             exit(1);
         }
 
-        Lexer lexer(filename);
-        Parser parser(lexer.execute());
+        // lex
+        Program program;
 
-        Writer writer(path, parser.execute());
+        Lexer lexer(filename, program);
+        std::vector<Token> tokens = lexer.execute();
+
+        if (program.error) exit(1);
+
+        if (program.warnings) {
+            std::cout << '\n'
+                      << RESET << "Lexing terminated with " << BOLD << YELLOW << program.warnings << RESET
+                      << " warning";
+
+            if (program.warnings > 1) std::cout << 's';
+            std::cout << ". Would you still like to continue?" << YES_NO << '\n';
+
+            char answer;
+            std::cin >> answer;
+
+            if (answer != 'Y' && answer != 'y') return;
+        }
+
+        // parse
+        program.warnings = 0;
+
+        Parser parser(tokens, program);
+        ParserInfo info = parser.execute();
+
+        if (program.error) exit(1);
+
+        if (program.warnings) {
+            std::cout << '\n'
+                      << RESET << "Parsing terminated with " << BOLD << YELLOW << program.warnings << RESET
+                      << " warning";
+
+            if (program.warnings > 1) std::cout << 's';
+            std::cout << ". Would you still like to continue?" << YES_NO << '\n';
+
+            char answer;
+            std::cin >> answer;
+
+            if (answer != 'Y' && answer != 'y') return;
+        }
+
+        // write
+        Writer writer(path, info);
         writer.execute();
     }
 }
