@@ -16,10 +16,11 @@ namespace Helpy {
     class Parser {
         std::vector<Token> tokens;
         std::vector<Token>::iterator it;
+        Program &program;
 
     /* CONSTRUCTOR */
     public:
-        explicit Parser(std::vector<Token> tokens);
+        Parser(std::vector<Token> tokens, Program &program);
 
     /* METHODS */
     private:

@@ -10,7 +10,8 @@
 #define MAX_ARGUMENTS 8
 
 namespace Helpy {
-    Parser::Parser(std::vector<Token> tokens) : tokens(std::move(tokens)), it(this->tokens.begin()) {}
+    Parser::Parser(std::vector<Token> tokens, Program &program)
+        : tokens(std::move(tokens)), it(this->tokens.begin()), program(program) {}
 
     std::string Parser::parseColor() {
         unsigned line = (it++)->line;
@@ -104,10 +105,14 @@ namespace Helpy {
         std::string name = "Helpy";
         unsigned line = (it++)->line;
 
-        if (it == tokens.end())
+        if (it == tokens.end()) {
             Utils::printWarning("No value was assigned to NAME!", line);
-        else if (it->type != TokenType::Word)
+            ++program.warnings;
+        }
+        else if (it->type != TokenType::Word) {
             Utils::printWarning("Unexpected value assigned to NAME!", line);
+            ++program.warnings;
+        }
         else
             name = (it++)->value;
 
@@ -139,6 +144,8 @@ namespace Helpy {
 
                 default:
                     Utils::printWarning('\'' + it->value + "' is NOT a valid keyword!", it->line);
+                    ++program.warnings;
+
                     ++it;
             }
         }
