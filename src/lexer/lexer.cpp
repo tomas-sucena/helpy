@@ -8,11 +8,18 @@ namespace Helpy {
                                                     {"DESCRIPTIONS", TokenType::DescriptionsKeyword},
                                                     {"NAME", TokenType::NameKeyword},};
 
-    Lexer::Lexer(const std::string &path, Program &program) : file(path), curr(0), line(1), program(program) {}
+    Lexer::Lexer(const std::string &path, Program &program)
+        : file(path), curr(0), line(1), pos(-1), program(program) {}
 
     void Lexer::read() {
         file.get(curr);
-        line += (curr == '\n');
+        program.addChar(curr);
+
+        if (curr == '\n') {
+            ++line;
+            pos = -1;
+        }
+        else ++pos;
     }
 
     std::string Lexer::readWord() {
@@ -120,23 +127,36 @@ namespace Helpy {
             // check if there is more to read
             if (file.eof()) break;
 
+            uint16_t initialLine = line;
+            uint16_t initialPos = pos;
+
             switch (curr) {
                 case 'a' ... 'z' :
                 case 'A' ... 'Z' :
-                case '1' ... '9' :
-                    tokens.emplace_back(TokenType::Word, line, readWord());
+                case '1' ... '9' : {
+                    std::string word = readWord();
+
+                    tokens.emplace_back(TokenType::Word, initialLine, initialPos, pos, word);
                     getNext = false;
 
                     break;
 
-                case '\'' :
-                case '"' :
-                    tokens.emplace_back(TokenType::String, line, readString(curr));
-                    break;
+                }
 
-                case '(' :
-                    tokens.emplace_back(TokenType::String, line, readString(')'));
+                case '\'' :
+                case '"' : {
+                    std::string string = readString(curr);
+                    tokens.emplace_back(TokenType::String, initialLine, initialPos, pos, string);
+
                     break;
+                }
+
+                case '(' : {
+                    std::string string = readString(')');
+                    tokens.emplace_back(TokenType::String, initialLine, initialPos, pos, string);
+
+                    break;
+                }
 
                 case ':' : {
                     Token last = tokens.back();
@@ -148,13 +168,14 @@ namespace Helpy {
                         Utils::printError('\'' + last.value + "' is NOT a valid keyword!", line, false);
                         program.error = true;
                     }
-                    else tokens.emplace_back(it->second, last.line);
+                    else
+                        tokens.emplace_back(it->second, last.line, last.start, pos);
 
                     break;
                 }
 
                 case '-' :
-                    tokens.emplace_back(TokenType::Hyphen, line);
+                    tokens.emplace_back(TokenType::Hyphen, line, pos, pos);
                     break;
 
                 case '/' :
