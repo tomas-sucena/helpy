@@ -13,7 +13,7 @@ namespace Helpy {
     class Lexer {
         std::ifstream file;
         char curr;
-        int line;
+        uint16_t line;
         bool error;
 
         static uMap<std::string, TokenType> keywords;
