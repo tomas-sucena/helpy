@@ -8,7 +8,7 @@ namespace Helpy {
                                                     {"DESCRIPTIONS", TokenType::DescriptionsKeyword},
                                                     {"NAME", TokenType::NameKeyword},};
 
-    Lexer::Lexer(const std::string &path) : file(path), curr(0), line(1), error(false), warnings(0) {}
+    Lexer::Lexer(const std::string &path, Program &program) : file(path), curr(0), line(1), program(program) {}
 
     void Lexer::read() {
         file.get(curr);
@@ -34,7 +34,7 @@ namespace Helpy {
                     continue;
                 default :
                     Utils::printError(std::string("Unexpected character '") + curr + "'!", line, false);
-                    error = true;
+                    program.error = true;
             }
 
             read();
@@ -146,7 +146,7 @@ namespace Helpy {
 
                     if (it == keywords.end()) {
                         Utils::printError('\'' + last.value + "' is NOT a valid keyword!", line, false);
-                        error = true;
+                        program.error = true;
                     }
                     else tokens.emplace_back(it->second, last.line);
 
@@ -165,7 +165,7 @@ namespace Helpy {
                                             + "'!", line);
 
                         getNext = false;
-                        ++warnings;
+                        ++program.warnings;
                     }
                     else
                         ignoreComment(curr == '*');
@@ -179,12 +179,10 @@ namespace Helpy {
                 default :
                     Utils::printWarning(std::string("Unexpected character '") + BOLD + curr + R_BOLD
                         + "'!", line);
-                    ++warnings;
+                    ++program.warnings;
             }
         }
 
-        // check if there were any errors
-        if (error) exit(1);
         return tokens;
     }
 }

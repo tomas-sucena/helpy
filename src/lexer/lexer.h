@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "../utils/program.hpp"
 #include "../utils/token.hpp"
 
 #define uMap std::unordered_map
@@ -14,14 +15,13 @@ namespace Helpy {
         std::ifstream file;
         char curr;
         uint16_t line;
-        bool error;
-        uint16_t warnings;
+        Program &program;
 
         static uMap<std::string, TokenType> keywords;
 
     /* CONSTRUCTOR */
     public:
-        explicit Lexer(const std::string &path);
+        explicit Lexer(const std::string &path, Program &program);
 
     /* METHODS */
     private:
