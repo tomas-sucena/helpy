@@ -23,7 +23,7 @@ namespace Helpy {
     };
 
     /**
-     * @brief A class that represents a Helpyfile token.
+     * @brief A struct that represents a Helpyfile token.
      */
     struct Token {
         TokenType type;
@@ -34,7 +34,7 @@ namespace Helpy {
         /**
          * @brief Creates a token.
          *
-         * Creates a token given its type and, in the case of a literal, its value
+         * Creates a token given its type and, in the case of a literal, its value.
          * @param type the type of the token
          * @param line the line where the token was found
          * @param value the value (if any) of the token

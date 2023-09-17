@@ -14,7 +14,8 @@ set(PROJECT_HEADERS
         src/utils/command.hpp
         src/utils/token.hpp
         src/utils/utils.hpp
-        src/writer/writer.h)
+        src/writer/writer.h
+        src/utils/program.hpp)
 
 set(PROJECT_SOURCES
         src/lexer/lexer.cpp
