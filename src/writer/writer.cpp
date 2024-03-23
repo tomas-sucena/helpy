@@ -38,9 +38,7 @@ namespace Helpy {
               << "#include \"../external/libfort/fort.hpp\"\n"
               << '\n'
               << "#define uMap std::unordered_map\n"
-              << "#define uSet std::unordered_set\n"
-              << '\n'
-              << "using std::string;\n";
+              << "#define uSet std::unordered_set\n";
 
         header << '\n'
                << "#include \"" << info.filename << "_utils.hpp\"\n";
@@ -51,8 +49,8 @@ namespace Helpy {
     void Writer::writeMethodsDeclaration() {
         header << '\n'
                << "\t/* METHODS */\n"
-               << "\tstatic string readInput(const string &instruction, uSet<string> &options);\n"
-               << "\tstatic double readNumber(const string &instruction);\n"
+               << "\tstatic std::string readInput(const std::string &instruction, uSet<std::string> &options);\n"
+               << "\tstatic double readNumber(const std::string &instruction);\n"
                << '\n'
                << "\tbool executeCommand(int value);\n"
                << "\tvoid advancedMode();\n"
@@ -72,7 +70,7 @@ namespace Helpy {
     void Writer::writeClass() {
         header << '\n'
                << "class " << info.classname << " {\n"
-               << "\tstatic uMap<string, int> ";
+               << "\tstatic uMap<std::string, int> ";
 
         for (int i = 1; i <= info.numArguments; ++i)
             header << "map" << i << ((i < info.numArguments) ? ", " : ";\n");
@@ -109,7 +107,7 @@ namespace Helpy {
         int prime = 2;
 
         for (int i = 0; i < info.numArguments; ++i) {
-            source << "uMap<string, int> " << info.classname << "::map" << i + 1 << " = {";
+            source << "uMap<std::string, int> " << info.classname << "::map" << i + 1 << " = {";
 
             int value = prime;
             for (Command &command : info.commands) {
@@ -159,15 +157,15 @@ namespace Helpy {
                   " * @param options the options that will be displayed to the user\n"
                   " * @return read input\n"
                   " */\n"
-               << "string " << info.classname << "::readInput(const string &instruction, uSet<string> &options) {\n"
-                  "\tstring res;\n"
+               << "std::string " << info.classname << "::readInput(const std::string &instruction, uSet<std::string> &options) {\n"
+                  "\tstd::string res;\n"
                   "\tbool valid = false;\n"
                   "\n"
                   "\twhile (true) {\n"
                   "\t\tstd::cout << BREAK;\n"
                   "\t\tstd::cout << instruction << std::endl << std::endl;\n"
                   "\n"
-                  "\t\tstring line; getline(std::cin >> std::ws, line);\n"
+                  "\t\tstd::string line; getline(std::cin >> std::ws, line);\n"
                   "\t\tUtils::toLowercase(line);\n"
                   "\n"
                   "\t\tstd::istringstream line_(line);\n"
@@ -196,7 +194,7 @@ namespace Helpy {
                   " * @param instruction the instruction that will be displayed before prompting the user to input the number\n"
                   " * @return the number inputted by the user\n"
                   " */\n"
-               << "double " << info.classname << "::readNumber(const string &instruction){\n"
+               << "double " << info.classname << "::readNumber(const std::string &instruction){\n"
                   "\tdouble res;\n"
                   "\tbool valid = false;\n"
                   "\n"
@@ -204,12 +202,12 @@ namespace Helpy {
                   "\t\tstd::cout << BREAK;\n"
                   "\t\tstd::cout << instruction << std::endl << std::endl;\n"
                   "\n"
-                  "\t\tstring line; getline(std::cin >> std::ws, line);\n"
+                  "\t\tstd::string line; getline(std::cin >> std::ws, line);\n"
                   "\t\tUtils::toLowercase(line);\n"
                   "\n"
                   "\t\tstd::istringstream line_(line);\n"
                   "\n"
-                  "\t\tstring temp;\n"
+                  "\t\tstd::string temp;\n"
                   "\t\twhile (line_ >> temp){\n"
                   "\t\t\ttry {\n"
                   "\t\t\t\tres = stod(temp);\n"
@@ -269,7 +267,7 @@ namespace Helpy {
                   "\t\tstd::cout << BREAK;\n"
                   "\t\tstd::cout << \"How can I be of assistance?\" << std::endl << std::endl;\n"
                   "\n"
-                  "\t\tstring ";
+                  "\t\tstd::string ";
 
         for (int i = 1; i <= info.numArguments; ++i)
             source << 's' << i << ((i < info.numArguments) ? ", " : ";\n");
@@ -318,14 +316,14 @@ namespace Helpy {
                   " * @brief executes the guided mode of the UI\n"
                   " */\n"
                << "void " << info.classname << "::guidedMode() {\n"
-                  "\tstring instruction = \"How can I be of assistance?\\n\\n\";\n"
+                  "\tstd::string instruction = \"How can I be of assistance?\\n\\n\";\n"
                   "\n";
 
         for (int i = 1; i <= (int) info.commands.size(); ++i) {
             const Command &command = info.commands[i - 1];
 
             source << "\t// " << command.getMethodName() << "()\n"
-                   << "\tinstruction += (string) BOLD + " << info.color << " + \"" << i << " - \" + WHITE + \"";
+                   << "\tinstruction += (std::string) BOLD + " << info.color << " + \"" << i << " - \" + WHITE + \"";
 
             for (int j = 1; j <= info.numArguments; ++j)
                 source << command[j - 1] << ((j < info.numArguments) ? " " : "\\n\"\n");
@@ -353,7 +351,7 @@ namespace Helpy {
                   "\t\tstd::cout << BREAK;\n"
                   "\t\tstd::cout << \"Anything else?\" << YES_NO << std::endl << std::endl;\n"
                   "\n"
-                  "\t\tstring input; getline(std::cin >> std::ws, input);\n"
+                  "\t\tstd::string input; getline(std::cin >> std::ws, input);\n"
                   "\t\tUtils::toLowercase(input);\n"
                   "\n"
                   "\t\tstd::istringstream input_(input);\n"
@@ -375,10 +373,10 @@ namespace Helpy {
                    " * @brief runs the command-line menu\n"
                    " */\n"
                << "void " << info.classname << "::run() {\n"
-               << "\tstring instruction = \"Which mode would you prefer?\\n\\n\"\n"
+               << "\tstd::string instruction = \"Which mode would you prefer?\\n\\n\"\n"
                   "                         \"* Guided\\n\"\n"
                   "                         \"* Advanced\";\n"
-                  "\tuSet<string> options = {\"guided\", \"advanced\", \"adv\"};\n"
+                  "\tuSet<std::string> options = {\"guided\", \"advanced\", \"adv\"};\n"
                   "\n"
                   "\t(readInput(instruction, options) == \"guided\") ? guidedMode() : advancedMode();\n"
                   "\n"
@@ -397,7 +395,7 @@ namespace Helpy {
               << "\t * @complexity O(n)\n"
               << "\t * @param s string to be modified\n"
               << "\t */\n"
-              << "\tstatic void toLowercase(string &s) {\n"
+              << "\tstatic void toLowercase(std::string &s) {\n"
               << "\t\tfor (char &c : s)\n"
               << "\t\t\tc = (char) tolower(c);\n"
               << "\t}\n";
@@ -409,7 +407,7 @@ namespace Helpy {
               << "\t * @complexity O(n)\n"
               << "\t * @param s string to be modified\n"
               << "\t */\n"
-              << "\tstatic void toUppercase(string &s) {\n"
+              << "\tstatic void toUppercase(std::string &s) {\n"
               << "\t\tfor (char &c : s)\n"
               << "\t\t\tc = (char) toupper(c);\n"
               << "\t}\n";
@@ -421,7 +419,7 @@ namespace Helpy {
               << "\t* @param columnNames list containing the name of each column of the table\n"
               << "\t* @return fort::char_table object\n"
               << "\t*/\n"
-              << "\tstatic fort::char_table createTable(const std::list<string> &columnNames) {\n"
+              << "\tstatic fort::char_table createTable(const std::list<std::string> &columnNames) {\n"
               << "\t\tfort::char_table table;\n"
               << "\n"
               << "\t\ttable.set_border_style(FT_NICE_STYLE);\n"
