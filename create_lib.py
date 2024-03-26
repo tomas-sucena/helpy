@@ -71,7 +71,7 @@ def main():
                 source_files.append(f"{dirname}/{filename}")
 
     config["header_files"] = header_files
-    config["source_files"] = source_files
+    config["source_files"] = source_files + ["src/main.cpp"]
 
     create_lib(config)
 
