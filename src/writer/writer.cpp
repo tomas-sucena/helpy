@@ -60,7 +60,7 @@ namespace Helpy {
         header << "\n\t// commands\n";
 
         for (const Command &command : info.commands)
-            header << "\tvoid " << command.getMethodName() << "();\n";
+            header << "\tvoid " << command.getSignature() << "();\n";
 
         header << '\n'
                << "public:\n"
@@ -141,7 +141,7 @@ namespace Helpy {
 
             source << '\n'
                    << " */\n"
-                   << "void " << info.classname << "::" << command.getMethodName() << "() {\n"
+                   << "void " << info.classname << "::" << command.getSignature() << "() {\n"
                    << "\tstd::cout << BREAK;\n"
                    << "\tstd::cout << \"Under development!\" << std::endl;\n"
                    << "}\n";
@@ -240,10 +240,10 @@ namespace Helpy {
                << "\tswitch (value) {\n";
 
         for (int i = 0; i < (int) info.commands.size(); ++i)
-            source << "\t\tcase (-" << i + 1 << ") :\n"
-                   << "\t\tcase (" << info.commands[i].getValue() << ") :\n"
-                   << "\t\t\t" << info.commands[i].getMethodName() << "();\n"
-                   << "\t\t\t" << "break;\n";
+            source << "\t\tcase -" << i + 1 << " :\n"
+                   << "\t\tcase " << info.commands[i].getValue() << " :\n"
+                   << "\t\t\t" << info.commands[i].getSignature() << "();\n"
+                   << "\t\t\t" << "break;\n\n";
 
         source << "\t\tdefault :\n"
                << "\t\t\tstd::cout << BREAK;\n"
@@ -316,26 +316,47 @@ namespace Helpy {
                   " * @brief executes the guided mode of the UI\n"
                   " */\n"
                << "void " << info.classname << "::guidedMode() {\n"
-                  "\tstd::string instruction = \"How can I be of assistance?\\n\\n\";\n"
-                  "\n";
+                                               "\tstd::string instruction = \"How can I be of assistance?\\n\\n\";\n"
+                                               "\n";
 
-        for (int i = 1; i <= (int) info.commands.size(); ++i) {
+        int numCommands = (int) info.commands.size();
+
+        for (int i = 1; i <= numCommands; ++i) {
             const Command &command = info.commands[i - 1];
 
-            source << "\t// " << command.getMethodName() << "()\n"
+            source << "\t// " << command.getSignature() << "()\n"
                    << "\tinstruction += (std::string) BOLD + " << info.color << " + \"" << i << " - \" + WHITE + \"";
 
-            for (int j = 1; j <= info.numArguments; ++j)
-                source << command[j - 1] << ((j < info.numArguments) ? " " : "\\n\"\n");
+            bool hasDescription = !command.getDescription().empty(); // verify if the command has a description
+            bool isLast = i == numCommands; // verify if we are writing the last command
 
-            source << "\t            + RESET";
+            switch ((isLast << 1) + hasDescription) {
+                // write command that neither has a description nor is last
+                case 0 :
+                    source << command.getName() << "\\n\"\n"
+                           << "\t            + RESET + '\\n'";
+                    break;
 
-            if (!command.getDescription().empty())
-                source << " + \"" << command.getDescription()
-                       << ((i < info.numArguments) ? "\\n\"\n"
-                                                     "\t            + '\\n'" : "\"");
-            else if (i < info.numArguments)
-                source << " + '\\n'";
+                // write command that has a description but is not last
+                case 1 :
+                    source << command.getName() << "\\n\"\n"
+                           << "\t            + RESET + ITALICS + \"" << command.getDescription() << "\\n\"\n"
+                           << "\t            + RESET + '\\n'";
+                    break;
+
+                // write the last command (without description)
+                case 2 :
+                    source << command.getName() << "\"\n"
+                           << "\t            + RESET";
+                    break;
+
+                // write the last command (with description)
+                case 3 :
+                    source << command.getName() << "\\n\""
+                           << "\t            + RESET + ITALICS + \"" << command.getDescription() << "\"\n"
+                           << "\t            + RESET";
+                    break;
+            }
 
             source << ";\n"
                    << '\n';
@@ -369,13 +390,13 @@ namespace Helpy {
 
         // run()
         source << '\n'
-                << "/**\n"
-                   " * @brief runs the command-line menu\n"
-                   " */\n"
+               << "/**\n"
+                  " * @brief runs the command-line menu\n"
+                  " */\n"
                << "void " << info.classname << "::run() {\n"
                << "\tstd::string instruction = \"Which mode would you prefer?\\n\\n\"\n"
-                  "                         \"* Guided\\n\"\n"
-                  "                         \"* Advanced\";\n"
+                  "                            \"* Guided\\n\"\n"
+                  "                            \"* Advanced\";\n"
                   "\tuSet<std::string> options = {\"guided\", \"advanced\", \"adv\"};\n"
                   "\n"
                   "\t(readInput(instruction, options) == \"guided\") ? guidedMode() : advancedMode();\n"

@@ -7,7 +7,8 @@
 namespace Helpy {
     class Command {
         std::vector<std::string> arguments;
-        std::string methodName;
+        std::string name;
+        std::string signature;
         std::string description;
         unsigned value;
 
@@ -18,17 +19,25 @@ namespace Helpy {
     /* METHODS */
     public:
         void push(std::string argument) {
+            bool empty = arguments.empty();
+
             // update arguments
             for (char &c : argument)
                 c = (char) tolower(c);
 
             arguments.emplace_back(argument);
 
-            // update method name
-            if (!methodName.empty())
+            // update name
+            if (!empty)
+                name += ' ';
+
+            name += argument;
+
+            // update signature
+            if (!empty)
                 argument.front() = (char) toupper(argument.front());
 
-            methodName += argument;
+            signature += argument;
         }
 
         void setDescription(const std::string &newDescription) {
@@ -43,8 +52,12 @@ namespace Helpy {
             value += val;
         }
 
-        [[nodiscard]] const std::string& getMethodName() const {
-            return methodName;
+        [[nodiscard]] const std::string& getName() const {
+            return name;
+        }
+
+        [[nodiscard]] const std::string& getSignature() const {
+            return signature;
         }
 
         [[nodiscard]] const std::string& getDescription() const {
