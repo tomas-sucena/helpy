@@ -2,6 +2,7 @@
 #define HELPY_PROGRAM_HPP
 
 #include <cstdint>
+#include <ostream>
 #include <string>
 #include <vector>
 

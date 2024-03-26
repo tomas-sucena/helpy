@@ -4,6 +4,7 @@
 #define HELPY_TOKEN_HPP
 
 #include <cstdint>
+#include <ostream>
 #include <string>
 
 namespace Helpy {
