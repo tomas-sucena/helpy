@@ -152,7 +152,7 @@ namespace Helpy {
     void Writer::writeHelpyMethods() {
         source << "\n"
                   "/********************************************************\n"
-                  "\tDO NOT ALTER THE METHODS BELOW!"
+                  "\tDO NOT ALTER THE METHODS BELOW!\n"
                   " ********************************************************/\n";
 
         // readInput()
@@ -190,8 +190,8 @@ namespace Helpy {
                   "\t\tstd::string line = readInput(instruction);\n"
                   "\t\tstd::istringstream line_(line);\n"
                   "\n"
-                  "\t\twhile (line_ >> res) {\n"
-                  "\t\t\tif (options.find(res) == options.end())\n"
+                  "\t\twhile (line_ >> input) {\n"
+                  "\t\t\tif (options.find(input) == options.end())\n"
                   "\t\t\t\tcontinue;\n"
                   "\n"
                   "\t\t\tvalid = true;\n"
@@ -204,7 +204,7 @@ namespace Helpy {
                   "\t\tstd::cout << RED << \"Invalid command! Please, try again.\" << RESET << std::endl;\n"
                   "\t}\n"
                   "\n"
-                  "\treturn res;\n"
+                  "\treturn input;\n"
                   "}\n";
 
         // readNumber()
