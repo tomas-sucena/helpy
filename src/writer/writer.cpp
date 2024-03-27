@@ -49,6 +49,7 @@ namespace Helpy {
     void Writer::writeMethodsDeclaration() {
         header << '\n'
                << "\t/* METHODS */\n"
+               << "\tstatic std::string readInput(const std::string &instruction);\n"
                << "\tstatic std::string readInput(const std::string &instruction, uSet<std::string> &options);\n"
                << "\tstatic double readNumber(const std::string &instruction);\n"
                << '\n'
@@ -127,7 +128,7 @@ namespace Helpy {
         }
     }
 
-    void Writer::writeMethodsDefinition() {
+    void Writer::writeUserMethods() {
         for (const Command &command : info.commands) {
             source << '\n'
                    << "/**\n"
@@ -149,7 +150,31 @@ namespace Helpy {
     }
 
     void Writer::writeHelpyMethods() {
+        source << "\n"
+                  "/********************************************************\n"
+                  "\tDO NOT ALTER THE METHODS BELOW!"
+                  " ********************************************************/\n";
+
         // readInput()
+        source << "\n"
+                  "/**\n"
+                  " * @brief reads a line of user input\n"
+                  " * @param instruction the instruction that will be displayed before prompting the user to type\n"
+                  " * @return read input\n"
+                  " */\n"
+               << "std::string " << info.classname << "::readInput(const std::string &instruction) {\n"
+                  "\t// display the instruction\n"
+                  "\tstd::cout << BREAK;\n"
+                  "\tstd::cout << instruction << std::endl << std::endl;\n"
+                  "\n"
+                  "\t// read the user input\n"
+                  "\tstd::string input; getline(std::cin >> std::ws, input);\n"
+                  "\tUtils::toLowercase(input);\n"
+                  "\n"
+                  "\treturn input;\n"
+                  "}\n";
+
+        // readInput(options)
         source << "\n"
                   "/**\n"
                   " * @brief reads a line of user input\n"
@@ -158,16 +183,11 @@ namespace Helpy {
                   " * @return read input\n"
                   " */\n"
                << "std::string " << info.classname << "::readInput(const std::string &instruction, uSet<std::string> &options) {\n"
-                  "\tstd::string res;\n"
+                  "\tstd::string input;\n"
                   "\tbool valid = false;\n"
                   "\n"
                   "\twhile (true) {\n"
-                  "\t\tstd::cout << BREAK;\n"
-                  "\t\tstd::cout << instruction << std::endl << std::endl;\n"
-                  "\n"
-                  "\t\tstd::string line; getline(std::cin >> std::ws, line);\n"
-                  "\t\tUtils::toLowercase(line);\n"
-                  "\n"
+                  "\t\tstd::string line = readInput(instruction);\n"
                   "\t\tstd::istringstream line_(line);\n"
                   "\n"
                   "\t\twhile (line_ >> res) {\n"
@@ -474,7 +494,7 @@ namespace Helpy {
     void Writer::writeSource() {
         writeMacros();
         writeKeywordMaps();
-        writeMethodsDefinition();
+        writeUserMethods();
         writeHelpyMethods();
     }
 

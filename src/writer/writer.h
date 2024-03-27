@@ -33,7 +33,7 @@ namespace Helpy {
         // source
         void writeMacros();
         void writeKeywordMaps();
-        void writeMethodsDefinition();
+        void writeUserMethods();
         void writeHelpyMethods();
 
         void writeUtils();
