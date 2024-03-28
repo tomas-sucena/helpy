@@ -1,6 +1,6 @@
 #include "manager.h"
 
-#include <filesystem>
+#include <experimental/filesystem>
 #include <iostream>
 
 #include "../lexer/lexer.h"
@@ -28,8 +28,6 @@
 #define DASHED_LINE "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
 #define BREAK       std::endl << YELLOW << DASHED_LINE << RESET << std::endl << std::endl
 #define YES_NO      " (" << GREEN << "Yes" << RESET << '/' << RED << "No" << RESET << ')'
-
-namespace fs = std::filesystem;
 
 namespace Helpy {
     void Manager::formatPath(std::string &path) {
@@ -80,7 +78,7 @@ namespace Helpy {
         formatPath(path);
 
         // check if the directory is usable
-        if (fs::exists(path) && !fs::is_empty(path)) {
+        if (std::experimental::filesystem::exists(path) && !std::experimental::filesystem::is_empty(path)) {
             std::cout << BOLD << YELLOW << "WARNING: " << RESET
                       << "The selected directory is already in use. Would you like to overwrite it?" << YES_NO << '\n';
 
@@ -90,11 +88,11 @@ namespace Helpy {
             if (answer != 'Y' && answer != 'y') return;
 
             // delete the content of the directory
-            fs::remove_all(path);
+            std::experimental::filesystem::remove_all(path);
         }
 
         // create the directory
-        fs::create_directory(path);
+        std::experimental::filesystem::create_directory(path);
         
         writeHelpyfileTemplate(path);
     }
@@ -104,7 +102,7 @@ namespace Helpy {
         filename = path + filename;
 
         // read Helpyfile
-        if (!std::filesystem::is_regular_file(filename)) {
+        if (!std::experimental::filesystem::is_regular_file(filename)) {
             Utils::printError((std::string) "Could not find the file '" + UNDERLINE + filename + RESET + RED
                 + "'! Please verify if the specified path is correct.");
 

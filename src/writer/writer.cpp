@@ -28,6 +28,7 @@ namespace Helpy {
 
     void Writer::writeIncludes() {
         utils << '\n'
+              << "#include <experimental/filesystem>\n"
               << "#include <iostream>\n"
               << "#include <sstream>\n"
               << "#include <string>\n"
@@ -47,18 +48,21 @@ namespace Helpy {
     }
 
     void Writer::writeMethodsDeclaration() {
-        header << '\n'
-               << "\t/* METHODS */\n"
-               << "\tstatic std::string readInput(const std::string &instruction);\n"
-               << "\tstatic std::string readInput(const std::string &instruction, uSet<std::string> &options);\n"
-               << "\tstatic double readNumber(const std::string &instruction);\n"
-               << '\n'
-               << "\tbool executeCommand(int value);\n"
-               << "\tvoid advancedMode();\n"
-               << "\tvoid guidedMode();\n";
+        header << "\n"
+                  "\t/* METHODS */\n"
+                  "\tstatic std::string readInput(const std::string &instruction);\n"
+                  "\tstatic std::string readInput(const std::string &instruction, uSet<std::string> &options);\n"
+                  "\tstatic double readNumber(const std::string &instruction);\n"
+                  "\tstatic std::string readFilename(const std::string &instruction);\n"
+                  "\tstatic std::string readDirname(const std::string &instruction);\n"
+                  "\n"
+                  "\tbool executeCommand(int value);\n"
+                  "\tvoid advancedMode();\n"
+                  "\tvoid guidedMode();\n";
 
         // user-defined methods
-        header << "\n\t// commands\n";
+        header << "\n"
+                  "\t// commands\n";
 
         for (const Command &command : info.commands)
             header << "\tvoid " << command.getSignature() << "();\n";
@@ -158,7 +162,7 @@ namespace Helpy {
         // readInput()
         source << "\n"
                   "/**\n"
-                  " * @brief reads a line of user input\n"
+                  " * @brief Reads a line of user input.\n"
                   " * @param instruction the instruction that will be displayed before prompting the user to type\n"
                   " * @return read input\n"
                   " */\n"
@@ -177,7 +181,7 @@ namespace Helpy {
         // readInput(options)
         source << "\n"
                   "/**\n"
-                  " * @brief reads a line of user input\n"
+                  " * @brief Reads a line of user input.\n"
                   " * @param instruction the instruction that will be displayed before prompting the user to type\n"
                   " * @param options the options that will be displayed to the user\n"
                   " * @return read input\n"
@@ -210,12 +214,12 @@ namespace Helpy {
         // readNumber()
         source << '\n'
                << "/**\n"
-                  " * @brief reads a number from the console\n"
+                  " * @brief Reads a number from the console.\n"
                   " * @param instruction the instruction that will be displayed before prompting the user to input the number\n"
                   " * @return the number inputted by the user\n"
                   " */\n"
                << "double " << info.classname << "::readNumber(const std::string &instruction){\n"
-                  "\tdouble res;\n"
+                  "\tdouble number;\n"
                   "\tbool valid = false;\n"
                   "\n"
                   "\twhile (true) {\n"
@@ -230,7 +234,7 @@ namespace Helpy {
                   "\t\tstd::string temp;\n"
                   "\t\twhile (line_ >> temp){\n"
                   "\t\t\ttry {\n"
-                  "\t\t\t\tres = stod(temp);\n"
+                  "\t\t\t\tnumber = stod(temp);\n"
                   "\t\t\t}\n"
                   "\t\t\tcatch(...) {\n"
                   "\t\t\t\tcontinue;\n"
@@ -246,13 +250,79 @@ namespace Helpy {
                   "\t\tstd::cout << RED << \"Invalid input! Please, try again.\" << RESET << std::endl;\n"
                   "\t}\n"
                   "\n"
-                  "\treturn res;\n"
+                  "\treturn number;\n"
+                  "}\n";
+
+        // readFilename()
+        source << '\n'
+               << "/**\n"
+                  "* @brief Reads a path from the console and verifies if it corresponds to a file.\n"
+                  "* @param instruction the instruction that will be displayed before prompting the user to input the number\n"
+                  "* @return the path inputted by the user\n"
+                  "*/\n"
+               << "std::string " << info.classname << "::readFilename(const std::string &instruction) {\n"
+                  "\tstd::string filename;\n"
+                  "\tbool valid = false;\n"
+                  "\n"
+                  "\twhile (true) {\n"
+                  "\t\tstd::string line = readInput(instruction);\n"
+                  "\t\tstd::istringstream line_(line);\n"
+                  "\n"
+                  "\t\twhile (line_ >> filename) {\n"
+                  "\t\t\t// verify if the file exists\n"
+                  "\t\t\tif (!std::experimental::filesystem::is_regular_file(filename))\n"
+                  "\t\t\t\tcontinue;\n"
+                  "\n"
+                  "\t\t\tvalid = true;\n"
+                  "\t\t\tbreak;\n"
+                  "\t\t}\n"
+                  "\n"
+                  "\t\tif (valid) break;\n"
+                  "\n"
+                  "\t\tstd::cout << BREAK;\n"
+                  "\t\tstd::cout << RED << \"Invalid filename! Please, try again.\" << RESET << std::endl;\n"
+                  "\t};\n"
+                  "\n"
+                  "\treturn filename;\n"
+                  "}\n";
+
+        // readDirname()
+        source << '\n'
+               << "/**\n"
+                  "* @brief Reads a path from the console and verifies if it corresponds to a directory.\n"
+                  "* @param instruction the instruction that will be displayed before prompting the user to input the number\n"
+                  "* @return the path inputted by the user\n"
+                  "*/\n"
+               << "std::string " << info.classname << "::readDirname(const std::string &instruction) {\n"
+                  "\tstd::string dirname;\n"
+                  "\tbool valid = false;\n"
+                  "\n"
+                  "\twhile (true) {\n"
+                  "\t\tstd::string line = readInput(instruction);\n"
+                  "\t\tstd::istringstream line_(line);\n"
+                  "\n"
+                  "\t\twhile (line_ >> dirname) {\n"
+                  "\t\t\t// verify if the file exists\n"
+                  "\t\t\tif (!std::experimental::filesystem::is_directory(dirname))\n"
+                  "\t\t\t\tcontinue;\n"
+                  "\n"
+                  "\t\t\tvalid = true;\n"
+                  "\t\t\tbreak;\n"
+                  "\t\t}\n"
+                  "\n"
+                  "\t\tif (valid) break;\n"
+                  "\n"
+                  "\t\tstd::cout << BREAK;\n"
+                  "\t\tstd::cout << RED << \"Invalid directory! Please, try again.\" << RESET << std::endl;\n"
+                  "\t};\n"
+                  "\n"
+                  "\treturn dirname;\n"
                   "}\n";
 
         // executeCommand()
         source << '\n'
                << "/**\n"
-               << " * @brief parses the arguments that were inputted and executes the corresponding command\n"
+               << " * @brief Parses the arguments that were inputted and executes the corresponding command.\n"
                << " * @param value the value that will be used in the switch case to choose which command to execute\n"
                << " * @return 'true' if the command exists, 'false' otherwise\n"
                << " */\n"
@@ -278,7 +348,7 @@ namespace Helpy {
         // advancedMode()
         source << '\n'
                << "/**\n"
-                  " * @brief executes the advanced mode of the UI\n"
+                  " * @brief Executes the advanced mode of the UI.\n"
                   " */\n"
                << "void " << info.classname << "::advancedMode() {\n"
                   "\tbool done = false;\n"
@@ -333,7 +403,7 @@ namespace Helpy {
         // guidedMode()
         source << '\n'
                << "/**\n"
-                  " * @brief executes the guided mode of the UI\n"
+                  " * @brief Executes the guided mode of the UI.\n"
                   " */\n"
                << "void " << info.classname << "::guidedMode() {\n"
                                                "\tstd::string instruction = \"How can I be of assistance?\\n\\n\";\n"
@@ -411,7 +481,7 @@ namespace Helpy {
         // run()
         source << '\n'
                << "/**\n"
-                  " * @brief runs the command-line menu\n"
+                  " * @brief Runs the command-line menu.\n"
                   " */\n"
                << "void " << info.classname << "::run() {\n"
                << "\tstd::string instruction = \"Which mode would you prefer?\\n\\n\"\n"
@@ -432,7 +502,7 @@ namespace Helpy {
 
         // toLowercase()
         utils << "\t/**\n"
-              << "\t * @brief turns all the characters of a string into lowercase\n"
+              << "\t * @brief Turns all the characters of a string into lowercase.\n"
               << "\t * @complexity O(n)\n"
               << "\t * @param s string to be modified\n"
               << "\t */\n"
@@ -444,7 +514,7 @@ namespace Helpy {
         // toUppercase()
         utils << '\n'
               << "\t/**\n"
-              << "\t * @brief turns all the characters of a string into uppercase\n"
+              << "\t * @brief Turns all the characters of a string into uppercase.\n"
               << "\t * @complexity O(n)\n"
               << "\t * @param s string to be modified\n"
               << "\t */\n"
@@ -456,7 +526,7 @@ namespace Helpy {
         // createTable()
         utils << "\n"
                  "\t/**\n"
-                 "\t* @brief creates a fort::char_table that will be used to display information in the terminal\n"
+                 "\t* @brief Creates a fort::char_table that will be used to display information in the terminal.\n"
                  "\t* @param columnNames list containing the name of each column of the table\n"
                  "\t* @return fort::char_table object\n"
                  "\t*/\n"
@@ -486,7 +556,7 @@ namespace Helpy {
         // createUTF8Table()
         utils << "\n"
                  "\t/**\n"
-                 "\t* @brief creates a fort::utf8_table that will be used to display information in the terminal\n"
+                 "\t* @brief Creates a fort::utf8_table that will be used to display information in the terminal.\n"
                  "\t* @param columnNames list containing the name of each column of the table\n"
                  "\t* @return fort::utf8_table object\n"
                  "\t*/\n"

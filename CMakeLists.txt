@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.16.3)
 project(helpy)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
+link_libraries(stdc++fs) # to use <external/filesystem>
 
 set(PROJECT_DEPENDENCIES
         external/libfort/fort.hpp
