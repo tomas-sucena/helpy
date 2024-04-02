@@ -710,7 +710,7 @@ namespace Helpy {
                << "std::string " << info.classname << "::readInput(const std::string &instruction) {\n"
                   "\t// display the instruction\n"
                   "\tstd::cout << BREAK;\n"
-                  "\tstd::cout << instruction << std::endl << std::endl;\n"
+                  "\tstd::cout << instruction << '\\n' << std::endl;\n"
                   "\n"
                   "\t// read the user input\n"
                   "\tstd::string input; getline(std::cin >> std::ws, input);\n"
@@ -768,7 +768,7 @@ namespace Helpy {
                   "\n"
                   "\twhile (true) {\n"
                   "\t\tstd::cout << BREAK;\n"
-                  "\t\tstd::cout << instruction << std::endl << std::endl;\n"
+                  "\t\tstd::cout << instruction << '\\n' << std::endl;\n"
                   "\n"
                   "\t\tstd::string line; getline(std::cin >> std::ws, line);\n"
                   "\t\tUtils::toLowercase(line);\n"
@@ -926,7 +926,7 @@ namespace Helpy {
                   "\n"
                   "\twhile (!done) {\n"
                   "\t\tstd::cout << BREAK;\n"
-                  "\t\tstd::cout << \"How can I be of assistance?\" << std::endl << std::endl;\n"
+                  "\t\tstd::cout << \"How can I be of assistance?\" << '\\n' << std::endl;\n"
                   "\n"
                   "\t\tstd::string ";
 
@@ -953,7 +953,7 @@ namespace Helpy {
         source << "\t\t\tcontinue;\n"
                   "\n"
                   "\t\tstd::cout << BREAK;\n"
-                  "\t\tstd::cout << \"Anything else?\" << YES_NO << std::endl << std::endl;\n"
+                  "\t\tstd::cout << \"Anything else?\" << YES_NO << '\\n' << std::endl;\n"
                   "\n"
                   "\t\ts1.clear(); getline(std::cin >> std::ws, s1);\n"
                   "\t\tUtils::toLowercase(s1);\n"
@@ -1013,7 +1013,7 @@ namespace Helpy {
 
                 // write the last command (with description)
                 case 3 :
-                    source << command.getName() << "\\n\""
+                    source << command.getName() << "\\n\"\n"
                            << "\t            + RESET + ITALICS + \"" << command.getDescription() << "\"\n"
                            << "\t            + RESET";
                     break;
@@ -1031,7 +1031,7 @@ namespace Helpy {
                   "\t\t\tcontinue;\n"
                   "\n"
                   "\t\tstd::cout << BREAK;\n"
-                  "\t\tstd::cout << \"Anything else?\" << YES_NO << std::endl << std::endl;\n"
+                  "\t\tstd::cout << \"Anything else?\" << YES_NO << '\\n' << std::endl;\n"
                   "\n"
                   "\t\tstd::string input; getline(std::cin >> std::ws, input);\n"
                   "\t\tUtils::toLowercase(input);\n"
