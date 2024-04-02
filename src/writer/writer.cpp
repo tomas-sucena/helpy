@@ -48,24 +48,27 @@ namespace Helpy {
     }
 
     void Writer::writeMethodsDeclaration() {
+        // user-defined methods
         header << "\n"
                   "\t/* METHODS */\n"
+                  "\t// commands\n";
+
+        for (const Command &command : info.commands)
+            header << "\tvoid " << command.getSignature() << "();\n";
+
+        // Helpy methods
+        header << "\n"
+                  "\t// Helpy functions\n"
                   "\tstatic std::string readInput(const std::string &instruction);\n"
                   "\tstatic std::string readInput(const std::string &instruction, uSet<std::string> &options);\n"
                   "\tstatic double readNumber(const std::string &instruction);\n"
                   "\tstatic std::string readFilename(const std::string &instruction);\n"
                   "\tstatic std::string readDirname(const std::string &instruction);\n"
+                  "\tstatic std::vector<std::string> readCSV(const std::string &instruction, char delimiter = ',');\n"
                   "\n"
                   "\tbool executeCommand(int value);\n"
                   "\tvoid advancedMode();\n"
                   "\tvoid guidedMode();\n";
-
-        // user-defined methods
-        header << "\n"
-                  "\t// commands\n";
-
-        for (const Command &command : info.commands)
-            header << "\tvoid " << command.getSignature() << "();\n";
 
         header << '\n'
                << "public:\n"
@@ -163,7 +166,7 @@ namespace Helpy {
         source << "\n"
                   "/**\n"
                   " * @brief Reads a line of user input.\n"
-                  " * @param instruction the instruction that will be displayed before prompting the user to type\n"
+                  " * @param instruction the instruction that will be displayed before prompting the user to input\n"
                   " * @return read input\n"
                   " */\n"
                << "std::string " << info.classname << "::readInput(const std::string &instruction) {\n"
@@ -182,7 +185,7 @@ namespace Helpy {
         source << "\n"
                   "/**\n"
                   " * @brief Reads a line of user input.\n"
-                  " * @param instruction the instruction that will be displayed before prompting the user to type\n"
+                  " * @param instruction the instruction that will be displayed before prompting the user to input\n"
                   " * @param options the options that will be displayed to the user\n"
                   " * @return read input\n"
                   " */\n"
@@ -216,7 +219,7 @@ namespace Helpy {
                << "/**\n"
                   " * @brief Reads a number from the console.\n"
                   " * @param instruction the instruction that will be displayed before prompting the user to input the number\n"
-                  " * @return the number inputted by the user\n"
+                  " * @return the number input by the user\n"
                   " */\n"
                << "double " << info.classname << "::readNumber(const std::string &instruction){\n"
                   "\tdouble number;\n"
@@ -256,10 +259,10 @@ namespace Helpy {
         // readFilename()
         source << '\n'
                << "/**\n"
-                  "* @brief Reads a path from the console and verifies if it corresponds to a file.\n"
-                  "* @param instruction the instruction that will be displayed before prompting the user to input the number\n"
-                  "* @return the path inputted by the user\n"
-                  "*/\n"
+                  " * @brief Reads a path from the console and verifies if it corresponds to a file.\n"
+                  " * @param instruction the instruction that will be displayed before prompting the user to input the number\n"
+                  " * @return the path input by the user\n"
+                  " */\n"
                << "std::string " << info.classname << "::readFilename(const std::string &instruction) {\n"
                   "\tstd::string filename;\n"
                   "\tbool valid = false;\n"
@@ -281,7 +284,7 @@ namespace Helpy {
                   "\n"
                   "\t\tstd::cout << BREAK;\n"
                   "\t\tstd::cout << RED << \"Invalid filename! Please, try again.\" << RESET << std::endl;\n"
-                  "\t};\n"
+                  "\t}\n"
                   "\n"
                   "\treturn filename;\n"
                   "}\n";
@@ -289,10 +292,10 @@ namespace Helpy {
         // readDirname()
         source << '\n'
                << "/**\n"
-                  "* @brief Reads a path from the console and verifies if it corresponds to a directory.\n"
-                  "* @param instruction the instruction that will be displayed before prompting the user to input the number\n"
-                  "* @return the path inputted by the user\n"
-                  "*/\n"
+                  " * @brief Reads a path from the console and verifies if it corresponds to a directory.\n"
+                  " * @param instruction the instruction that will be displayed before prompting the user to input the number\n"
+                  " * @return the path input by the user\n"
+                  " */\n"
                << "std::string " << info.classname << "::readDirname(const std::string &instruction) {\n"
                   "\tstd::string dirname;\n"
                   "\tbool valid = false;\n"
@@ -314,26 +317,53 @@ namespace Helpy {
                   "\n"
                   "\t\tstd::cout << BREAK;\n"
                   "\t\tstd::cout << RED << \"Invalid directory! Please, try again.\" << RESET << std::endl;\n"
-                  "\t};\n"
+                  "\t}\n"
                   "\n"
                   "\treturn dirname;\n"
                   "}\n";
 
-        // executeCommand()
+        // readCSV()
         source << '\n'
                << "/**\n"
-               << " * @brief Parses the arguments that were inputted and executes the corresponding command.\n"
-               << " * @param value the value that will be used in the switch case to choose which command to execute\n"
-               << " * @return 'true' if the command exists, 'false' otherwise\n"
-               << " */\n"
+                  " * @brief Reads and parses a line of user input containing comma-separated values.\n"
+                  " * @param instruction the instruction that will be displayed before prompting the user to input"
+                  " * @param delimiter the character that separates each value"
+                  " * @return the values input by the user"
+                  " */\n"
+               << "std::vector<std::string> " << info.classname << "::readCSV(const std::string &instruction, char delimiter) {\n"
+                  "\tstd::cout << BREAK;\n"
+                  "\tstd::cout << instruction << '\\n' << std::endl;\n"
+                  "\n"
+                  "\t// read the user input\n"
+                  "\tstd::string line; getline(std::cin >> std::ws, line);\n"
+                  "\tUtils::toLowercase(line);\n"
+                  "\n"
+                  "\tstd::istringstream line_(line);\n"
+                  "\n"
+                  "\t// separate the user input into values\n"
+                  "\tstd::vector<std::string> values;\n"
+                  "\tfor (std::string value; getline(line_, value, delimiter); ) {\n"
+                  "\t\tvalues.emplace_back(value);\n"
+                  "\t}\n"
+                  "\n"
+                  "\treturn values;\n"
+                  "}\n";
+
+        // executeCommand()
+        source << "\n"
+                  "/**\n"
+                  " * @brief Parses the arguments that were input and executes the corresponding command.\n"
+                  " * @param value the value that will be used in the switch case to choose which command to execute\n"
+                  " * @return 'true' if the command exists, 'false' otherwise\n"
+                  " */\n"
                << "bool " << info.classname << "::executeCommand(int value) {\n"
-               << "\tswitch (value) {\n";
+                  "\tswitch (value) {\n";
 
         for (int i = 0; i < (int) info.commands.size(); ++i)
             source << "\t\tcase -" << i + 1 << " :\n"
-                   << "\t\tcase " << info.commands[i].getValue() << " :\n"
-                   << "\t\t\t" << info.commands[i].getSignature() << "();\n"
-                   << "\t\t\t" << "break;\n\n";
+                      "\t\tcase " << info.commands[i].getValue() << " :\n"
+                      "\t\t\t" << info.commands[i].getSignature() << "();\n"
+                      "\t\t\t" << "break;\n\n";
 
         source << "\t\tdefault :\n"
                << "\t\t\tstd::cout << BREAK;\n"
@@ -406,8 +436,8 @@ namespace Helpy {
                   " * @brief Executes the guided mode of the UI.\n"
                   " */\n"
                << "void " << info.classname << "::guidedMode() {\n"
-                                               "\tstd::string instruction = \"How can I be of assistance?\\n\\n\";\n"
-                                               "\n";
+                  "\tstd::string instruction = \"How can I be of assistance?\\n\\n\";\n"
+                  "\n";
 
         int numCommands = (int) info.commands.size();
 
