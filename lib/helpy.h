@@ -388,12 +388,14 @@ namespace Helpy {
     class Manager {
     /* METHODS */
     private:
-        static void formatPath(std::string &path);
+        static std::string readInput(const std::string &instr);
+        static void formatDirname(std::string &path);
+        static bool createDirectory(std::string &path);
         static void writeHelpyfileTemplate(const std::string &path);
 
     public:
-        static void init(std::string path);
-        static void run(std::string path, std::string filename);
+        static void init(std::string outputDir);
+        static void run(std::string path, std::string outputDir);
     };
 }
 

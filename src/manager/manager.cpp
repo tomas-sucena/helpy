@@ -6,7 +6,6 @@
 #include "../lexer/lexer.h"
 #include "../parser/parser.h"
 #include "../writer/writer.h"
-#include "../utils/program.hpp"
 #include "../utils/utils.hpp"
 
 // formatting
@@ -30,9 +29,51 @@
 #define YES_NO      " (" << GREEN << "Yes" << RESET << '/' << RED << "No" << RESET << ')'
 
 namespace Helpy {
-    void Manager::formatPath(std::string &path) {
+    /**
+     * @brief Reads a line of user input.
+     *
+     * Reads a line of user input. This function was copied from Helpy.
+     * @param instruction the instruction that will be displayed before prompting the user to input
+     * @return read input
+     */
+    std::string Manager::readInput(const std::string &instruction) {
+        // display the instruction
+        std::cout << BREAK;
+        std::cout << instruction << '\n' << std::endl;
+
+        // read the user input
+        std::string input; getline(std::cin >> std::ws, input);
+
+        return input;
+    }
+
+    void Manager::formatDirname(std::string &path) {
         if (!path.empty() && path.back() != '/')
             path.push_back('/');
+    }
+
+    bool Manager::createDirectory(std::string &path) {
+        formatDirname(path);
+
+        // check if the directory is usable
+        if (std::experimental::filesystem::exists(path) && !std::experimental::filesystem::is_empty(path)) {
+            std::ostringstream instr;
+            instr << BOLD << YELLOW << "WARNING: " << RESET
+                  << "The selected directory is already in use. Would you like to overwrite it?" << YES_NO;
+
+            char answer = Manager::readInput(instr.str()).front();
+
+            // verify if the user consented to having the contents of the directory removed
+            if (answer != 'Y' && answer != 'y')
+                return false;
+
+            // delete the content of the directory
+            std::experimental::filesystem::remove_all(path);
+        }
+
+        // create the directory
+        std::experimental::filesystem::create_directory(path);
+        return true;
     }
 
     void Manager::writeHelpyfileTemplate(const std::string &path) {
@@ -71,51 +112,38 @@ namespace Helpy {
     }
 
     /**
-     * @brief writes a template for a Helpyfile, which is the file that contains the Helpy specification
-     * @param path path to the directory where the Helpyfile will be placed
+     * @brief Writes a template for a Helpyfile, which is the file that contains the Helpy specification
+     * @param outputDir path to the directory where the Helpyfile will be placed
      */
-    void Manager::init(std::string path) {
-        formatPath(path);
-
-        // check if the directory is usable
-        if (std::experimental::filesystem::exists(path) && !std::experimental::filesystem::is_empty(path)) {
-            std::cout << BOLD << YELLOW << "WARNING: " << RESET
-                      << "The selected directory is already in use. Would you like to overwrite it?" << YES_NO << '\n';
-
-            char answer;
-            std::cin >> answer;
-
-            if (answer != 'Y' && answer != 'y') return;
-
-            // delete the content of the directory
-            std::experimental::filesystem::remove_all(path);
-        }
-
-        // create the directory
-        std::experimental::filesystem::create_directory(path);
-        
-        writeHelpyfileTemplate(path);
+    void Manager::init(std::string outputDir) {
+        if (createDirectory(outputDir))
+            writeHelpyfileTemplate(outputDir);
     }
 
-    void Manager::run(std::string path, std::string filename) {
-        formatPath(path);
-        filename = path + filename;
-
-        // read Helpyfile
-        if (!std::experimental::filesystem::is_regular_file(filename)) {
-            Utils::printError((std::string) "Could not find the file '" + UNDERLINE + filename + RESET + RED
-                + "'! Please verify if the specified path is correct.");
-
-            exit(1);
+    /**
+     * @brief Creates a new Helpy instance according to a Helpyfile.
+     * @param path path to either the Helpyfile or the directory where it is stored
+     * @param outputDir path where the files pertaining to Helpy will be output
+     */
+    void Manager::run(std::string path, std::string outputDir) {
+        // verify if the user input the path to a directory
+        if (std::experimental::filesystem::is_directory(path)) {
+            formatDirname(path);
+            path += "Helpyfile";
         }
 
-        // lex
+        // verify if the Helpyfile exists
+        if (!std::experimental::filesystem::is_regular_file(path)) {
+            Utils::printError((std::string) "Could not find the file '" + UNDERLINE + path + RESET + RED
+                              + "'! Please verify if the specified path is correct.");
+            exit(EXIT_FAILURE);
+        }
+
+        // lex the Helpyfile
         Program program;
+        std::vector<Token> tokens = Lexer(path, program).execute();
 
-        Lexer lexer(filename, program);
-        std::vector<Token> tokens = lexer.execute();
-
-        if (program.error) exit(1);
+        if (program.error) exit(EXIT_FAILURE);
 
         if (program.warnings) {
             std::cout << '\n'
@@ -131,13 +159,11 @@ namespace Helpy {
             if (answer != 'Y' && answer != 'y') return;
         }
 
-        // parse
+        // parse the Helpyfile
         program.warnings = 0;
+        ParserInfo info = Parser(tokens, program).execute();
 
-        Parser parser(tokens, program);
-        ParserInfo info = parser.execute();
-
-        if (program.error) exit(1);
+        if (program.error) exit(EXIT_FAILURE);
 
         if (program.warnings) {
             std::cout << '\n'
@@ -153,8 +179,8 @@ namespace Helpy {
             if (answer != 'Y' && answer != 'y') return;
         }
 
-        // write
-        Writer writer(path, info);
-        writer.execute();
+        // write the Helpy instance
+        if (createDirectory(outputDir))
+            Writer(outputDir, info).execute();
     }
 }
