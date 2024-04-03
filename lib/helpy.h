@@ -346,7 +346,6 @@ namespace Helpy::Utils {
 #include <unordered_map>
 #include <vector>
 
-
 #define uMap std::unordered_map
 
 namespace Helpy {
@@ -407,7 +406,6 @@ namespace Helpy {
 #ifndef HELPY_PARSER_H
 #define HELPY_PARSER_H
 
-
 namespace Helpy {
     struct ParserInfo {
         unsigned numArguments;
@@ -451,7 +449,6 @@ namespace Helpy {
 #include <string>
 #include <vector>
 #include <unordered_map>
-
 
 #define uMap std::unordered_map
 

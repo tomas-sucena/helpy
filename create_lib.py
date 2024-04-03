@@ -16,10 +16,24 @@ def copy_file(filename: str, output_file):
         output_file.write(" ********************************************************/\n\n")
 
         # copy the contents from the file
+        whitespace_lines = 0
+
         for line in file.readlines():
             # ignore relative includes
-            if not re.search('#include ".+"', line.strip()):
+            if re.search('#include ".+"', line.strip()):
+                whitespace_lines += 1
+                continue
+
+            if not line.isspace():
                 output_file.write(line)
+                whitespace_lines = 0
+                continue
+
+            # ignore multiple whitespace lines in a row
+            if whitespace_lines == 0:
+                output_file.write(line)
+
+            whitespace_lines += 1
 
 
 def create_lib(config):

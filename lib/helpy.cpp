@@ -4,7 +4,6 @@
    src/lexer/lexer.cpp
  ********************************************************/
 
-
 namespace Helpy {
     uMap<std::string, TokenType> Lexer::keywords = {{"COLOR", TokenType::ColorKeyword},
                                                     {"COLOUR", TokenType::ColorKeyword},
@@ -216,10 +215,8 @@ namespace Helpy {
    src/manager/manager.cpp
  ********************************************************/
 
-
 #include <experimental/filesystem>
 #include <iostream>
-
 
 // formatting
 #define RESET      "\033[0m"
@@ -375,11 +372,9 @@ namespace Helpy {
    src/parser/parser.cpp
  ********************************************************/
 
-
 #include <stdexcept>
 #include <unordered_set>
 #include <utility>
-
 
 #define uSet std::unordered_set
 #define MAX_ARGUMENTS 8
@@ -538,9 +533,7 @@ namespace Helpy {
    src/writer/writer.cpp
  ********************************************************/
 
-
 #include <thread>
-
 
 namespace Helpy {
     Writer::Writer(const std::string &path, ParserInfo info) : info(std::move(info)) {
@@ -1194,7 +1187,6 @@ namespace Helpy {
  ********************************************************/
 
 #include <cstring>
-
 
 int main(int argc, char *argv[]) {
     if (argc < 2) return 0;
