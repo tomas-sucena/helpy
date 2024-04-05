@@ -928,9 +928,9 @@ namespace Helpy {
         source << '\n'
                << "/**\n"
                   " * @brief Reads and parses a line of user input containing comma-separated values.\n"
-                  " * @param instruction the instruction that will be displayed before prompting the user to input"
-                  " * @param delimiter the character that separates each value"
-                  " * @return the values input by the user"
+                  " * @param instruction the instruction that will be displayed before prompting the user to input\n"
+                  " * @param delimiter the character that separates each value\n"
+                  " * @return the values input by the user\n"
                   " */\n"
                << "std::vector<std::string> " << info.classname << "::readCSV(const std::string &instruction, char delimiter) {\n"
                   "\tstd::cout << BREAK;\n"
