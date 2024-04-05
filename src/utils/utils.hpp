@@ -6,15 +6,17 @@
 #include <string>
 
 // output formatting
-#define RESET      "\033[0m"
-#define BOLD       "\033[1m"
-#define R_BOLD     "\033[22m"
-#define ITALICS    "\033[3m"
-#define UNDERLINE  "\033[4m"
+#define RESET           "\033[0m"
+#define BOLD            "\033[1m"
+#define R_BOLD          "\033[22m"
+#define ITALICS         "\033[3m"
+#define R_ITALICS       "\033[23m"
+#define UNDERLINE       "\033[4m"
+#define R_UNDERLINE     "\033[24m"
 
 // output colors
-#define RED        "\033[31m"
-#define YELLOW     "\033[33m"
+#define RED         "\033[31m"
+#define YELLOW      "\033[33m"
 
 namespace Helpy::Utils {
     /**
@@ -27,7 +29,7 @@ namespace Helpy::Utils {
         std::cout << BOLD << RED << "Error";
         if (line) std::cout << R_BOLD << " (line " << line << ')' << BOLD;
 
-        std::cout << ": " << RESET << BOLD << errorMsg << std::endl;
+        std::cout << ": " << RESET << errorMsg << std::endl;
         if (quit) exit(1);
     }
 
@@ -40,7 +42,7 @@ namespace Helpy::Utils {
         std::cout << BOLD << YELLOW << "WARNING";
         if (line) std::cout << R_BOLD << " (line " << line << ')' << BOLD;
 
-        std::cout << ": " << RESET << BOLD << warningMsg << std::endl;
+        std::cout << ": " << RESET << warningMsg << std::endl;
     }
 
     /**

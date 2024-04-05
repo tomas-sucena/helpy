@@ -59,16 +59,11 @@ namespace Helpy {
         if (std::experimental::filesystem::exists(path) && !std::experimental::filesystem::is_empty(path)) {
             std::ostringstream instr;
             instr << BOLD << YELLOW << "WARNING: " << RESET
-                  << "The selected directory is already in use. Would you like to overwrite it?" << YES_NO;
+                  << "The selected directory is already in use. Would you still like to continue?" << YES_NO;
 
+            // verify if the user consented to using the directory
             char answer = Manager::readInput(instr.str()).front();
-
-            // verify if the user consented to having the contents of the directory removed
-            if (answer != 'Y' && answer != 'y')
-                return false;
-
-            // delete the content of the directory
-            std::experimental::filesystem::remove_all(path);
+            return answer == 'Y' || answer == 'y';
         }
 
         // create the directory
@@ -134,8 +129,8 @@ namespace Helpy {
 
         // verify if the Helpyfile exists
         if (!std::experimental::filesystem::is_regular_file(path)) {
-            Utils::printError((std::string) "Could not find the file '" + UNDERLINE + path + RESET + RED
-                              + "'! Please verify if the specified path is correct.");
+            Utils::printError((std::string) "Could not find the file '" + BOLD + ITALICS + path + RESET + "'! "
+                + "Please verify if the specified path is correct.");
             exit(EXIT_FAILURE);
         }
 
