@@ -775,10 +775,10 @@ namespace Helpy {
         // readYesOrNo()
         source << '\n'
                << "/**\n"
-                  " * @brief Reads the user's answer to a \"Yes/No\" question.\n"
+                  " * @brief Reads the user's answer to a Yes/No question.\n"
                   " * @param instruction the instruction that will be displayed before prompting the user to input\n"
-                  " * @param strict boolean indicating if the user must explicitly type \"Yes\" or \"No\"\n"
-                  " * @return 'true' if the user answered \"Yes\", 'false' otherwise\n"
+                  " * @param strict boolean indicating if the user must explicitly type Yes or No\n"
+                  " * @return 'true' if the user answered Yes, 'false' otherwise\n"
                   " */\n"
                << "bool " << info.classname << "::readYesOrNo(const std::string &instruction, bool strict) {\n"
                   "\tstd::string input = strict\n"
@@ -1100,31 +1100,31 @@ namespace Helpy {
     }
 
     void Writer::writeUtils() {
-        utils << '\n'
-              << "namespace Utils {\n";
+        utils << "\n"
+                 "namespace Utils {\n";
 
         // toLowercase()
         utils << "\t/**\n"
-              << "\t * @brief Turns all the characters of a string into lowercase.\n"
-              << "\t * @complexity O(n)\n"
-              << "\t * @param s string to be modified\n"
-              << "\t */\n"
+                 "\t * @brief Turns all the characters of a string into lowercase.\n"
+                 "\t * @complexity O(n)\n"
+                 "\t * @param s string to be modified\n"
+                 "\t */\n"
               << "\tstatic void toLowercase(std::string &s) {\n"
-              << "\t\tfor (char &c : s)\n"
-              << "\t\t\tc = (char) tolower(c);\n"
-              << "\t}\n";
+                 "\t\tfor (char &c : s)\n"
+                 "\t\t\tc = (char) tolower(c);\n"
+                 "\t}\n";
 
         // toUppercase()
-        utils << '\n'
-              << "\t/**\n"
-              << "\t * @brief Turns all the characters of a string into uppercase.\n"
-              << "\t * @complexity O(n)\n"
-              << "\t * @param s string to be modified\n"
-              << "\t */\n"
+        utils << "\n"
+                 "\t/**\n"
+                 "\t * @brief Turns all the characters of a string into uppercase.\n"
+                 "\t * @complexity O(n)\n"
+                 "\t * @param s string to be modified\n"
+                 "\t */\n"
               << "\tstatic void toUppercase(std::string &s) {\n"
-              << "\t\tfor (char &c : s)\n"
-              << "\t\t\tc = (char) toupper(c);\n"
-              << "\t}\n";
+                 "\t\tfor (char &c : s)\n"
+                 "\t\t\tc = (char) toupper(c);\n"
+                 "\t}\n";
 
         // createTable()
         utils << "\n"
@@ -1186,9 +1186,36 @@ namespace Helpy {
                  "\t\treturn table;\n"
                  "\t}\n";
 
+        // createMDTable()
+        utils << "\n"
+                 "\t/**\n"
+                 "\t * @brief Creates a table that will be output to a Markdown file.\n"
+                 "\t * @param columnNames list containing the name of each column of the table\n"
+                 "\t * @return string representing a Markdown table\n"
+                 "\t */\n"
+              << "\tstatic std::string createMDTable(const std::vector<std::string> &columnNames) {\n"
+                 "\t\tsize_t numColumns = columnNames.size();\n"
+                 "\t\tif (numColumns == 0) return \"\";\n"
+                 "\n"
+                 "\t\tstd::string table = \"|\";\n"
+                 "\n"
+                 "\t\t// set the table header\n"
+                 "\t\tfor (const std::string &columnName : columnNames)\n"
+                 "\t\t\ttable += ' ' + columnName + \" |\";\n"
+                 "\n"
+                 "\t\ttable += \"\\n|\";\n"
+                 "\n"
+                 "\t\t// set the alignment of each column\n"
+                 "\t\tfor (size_t i = 0; i < numColumns; ++i)\n"
+                 "\t\t\ttable += \":-:|\";\n"
+                 "\n"
+                 "\t\ttable += '\\n';\n"
+                 "\t\treturn table;\n"
+                 "\t}\n";
+
         utils << "}\n"
-              << '\n'
-              << "#endif\n";
+                 "\n"
+                 "#endif\n";
     }
 
     void Writer::writeHeader() {
