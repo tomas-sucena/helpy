@@ -215,7 +215,7 @@ namespace Helpy {
    src/manager/manager.cpp
  ********************************************************/
 
-#include <experimental/filesystem>
+#include <filesystem>
 #include <iostream>
 
 // formatting
@@ -266,7 +266,7 @@ namespace Helpy {
         formatDirname(path);
 
         // check if the directory is usable
-        if (std::experimental::filesystem::exists(path) && !std::experimental::filesystem::is_empty(path)) {
+        if (std::filesystem::exists(path) && !std::filesystem::is_empty(path)) {
             std::ostringstream instr;
             instr << BOLD << YELLOW << "WARNING: " << RESET
                   << "The selected directory is already in use. Would you still like to continue?" << YES_NO;
@@ -277,7 +277,7 @@ namespace Helpy {
         }
 
         // create the directory
-        std::experimental::filesystem::create_directory(path);
+        std::filesystem::create_directory(path);
         return true;
     }
 
@@ -332,13 +332,13 @@ namespace Helpy {
      */
     void Manager::run(std::string path, std::string outputDir) {
         // verify if the user input the path to a directory
-        if (std::experimental::filesystem::is_directory(path)) {
+        if (std::filesystem::is_directory(path)) {
             formatDirname(path);
             path += "Helpyfile";
         }
 
         // verify if the Helpyfile exists
-        if (!std::experimental::filesystem::is_regular_file(path)) {
+        if (!std::filesystem::is_regular_file(path)) {
             Utils::printError((std::string) "Could not find the file '" + BOLD + ITALICS + path + RESET + "'! "
                 + "Please verify if the specified path is correct.");
             exit(EXIT_FAILURE);
@@ -581,7 +581,7 @@ namespace Helpy {
 
     void Writer::writeIncludes() {
         utils << '\n'
-              << "#include <experimental/filesystem>\n"
+              << "#include <filesystem>\n"
               << "#include <iostream>\n"
               << "#include <sstream>\n"
               << "#include <string>\n"
@@ -875,7 +875,7 @@ namespace Helpy {
                   "\n"
                   "\t\twhile (line_ >> filename) {\n"
                   "\t\t\t// verify if the file exists\n"
-                  "\t\t\tif (!std::experimental::filesystem::is_regular_file(filename))\n"
+                  "\t\t\tif (!std::filesystem::is_regular_file(filename))\n"
                   "\t\t\t\tcontinue;\n"
                   "\n"
                   "\t\t\tvalid = true;\n"
@@ -908,7 +908,7 @@ namespace Helpy {
                   "\n"
                   "\t\twhile (line_ >> dirname) {\n"
                   "\t\t\t// verify if the file exists\n"
-                  "\t\t\tif (!std::experimental::filesystem::is_directory(dirname))\n"
+                  "\t\t\tif (!std::filesystem::is_directory(dirname))\n"
                   "\t\t\t\tcontinue;\n"
                   "\n"
                   "\t\t\tvalid = true;\n"
@@ -1087,8 +1087,8 @@ namespace Helpy {
                   " */\n"
                << "void " << info.classname << "::run() {\n"
                << "\tstd::string instruction = \"Which mode would you prefer?\\n\\n\"\n"
-                  "                            \"* Guided\\n\"\n"
-                  "                            \"* Advanced\";\n"
+                  "                            " << info.color << " \"* \" RESET \"Guided\\n\"\n"
+                  "                            " << info.color << " \"* \" RESET \"Advanced\";\n"
                   "\n"
                   "\t(readInput(instruction, {\"guided\", \"advanced\", \"adv\"}) == \"guided\")\n"
                   "\t\t? " << info.classname << "::guidedMode()\n"
