@@ -1,6 +1,6 @@
 #include "manager.h"
 
-#include <experimental/filesystem>
+#include <filesystem>
 #include <iostream>
 
 #include "../lexer/lexer.h"
@@ -56,7 +56,7 @@ namespace Helpy {
         formatDirname(path);
 
         // check if the directory is usable
-        if (std::experimental::filesystem::exists(path) && !std::experimental::filesystem::is_empty(path)) {
+        if (std::filesystem::exists(path) && !std::filesystem::is_empty(path)) {
             std::ostringstream instr;
             instr << BOLD << YELLOW << "WARNING: " << RESET
                   << "The selected directory is already in use. Would you still like to continue?" << YES_NO;
@@ -67,7 +67,7 @@ namespace Helpy {
         }
 
         // create the directory
-        std::experimental::filesystem::create_directory(path);
+        std::filesystem::create_directory(path);
         return true;
     }
 
@@ -122,13 +122,13 @@ namespace Helpy {
      */
     void Manager::run(std::string path, std::string outputDir) {
         // verify if the user input the path to a directory
-        if (std::experimental::filesystem::is_directory(path)) {
+        if (std::filesystem::is_directory(path)) {
             formatDirname(path);
             path += "Helpyfile";
         }
 
         // verify if the Helpyfile exists
-        if (!std::experimental::filesystem::is_regular_file(path)) {
+        if (!std::filesystem::is_regular_file(path)) {
             Utils::printError((std::string) "Could not find the file '" + BOLD + ITALICS + path + RESET + "'! "
                 + "Please verify if the specified path is correct.");
             exit(EXIT_FAILURE);
